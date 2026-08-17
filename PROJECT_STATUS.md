@@ -346,6 +346,17 @@ reasoning in `docs/NORTHLIGHT.md` §2c.
   checkout CTA present on arrival; account menu checked **signed in** at
   both breakpoints — identical entries, every destination 200, logout
   returns the menu to its guest state.
+- **Signed-in sweep, 21 further combinations** (7 routes x 1440/991/390,
+  with an item in the cart and the account dropdown opened on each). The
+  100-combination sweep above ran entirely as a guest, which never enters
+  the authenticated rendering path: the account menu is taller signed in
+  (header + divider + two links + a logout form) and hangs off a
+  `.nav-icon-link` that also carries Bootstrap's `dropdown-toggle::after`
+  caret — the exact case `min-width` was chosen for. This run also covers
+  `/account` and `/orders`, which a guest sweep cannot reach at all.
+  **0 flagged**: no overflow with the menu shut or open, no menu escaping
+  the viewport, one visible cart, no unnamed or sub-44px control, three
+  menu entries everywhere, no page errors.
 - **Links:** every forward link from every homepage module resolves 200;
   heading order matches the intended arc.
 - `php artisan test` 2/2 pass, `php -l` clean on every touched file,
