@@ -593,3 +593,57 @@ caught by testing, not assumed:
 
 - Push/deploy decision, the remote question, and the trademark image —
   all the user's call, not made here.
+
+---
+
+## Milestone 7: Pushed and deployed
+
+**Status: live.**
+
+- Pushed to a new repo under the user's own GitHub account:
+  `github.com/IridescentGlow/northlight-optical` (`upstream` remote keeps
+  `bhupindersingh007/sunray` for reference; nothing was ever pushed there).
+- Deployed to Railway (chosen over Vercel — no native PHP/Laravel support
+  there): project `northlight-optical`, MySQL service + a Dockerfile-built
+  web service, auto-deploying from `main` on every push.
+- **Live at: https://northlight-web-production.up.railway.app**
+
+Two real bugs shipped and were fixed within minutes of being found —
+both by actually running the container and hitting real routes, not by
+reading the Dockerfile:
+
+1. `mkdir -p storage/framework/{sessions,views,cache}` doesn't expand
+   under Docker's default `/bin/sh` (dash isn't bash) — created one
+   literal directory instead of three, so every request 500'd on
+   `file_put_contents(.../sessions/<id>)`. This briefly went live before
+   the fix landed (auto-deployed from the first push). Fixed by writing
+   three explicit `mkdir -p` calls.
+2. `TrustProxies::$proxies` was at the framework default (trust nothing),
+   which reads `$request->secure()` as false behind any TLS-terminating
+   reverse proxy — silently emits `http://` links from `url()`/`asset()`
+   regardless of `APP_URL`. Set to `'*'`, safe here since the app only
+   ever receives connections from Railway's own edge on a private network.
+
+Full functional verification on the live deployment (curl-based — this
+sandbox's headless browser cannot reach external network, a limitation
+hit earlier in this project too):
+
+- All 10 routes 200 on a fresh guest session.
+- Product image served from the tracked catalog: 200.
+- Registered a real account against live MySQL → session cookie set with
+  `secure` flag (confirms the TrustProxies fix) → homepage correctly
+  shows "My Account" instead of "Login".
+- Added a product to cart → cart page shows the item and a visible
+  Checkout link → `/checkout`, `/account`, `/orders` all 200 while
+  authenticated.
+
+### Known gaps carried forward, unchanged by this milestone
+
+- `sunglasses1.jpg` is a real Ray-Ban stock photo, live now — see
+  Milestone 6. Still needs a rights-cleared replacement.
+- The upstream licence question is still open — footer credit unchanged.
+- `php artisan serve` (Laravel's built-in single-threaded dev server) is
+  what's actually running in production, not php-fpm+nginx or Octane —
+  adequate for this traffic level, not a real production web server.
+  Worth revisiting if this needs to handle concurrent load.
+- No custom domain configured — running on Railway's `*.up.railway.app`.
