@@ -61,3 +61,18 @@ $btn-hover-bg-tint-amount:        2%;
         box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
     }
 }
+
+
+// The global .btn rule above hard-codes color:$white for every button
+// variant, which makes stock .btn-outline-primary unreadable (white text,
+// no fill, at rest). Restore its intended resting/hover colors here so it
+// can be used as a real secondary action alongside .btn-primary.
+.btn-outline-primary {
+    color: $primary;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $white;
+    }
+}

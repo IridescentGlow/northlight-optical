@@ -103,11 +103,16 @@
         @endauth
 
         @guest
-        <p class="text-muted">
-            Please
-            <a href="{{ route('register.create') }}">Register</a> / <a href="{{ route('login.create') }}">Login</a>
-            to Complete Checkout.
-        </p>
+        <div class="border border-primary-subtle bg-primary-subtle rounded-3 p-4 p-md-5 text-center w-100">
+            <h5 class="mb-2">Sign In to Complete Checkout</h5>
+            <p class="text-muted mb-4">
+                Log in or create a free account to check out — your cart will be waiting for you.
+            </p>
+            <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+                <a href="{{ route('login.create') }}" class="btn btn-primary px-4 py-2">Log In</a>
+                <a href="{{ route('register.create') }}" class="btn btn-outline-primary px-4 py-2">Create Account</a>
+            </div>
+        </div>
         @endguest
 
     </div>
