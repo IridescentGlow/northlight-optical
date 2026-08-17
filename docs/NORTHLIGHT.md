@@ -35,6 +35,16 @@ zoom on product imagery, upgraded toast notifications, an animated nav
 underline, and animated stat counters. Three candidates were deliberately
 skipped — reasoning in §3b.
 
+**Fourth milestone** — two things, in the order they were prioritised:
+1. **Global navigation & commerce access** (§2b). The cart was reported as
+   unreachable without going through a product page. It was in fact already
+   rendered on every page at both breakpoints — the real defects were
+   discoverability and mobile ergonomics, documented in full in §2b.
+2. **Homepage expansion** (§2c). The homepage was three sections long and
+   disconnected from the depth of the rest of the site. It is now a curated
+   overview built on a deliberate narrative arc, with every module linking
+   forward to its full page.
+
 Everything else — the product catalog, cart, checkout, auth, account
 dashboard — is reused as-is. It already behaves like a real eyewear store's
 shop section, so there was no reason to touch it beyond the auth-prompt fix.
@@ -97,8 +107,10 @@ About ▾
 
 No new markup pattern, no new CSS — it's the same dropdown structure copied
 once. Because it lives inside `#navbar-primary`, the existing mobile
-hamburger/collapse behavior covers it automatically; `partials/menubar.blade.php`
-(the icon-only bar for small screens) is untouched.
+hamburger/collapse behavior covers it automatically.
+
+(`partials/menubar.blade.php` was untouched by this milestone. It was
+rebuilt in the fourth — see §2b.)
 
 ### Reused components
 
@@ -129,6 +141,107 @@ one component reused five times:
 | Promise | Full-bleed alternating split panels (`row g-0`, `flex-md-row-reverse` on even items), one side a large icon on an `.icon-panel` gradient, the other side text. | "Alternating split panels (image/text)" — there is no photography for the "image" half (see Design Rule 3, unchanged), so the image half is a large-scale icon on a full-bleed gradient built from the same two brand tokens ($brown → $brown-dark), not a new color. This is a deliberate substitution for a photo, not an unremarked deviation — flagged here and in `PROJECT_STATUS.md`. |
 | Testimonials | One large featured pull-quote (`TestimonialController` splits `config('northlight.testimonials')[0]` out), then the remaining five in a tighter supporting grid. | "Featured-quote-plus-supporting-quotes layout… instead of three even cards." |
 | Contact | Unchanged two-column form + info card. | Explicitly asked to stay "form-forward and simple" — the deliberate contrast with the other four is the differentiation. |
+
+### 2b. Global navigation & commerce access (fourth milestone)
+
+**The reported problem was that there is no globally accessible cart — that
+a visitor can't get back to their cart without navigating to a product
+page. That premise turned out to be wrong, and checking it first changed
+what got built.** `layouts/app.blade.php` includes the header on every
+page; the header renders a cart link at ≥lg and `partials/menubar.blade.php`
+renders one below lg. Measured across 10 routes × 5 widths, exactly one
+cart link is visible everywhere. Nothing was missing.
+
+What *was* wrong was that the cart was hard to see and hard to hit:
+
+| Defect | Fix |
+|---|---|
+| **At 390px the icon bar wrapped onto a second row** under the hamburger. The brand's `ms-4` plus a full-size wordmark overflowed the flex row, so the cart sat below the primary line, left-aligned, looking like page content rather than navigation. This is almost certainly what produced the report. | Brand takes `me-auto` to pin the bar right; `ms-4` → `ms-2`; the wordmark steps `fs-4` → `fs-5` below lg with a `clamp()` floor so it still fits at 360px. Header is a single 60px row at every width. |
+| **The count badge always rendered**, so every page showed a `0` pill — noise that also destroyed the badge's only real signal. | Renders only when the cart has items. |
+| **Icon-only controls had no accessible name.** Cart, search, account and the hamburger were unlabelled SVGs. | `aria-label` on each; the cart's announces its count ("Shopping cart, 2 items"), with the badge `aria-hidden` so the number isn't read twice. |
+| **Tap targets were the bare icons** — 20px on desktop, 24px on mobile. WCAG 2.5.8 wants 44px; 24px met the older floor by exactly nothing. | New `.nav-icon-link`: 44px minimum target, `min-width` so the account caret can extend it, plus a Bootstrap-shaped focus ring these controls never had (they are neither `.btn` nor `.nav-link`, so they were falling back to the browser's 1px default). |
+| **Cart markup was duplicated** between header and menubar, each with its own `CartService` instantiation — and the account menus had already drifted apart (desktop had "My Account", mobile had neither it nor an orders link). | Extracted `partials/cart-button.blade.php` and `partials/account-menu.blade.php`; both call sites include them. |
+| **A dead `<a href="#">`** wrapped the signed-in user's name at the top of the account dropdown — a focusable link to nowhere, first in the menu's tab order. | It's a label, so it's now a `dropdown-header`. |
+| **No primary CTA anywhere in the nav.** Booking — the action this business actually wants — was two levels deep (`About ▾ → Contact & Booking`). | A "Book an Exam" `btn-primary` in the nav; full-width in the collapsed mobile menu. |
+
+Three things were deliberately **not** built:
+
+- **No global checkout link.** `checkout.create` sits behind `auth` +
+  `IsCartEmpty`, so a nav entry would bounce guests and empty carts. The
+  cart page is the checkout entry point, and its auth callout (second
+  milestone) already handles the guest case.
+- **No mini-cart dropdown or offcanvas.** That is new commerce
+  functionality; the brief scoped this to surfacing what exists.
+- **The header's `d-none d-lg-inline-block` classes stayed.** Removing them
+  looks like "making the cart available on mobile" but would render it
+  twice inside the expanded menu, since the menubar already shows one.
+
+One deliberate removal: the mobile bar carries **two** icons, not three.
+The magnifying glass is not a search field — it is a plain link to the
+products listing, which is already one tap away in the menu, plus the hero
+CTA and the footer. Its 44px target was what pushed the bar onto a second
+row. The desktop bar keeps it, where there is room.
+
+### 2c. Homepage as curated entry point (fourth milestone)
+
+The homepage was hero + two near-identical product grids + a sale banner.
+It is now eight sections following an explicit narrative arc — *minimal →
+intriguing → informative → impressive → convincing → action*:
+
+| # | Section | Arc beat | Links forward to |
+|---|---|---|---|
+| 1 | Hero (`partials/hero`, unchanged) | minimal | `/products` |
+| 2 | Statement — "Good eye care shouldn't require you to explain yourself first" | intriguing | — |
+| 3 | Services preview, 3 of 6 | informative | `/services` |
+| 4 | Featured frames, 3 products | impressive | `/products`, each product page |
+| 5 | Sale banner (`partials/sale`) | impressive | `/products?type=sale` |
+| 6 | Promise band, 3 of 6 | convincing (what's different) | `/promise` |
+| 7 | Team strip (3 of 6) + one testimonial | convincing (who's behind it) | `/about`, `/testimonials` |
+| 8 | Booking CTA + hours + address | action | `/contact`, `tel:`, Maps |
+
+**Each module is composed for this page, not shrunk down from the page it
+links to:**
+
+- **Services** is an asymmetric split — heading, framing copy and the
+  forward link in a left column, a tight icon-led list on the right. The
+  Services page is a full-width *numbered* list; the homepage version is
+  neither numbered nor full-width.
+- **Promise** is a single full-width gradient band with three centred
+  items. The Promise page is alternating split panels. They share the
+  `.icon-panel` gradient so the two read as one brand, without the
+  homepage repeating that page's layout.
+- **Team** is names and roles only, at 7rem instead of 9rem. Bios belong
+  to the About page — that's the reason to click through.
+- **Featured frames** deliberately keeps the shared `partials/card`. A
+  shopping module should look like a shopping module, and the card carries
+  the add-to-cart form, sale badge and lens-zoom hover. The
+  homepage-specific work here is the framing — a real heading and a proper
+  button in place of the muted "See More" text link.
+
+**The "Special Offers" grid was removed.** It was a second three-card
+product grid immediately below the first, which is exactly the "longer
+list of cards" the homepage was supposed to stop being. The sale banner
+directly beneath still carries the offer story and still links to
+`/products?type=sale`, and the sale route stays reachable from the
+Categories nav — so nothing became unreachable. `HomeController` no longer
+runs that query.
+
+**Curation lives in `HomeController`, selected by title/name rather than
+array index**, via a small `pick()` helper that throws a named exception if
+a config entry it expects has been renamed. Index-based slicing would
+silently change what the homepage shows when `config/northlight.php` is
+reordered; this fails loudly instead. Each pick is commented with why those
+specific entries: the three *core* services (the differentiators are
+covered by the Promise band), the three promises the practice leads with,
+one team member per function rather than three optometrists, and —
+deliberately — **not** the testimonial the Testimonials page features, but
+the one about Soo-ah, who appears in the team strip directly above it, so
+the section reads as a single thought.
+
+**Two accessibility defects were found and fixed while building this**, both
+by measurement rather than inspection — see §6 and `PROJECT_STATUS.md`:
+white text on the brand gradient (2.41:1, fails AA), and a `g-5` gutter
+overflowing the viewport below `sm`.
 
 ## 3. Design / UX Rules
 
@@ -417,6 +530,26 @@ polish):**
     drag + keyboard, lens cursor-tracking, toast auto-dismiss~~
 21. ~~Update this document and `PROJECT_STATUS.md`~~
 
+**Fourth milestone (global nav/cart, then homepage expansion — in that
+order, since the nav is the more load-bearing of the two):**
+
+22. ~~Audit the actual cart/checkout architecture before changing it —
+    established that the cart was already global and that the real
+    defects were discoverability and mobile ergonomics (§2b)~~
+23. ~~Extract `partials/cart-button` + `partials/account-menu`; fix the
+    390px row wrap, the always-on `0` badge, missing accessible names,
+    sub-44px tap targets, the dead `href="#"`, and add the "Book an
+    Exam" CTA~~
+24. ~~Verify at the `navbar-expand-lg` boundary specifically (991 vs
+    992), not just desktop/mobile — that is where the cart swaps
+    rendering paths entirely~~
+25. ~~Commit the nav work on its own before starting the homepage~~
+26. ~~Rebuild the homepage on an explicit narrative arc, with curation in
+    `HomeController` selected by name rather than index (§2c)~~
+27. ~~Re-run the full sweep — caught a real `g-5` viewport overflow and,
+    via a contrast audit, white-on-gradient text failing AA at 2.41:1~~
+28. ~~Update this document and `PROJECT_STATUS.md`~~
+
 ## 5. Current Project Status
 
 See [`../PROJECT_STATUS.md`](../PROJECT_STATUS.md) for the live status
@@ -472,3 +605,22 @@ snapshot (updated as work lands).
   in `AboutController` and is not a placeholder. Full detail in §3b.
   Before this site is treated as real, the two illustrative numbers need
   replacing with actual figures (or removing).
+- **White text does not pass contrast on the brand gradient, anywhere.**
+  Measured against both `.icon-panel` stops, white is **2.41:1** and
+  **2.77:1** — failing WCAG AA for normal text (4.5:1) *and* for large
+  text (3:1). The homepage's Promise band therefore uses near-black type
+  on the gradient (6.39:1 / 5.57:1) with a `.btn-dark` CTA (15.4:1). The
+  brand colour itself is untouched; only the ink changed.
+  **Still open:** the Promise *page* (§2a) puts white 64px icons on the
+  same gradient, at that same 2.4–2.8:1. Those icons are decorative and
+  sit beside text that states the same thing, so they are defensible
+  under SC 1.4.11's decorative exemption — but if that band ever gains
+  white *text*, it inherits a real AA failure. Not changed here because
+  it is outside this milestone's scope and would alter an established
+  page's visual direction.
+- **`g-5` overflows the viewport below `sm`.** A 3rem horizontal gutter
+  gives a `.row` -24px side margins while `.container` only pads 12px.
+  Above `sm` the container is centred with slack to absorb it; below,
+  it's fluid, so the page scrolls sideways by 12px. Homepage rows use
+  `gy-5 g-lg-5` instead. Worth knowing before adding `g-5` anywhere new —
+  it looks correct at every width a desktop browser is usually tested at.

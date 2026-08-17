@@ -2,6 +2,8 @@
 
 _Last updated: 2026-08-17_
 
+> **Not pushed and not deployed.** All work is local commits on `main`.
+
 See [`docs/NORTHLIGHT.md`](docs/NORTHLIGHT.md) for full architecture,
 design rules, and known constraints. This file tracks live status only.
 (Referred to as "PROGRESS.md" in one request — this is the file that
@@ -231,3 +233,143 @@ these five pages; a seventh risked "too many reads busy").
 
 ### Blocked on
 - Nothing currently.
+
+---
+
+## Milestone 4: Global nav/cart access, then homepage expansion
+
+**Status: complete and verified.** Two parts, done in sequence and
+committed separately — the nav is the more load-bearing of the two.
+
+### Part 1 — Global navigation & commerce UX
+
+**The reported premise was wrong, and checking it first is what shaped the
+work.** The cart was reported as unreachable without going through a
+product page. It was already rendered on every page at both breakpoints
+(`layouts/app.blade.php` includes the header everywhere; the header
+renders a cart link at >=lg, `partials/menubar` renders one below lg).
+Measured across 10 routes x 5 widths: exactly one visible cart link,
+everywhere. Nothing was missing — so this became a discoverability and
+mobile-ergonomics fix instead of new plumbing. Full detail in
+`docs/NORTHLIGHT.md` §2b.
+
+Fixed:
+- **The 390px header wrapped onto a second row**, dropping the cart below
+  the primary line where it read as page content, not navigation. This is
+  almost certainly what produced the original report. Header is now a
+  single 60px row from 360px up.
+- **The count badge always rendered** — every page showed a `0` pill,
+  which destroyed the badge's only real signal. Now renders only when the
+  cart has items.
+- **Icon-only controls had no accessible name.** All labelled; the cart's
+  announces its count, with the badge `aria-hidden` so it isn't read twice.
+- **Tap targets were the bare 20–24px icons.** New `.nav-icon-link` gives
+  44px (WCAG 2.5.8) plus a Bootstrap-shaped focus ring these controls
+  never had — they are neither `.btn` nor `.nav-link`, so they were
+  falling back to the browser's 1px default outline.
+- **Cart and account markup were duplicated** across two partials and had
+  already drifted. Extracted `partials/cart-button` and
+  `partials/account-menu`.
+- **A dead `<a href="#">`** on the signed-in user's name, first in the
+  account menu's tab order. Now a `dropdown-header`.
+- **No primary CTA in the nav.** Added "Book an Exam"; booking was
+  previously two levels deep.
+
+Deliberately not built: no global checkout link (`checkout.create` is
+behind `auth` + `IsCartEmpty` and would bounce guests and empty carts), no
+mini-cart dropdown or offcanvas (new commerce functionality, out of
+scope), and the header's `d-none d-lg-inline-block` classes stayed —
+removing them would render the cart *twice* in the expanded mobile menu.
+
+One deliberate removal: the mobile bar carries two icons, not three. The
+magnifying glass is not a search field, just a link to the products
+listing that is already in the menu, the hero CTA and the footer; its
+44px target is what pushed the bar onto a second row.
+
+### Part 2 — Homepage expansion
+
+Hero + two near-identical product grids + a sale banner became eight
+sections on an explicit arc (minimal → intriguing → informative →
+impressive → convincing → action). Section table and per-module design
+reasoning in `docs/NORTHLIGHT.md` §2c.
+
+- Each module is composed for the homepage, not shrunk from the page it
+  links to: Services is an asymmetric heading/list split (the Services
+  page is a numbered full-width list); Promise is one gradient band (the
+  Promise page is alternating panels); the team strip is names and roles
+  only, no bios.
+- Featured frames deliberately keeps the shared `partials/card` — a
+  shopping module should look like one, and the card carries the
+  add-to-cart form, sale badge and lens-zoom. The homepage work there is
+  the framing, not a bespoke card.
+- **"Special Offers" was removed** — a second three-card grid directly
+  below the first is exactly the "longer list of cards" this pass was
+  meant to end. The sale banner still carries the offer and still links to
+  `/products?type=sale`; nothing became unreachable.
+- Curation lives in `HomeController`, selected **by title/name, not array
+  index**, through a `pick()` helper that throws a named exception if a
+  config entry is renamed — index slicing would silently change the
+  homepage when `config/northlight.php` is reordered.
+- Every module links forward to its full page.
+
+### Verification performed
+
+- **Full sweep, 100 combinations**: 10 routes x 1440/992/991/768/390 x
+  normal and reduced motion. Final run: **0 flagged**. The 991/992 pair is
+  deliberate — that is the `navbar-expand-lg` boundary where the cart
+  swaps rendering paths entirely, and desktop+mobile alone would not
+  discriminate it. Per combination the sweep asserts: no horizontal
+  overflow, no page errors, no reveal stuck hidden, **exactly one visible
+  cart**, no unnamed header control, no sub-44px icon target.
+- **Two real defects found by measurement, not inspection:**
+  1. **White text on the brand gradient fails AA** — 2.41:1 and 2.77:1
+     against the two `.icon-panel` stops, failing even the 3:1 large-text
+     threshold. Found by scripting a contrast audit over the rendered
+     band rather than eyeballing it. The Promise band now uses near-black
+     type (6.39:1 / 5.57:1) and a `.btn-dark` CTA (15.4:1). 17/17 samples
+     pass. The brand colour is unchanged; only the ink changed.
+  2. **`g-5` overflowed the viewport by 12px at 390px** in *both* motion
+     modes, so not the blur-reveal bug pattern from Milestone 3. A 3rem
+     gutter gives -24px row margins against `.container`'s 12px padding;
+     harmless while the container is centred with slack, an overflow once
+     it goes fluid below `sm`. Located by scripting a per-element
+     bounding-box scan rather than guessing. Homepage rows use
+     `gy-5 g-lg-5`.
+- **Accessibility, homepage:** 27 keyboard stops walked at 1440 and 390 —
+  tab order follows visual order, **0 stops without a focus indicator**,
+  0 nested interactive controls, 13/13 `main` links have an accessible
+  name (Playwright's own name computation, not `textContent`). Under
+  `prefers-reduced-motion`, all 14 reveals render fully visible and
+  unblurred on first paint.
+- **Nav, functional:** badge and `aria-label` confirmed empty vs
+  populated; cart reached from `/promise` (a non-product page) with the
+  checkout CTA present on arrival; account menu checked **signed in** at
+  both breakpoints — identical entries, every destination 200, logout
+  returns the menu to its guest state.
+- **Links:** every forward link from every homepage module resolves 200;
+  heading order matches the intended arc.
+- `php artisan test` 2/2 pass, `php -l` clean on every touched file,
+  `npm run build` clean. `pick()`'s guard verified to actually throw its
+  named exception, and to preserve requested order.
+
+### Known gaps / deliberate substitutions
+
+- **Product photography is still missing** (pre-existing, Milestone 1).
+  The remaining console errors on `/` and `/products` are those image
+  404s and nothing else — confirmed by reading the messages, not assumed.
+  This is most visible on the homepage's featured-frames module, which is
+  a shopping module rendering alt text instead of frames.
+- **The Promise *page* still puts white icons on the brand gradient** at
+  that same 2.4–2.8:1. Defensible today — they're decorative and sit
+  beside text saying the same thing — but that band must never gain white
+  *text*. Left alone as outside this milestone's scope; flagged in
+  `docs/NORTHLIGHT.md` §6.
+- `partials/sale.blade.php`'s heading changed `h1` → `h2.h1`: the hero
+  already owns the page's only `h1` and the banner now sits mid-page
+  among `h3`s. Rendered size is byte-identical.
+- Same pre-existing gaps as Milestones 1–3 (no outbound mail, SQLite-only
+  local dev, invented business details, illustrative About stats).
+
+### Blocked on
+
+- Nothing. **Not pushed, not deployed** — awaiting the go-ahead.
