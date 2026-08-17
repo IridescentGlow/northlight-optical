@@ -12,14 +12,16 @@
     One <h1>, not the old breakpoint pair — the previous markup shipped two
     copies and hid one per breakpoint, which put a second h1 in the DOM.
     A clamp() between two existing display sizes covers the same range.
---}}
 
-{{-- Google's model-viewer. type="module" so it never blocks parsing. If
-     this host is unreachable the element simply never upgrades, and the
-     slot="poster" content below stays on screen — the hero keeps its
-     headline, copy and CTA either way. --}}
-<script type="module"
-    src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
+    <model-viewer> is registered via resources/js/app.js
+    (`import '@google/model-viewer'`), bundled through Vite rather than
+    loaded from ajax.googleapis.com — the hero no longer depends on an
+    external host being reachable at runtime. The slot="poster" fallback
+    below still matters even without that dependency: it covers the
+    ~1 second the element takes to register and the model to decode, so
+    the poster is never literally optional, just no longer load-bearing
+    against a third-party outage.
+--}}
 
 <section class="hero-stage d-flex align-items-center">
     <div class="container">

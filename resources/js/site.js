@@ -13,6 +13,38 @@ import { Alert } from 'bootstrap';
 document.addEventListener('DOMContentLoaded', () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // --- <model-viewer>, dynamically imported ---
+    //
+    // Registered from the bundle (via @google/model-viewer, not the
+    // ajax.googleapis.com CDN this replaced), but only ever fetched on a
+    // page that actually contains one. A static top-level import in app.js
+    // pulled the ~300KB-gzipped Three.js payload this component bundles
+    // into the *shared* JS chunk every page loads — About, Cart, Login,
+    // all of it — for a component only the homepage hero uses. Vite splits
+    // a dynamic import() into its own chunk automatically, so this fetch
+    // only happens when document.querySelector below finds an element.
+    if (document.querySelector('model-viewer')) {
+        // The hero's GLB is Draco-compressed (11.7MB -> 585KB with no
+        // visible quality loss). model-viewer decodes Draco via a WASM
+        // module that, left at its default, is fetched from
+        // www.gstatic.com — reintroducing the exact external-host
+        // dependency @google/model-viewer was installed to remove. These
+        // three files (public/draco/, copied from
+        // three/examples/jsm/libs/draco/gltf/, decoder only — the encoder
+        // is not needed at runtime) make that fetch same-origin instead.
+        //
+        // Must be set on the *global* `window.ModelViewerElement`, not on
+        // the class binding the import below resolves to — the library
+        // reads `self.ModelViewerElement.dracoDecoderLocation` itself
+        // (see its own bundled source), and it does so synchronously as
+        // each <model-viewer> instance's constructor runs, which happens
+        // during import() as custom elements upgrade — before any .then()
+        // on that import could ever fire. So this line has to run first,
+        // not after.
+        window.ModelViewerElement = { dracoDecoderLocation: `${window.location.origin}/draco/` };
+        import('@google/model-viewer');
+    }
+
     // --- Scroll reveal (incl. .reveal-blur variant — same elements, CSS
     // in app.scss handles the extra blur/scale for that modifier) ---
     if (!prefersReducedMotion && 'IntersectionObserver' in window) {
