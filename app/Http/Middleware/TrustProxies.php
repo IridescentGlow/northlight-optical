@@ -10,9 +10,18 @@ class TrustProxies extends Middleware
     /**
      * The trusted proxies for this application.
      *
+     * Trusts all — the app only ever receives connections from its host
+     * platform's own edge/load balancer on a private network (Railway,
+     * or any similar container platform), never directly from the
+     * internet. Left at the framework default of null (trust nothing),
+     * $request->secure() reads false behind any TLS-terminating proxy
+     * even when the client's actual connection was HTTPS, which silently
+     * makes url()/asset() emit http:// links — broken images, wrong
+     * redirect scheme — despite APP_URL being set to https://.
+     *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.

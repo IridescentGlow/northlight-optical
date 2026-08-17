@@ -1,0 +1,41 @@
+# Deployment image for Railway. Not present for local development — the
+# local workflow throughout this project has been `php artisan serve` +
+# `npm run build` directly against SQLite. This exists solely so the
+# build/runtime environment is deterministic on Railway rather than
+# relying on its auto-detection heuristics for a PHP+Vite app.
+
+# --- Stage 1: compile front-end assets --------------------------------
+FROM node:20-alpine AS assets
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY resources ./resources
+COPY vite.config.js ./
+RUN npm run build
+
+# --- Stage 2: PHP runtime ------------------------------------------------
+FROM php:8.2-cli AS app
+WORKDIR /var/www/html
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libzip-dev libonig-dev unzip git \
+    && docker-php-ext-install pdo pdo_mysql mbstring bcmath \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-interaction --optimize-autoloader
+
+COPY . .
+COPY --from=assets /app/public/build ./public/build
+
+RUN composer run-script post-autoload-dump \
+    && mkdir -p storage/framework/{sessions,views,cache} storage/logs \
+    && chmod -R 775 storage bootstrap/cache
+
+COPY docker/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+EXPOSE 8080
+CMD ["/usr/local/bin/start.sh"]
