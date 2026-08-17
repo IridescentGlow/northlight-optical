@@ -345,7 +345,78 @@ header.sticky-top {
 // is handled entirely in site.js and always starts from the correct
 // final value already in the HTML (see site.js comment).
 
+/* ---------------------------------------------------------------------
+   Global navigation & commerce access.
+
+   Same rule as everything above: no new colors, fonts, or spacing scale.
+   $primary/$brown and Bootstrap's existing type steps are all this reads.
+   ------------------------------------------------------------------ */
+
+// Shared treatment for every icon-only control in the header (hamburger,
+// search, account, cart) at both breakpoints.
+//
+// 2.75rem = 44px, WCAG 2.5.8 (Target Size, Minimum). The icons themselves
+// are 20px on desktop and 24px on mobile; sizing the *target* here instead
+// of the icon means both are equally easy to hit without changing how the
+// nav looks at rest. min-width rather than width so the account control's
+// Bootstrap dropdown caret can extend the pill instead of overflowing it.
+.nav-icon-link {
+    min-width: 2.75rem;
+    height: 2.75rem;
+    padding-inline: 0.25rem;
+    border-radius: 999px;
+    color: inherit;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+        background-color: rgba($brown, 0.1);
+        transform: translateY(-1px);
+    }
+
+    // These aren't .btn or .nav-link, so they were falling back to the
+    // browser's default 1px outline while every other focusable control in
+    // the site showed Bootstrap's ring. Same shape and width Bootstrap uses
+    // ($btn-focus-width, .25rem) against the existing brand token.
+    &:focus-visible {
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba($brown, 0.4);
+    }
+}
+
+// Cart count. Anchored to the icon's top-right rather than the 44px
+// target's, so enlarging the tap area above didn't visually detach the
+// badge from the bag it belongs to.
+.cart-badge {
+    top: 0.3rem;
+    right: 0.35rem;
+    min-width: 1.15rem;
+    padding: 0.2rem 0.3rem;
+    font-size: 0.65rem;
+    line-height: 1;
+}
+
+// The wordmark steps down from fs-4 (1.5rem) to fs-5 (1.25rem) below lg,
+// where it shares a 390px row with a hamburger and two 44px tap targets.
+// clamp() interpolates *within* those two existing steps on the narrowest
+// phones rather than introducing a third fixed size to the type scale —
+// the ceiling is exactly fs-5 and it only ever gets smaller from there.
+.brand-wordmark {
+    font-size: clamp(1.1rem, 5vw, 1.25rem);
+}
+
+@media (min-width: 992px) {
+    .brand-wordmark {
+        font-size: 1.5rem;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
+    .nav-icon-link:hover,
+    .nav-icon-link:focus-visible {
+        transform: none;
+    }
+
     .reveal.reveal-pending {
         opacity: 1;
         transform: none;
