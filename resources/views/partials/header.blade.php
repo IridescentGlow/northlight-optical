@@ -15,10 +15,10 @@
 
             <a class="navbar-brand p-0 d-flex align-items-center ms-4 ms-lg-0" href="{{ route('home') }}">
 
-                <img src="{{ asset('images/logo.png') }}" alt="Sun Ray" style="width:38px">
+                <img src="{{ asset('images/logo.png') }}" alt="Northlight Optical" style="width:38px">
 
                 <span class="fw-bold fs-4 ms-2" style="letter-spacing: 0.10rem;">
-                    <span class="text-brown">SUN</span>RAY
+                    <span class="text-brown">NORTH</span>LIGHT
                 </span>
 
             </a>
@@ -48,6 +48,20 @@
                         <ul class="dropdown-menu border-0 text-center text-lg-start md:shadow-sm">
                             <li><a class="dropdown-item" href="{{ route('products.index') }}?category=eyeglasses">Eye Glasses</a></li>
                             <li><a class="dropdown-item" href="{{ route('products.index') }}?category=sunglasses">Sun Glasses</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown me-lg-3">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            About
+                        </a>
+                        <ul class="dropdown-menu border-0 text-center text-lg-start md:shadow-sm">
+                            <li><a class="dropdown-item" href="{{ route('about') }}">Our Team</a></li>
+                            <li><a class="dropdown-item" href="{{ route('services') }}">Services</a></li>
+                            <li><a class="dropdown-item" href="{{ route('promise') }}">Our Promise</a></li>
+                            <li><a class="dropdown-item" href="{{ route('testimonials') }}">Testimonials</a></li>
+                            <li><a class="dropdown-item" href="{{ route('contact.create') }}">Contact &amp; Booking</a></li>
                         </ul>
                     </li>
 
