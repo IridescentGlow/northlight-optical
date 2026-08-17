@@ -47,11 +47,6 @@ $btn-hover-bg-tint-amount:        2%;
     transition: transform 0.2s ease;
 }
 
-
-.card img:hover {
-    transform: scale(1.04);
-}
-
 .hover\:not-allowed:hover{
     cursor: not-allowed;
 }
@@ -173,20 +168,214 @@ header.sticky-top {
     transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
+
+/* ---------------------------------------------------------------------
+   Signature detail layer — last UI pass.
+
+   Six picks, chosen for on-brand fit and low/moderate risk over the
+   full list considered (docs/NORTHLIGHT.md has the complete reasoning,
+   including what was skipped and why). Same rule as the rest of this
+   file: no new colors, fonts, or spacing — $primary is the only token
+   any of this reads.
+   ------------------------------------------------------------------ */
+
+// 1. Blur-to-focus reveal — an on-brand variant of .reveal: the element
+// starts slightly blurred and enlarged, then sharpens into focus rather
+// than just fading/sliding. Literal enough for an eyewear brand that it
+// earns its own modifier instead of folding into the base .reveal rule.
+// --tilt lets an element (e.g. the About page's rotated initials
+// circles) keep its own static rotation without fighting this rule for
+// the `transform` property — it defaults to 0deg for every other use.
+.reveal.reveal-blur.reveal-pending {
+    filter: blur(14px);
+    transform: rotate(var(--tilt, 0deg)) scale(1.04);
+}
+
+.reveal.reveal-blur.reveal-pending.is-visible {
+    filter: blur(0);
+    transform: rotate(var(--tilt, 0deg));
+    transition: opacity 0.7s ease, transform 0.7s ease, filter 0.7s ease;
+}
+
+// 2. Before/after comparison slider (Promise page) — a draggable divide
+// between a blurred and a sharp rendering of the same content. Handle
+// interaction (site.js) is a direct 1:1 response to pointer/keyboard
+// input, not a decorative animation, so there's nothing for
+// prefers-reduced-motion to disable here except the handle's own hover
+// transition.
+.compare-slider {
+    position: relative;
+    aspect-ratio: 16 / 7;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    cursor: ew-resize;
+    user-select: none;
+    touch-action: none;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+
+    &__layer {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    &__before {
+        filter: blur(6px);
+    }
+
+    &__after {
+        clip-path: inset(0 50% 0 0);
+    }
+
+    &__handle {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 3px;
+        background: $primary;
+        transform: translateX(-50%);
+        pointer-events: none;
+        transition: box-shadow 0.15s ease;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 50%;
+            background: $primary;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    &__label {
+        position: absolute;
+        bottom: 0.75rem;
+        font-size: 0.75rem;
+        letter-spacing: 0.08rem;
+        text-transform: uppercase;
+        color: $white;
+        background: rgba(0, 0, 0, 0.55);
+        padding: 0.25rem 0.6rem;
+        border-radius: 999px;
+    }
+
+    &__label--before {
+        left: 0.75rem;
+    }
+
+    &__label--after {
+        right: 0.75rem;
+    }
+}
+
+// 3. Lens-style cursor zoom for product imagery — supersedes the old
+// flat `.card img:hover { scale(1.04) }` rule above. site.js updates
+// transform-origin to track the cursor, so the zoom feels like looking
+// through a lens at whatever part of the image you're pointing at,
+// rather than a uniform center-scale.
+//
+// !important: these images also carry .reveal.reveal-blur, whose
+// .is-visible state sets its own (higher-specificity, 4-class) transition
+// shorthand and never gets removed after the reveal fires — without this,
+// every hover after the initial reveal would silently inherit that rule's
+// 0.7s duration instead of the 0.3s meant for the zoom.
+.lens-zoom {
+    transition: transform 0.3s ease !important;
+
+    &:hover {
+        transform: scale(1.18);
+    }
+}
+
+// 4. Toast notifications — entrance animation for
+// partials/alerts.blade.php. Bootstrap's own .fade/.show classes still
+// drive the *dismiss* transition (data-bs-dismiss="alert" depends on
+// them); this keyframe only covers the mount animation.
+@keyframes northlight-toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.toast-notification {
+    animation: northlight-toast-in 0.35s ease-out;
+}
+
+// 5. Animated underline on nav link hover. Uses ::before, not ::after —
+// dropdown-toggle nav-links (Categories, About) already use ::after for
+// Bootstrap's own caret indicator, and claiming the same pseudo-element
+// here corrupted both (verified by screenshot, not assumed).
+.navbar-nav .nav-link {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 0;
+        height: 2px;
+        background-color: $primary;
+        transition: width 0.25s ease;
+    }
+
+    &:hover::before,
+    &:focus-visible::before {
+        width: 100%;
+    }
+}
+
+// 6. Animated stat counters (About page) — no styling of its own beyond
+// existing typography utilities (display-5, text-brown); the count-up
+// is handled entirely in site.js and always starts from the correct
+// final value already in the HTML (see site.js comment).
+
 @media (prefers-reduced-motion: reduce) {
     .reveal.reveal-pending {
         opacity: 1;
         transform: none;
     }
 
+    .reveal.reveal-blur.reveal-pending {
+        filter: none;
+        transform: none;
+    }
+
     .hover-lift:hover,
     .btn:hover,
     .btn:active,
-    .card img:hover {
+    .lens-zoom:hover {
         transform: none;
     }
 
     header.sticky-top {
+        transition: none;
+    }
+
+    .navbar-nav .nav-link::before {
+        transition: none;
+    }
+
+    .toast-notification {
+        animation: none;
+    }
+
+    .compare-slider__handle {
         transition: none;
     }
 }

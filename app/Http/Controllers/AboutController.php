@@ -14,6 +14,8 @@ class AboutController extends Controller
         $team = config('northlight.team');
         $business = config('northlight.business');
 
-        return view('about.index', compact('team', 'business'));
+        $languageCount = collect($team)->pluck('languages')->flatten()->unique()->count();
+
+        return view('about.index', compact('team', 'business', 'languageCount'));
     }
 }

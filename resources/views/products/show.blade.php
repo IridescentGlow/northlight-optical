@@ -11,8 +11,10 @@
 
             <div class="position-relative">
 
-                <img src="{{ asset('storage/'. $product->image_url) }}" class="img-fluid rounded mb-4 mb-lg-5"
-                    alt="{{ $product->name }}">
+                <div class="overflow-hidden rounded mb-4 mb-lg-5">
+                    <img src="{{ asset('storage/'. $product->image_url) }}" class="img-fluid lens-zoom reveal reveal-blur"
+                        alt="{{ $product->name }}">
+                </div>
 
                 @if($product->on_sale == true)
 
