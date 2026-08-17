@@ -411,6 +411,18 @@ header.sticky-top {
     }
 }
 
+// Small uppercase label above a section heading (homepage modules, and the
+// two sub-labels in its booking card). Reuses the letterspaced-uppercase
+// idiom the global .btn rule already established, so it reads as part of
+// the same system rather than as a new type style. No new colours — callers
+// pair it with the existing .text-brown / .text-muted utilities.
+.section-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12rem;
+    text-transform: uppercase;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .nav-icon-link:hover,
     .nav-icon-link:focus-visible {
