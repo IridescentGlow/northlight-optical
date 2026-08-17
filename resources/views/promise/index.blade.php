@@ -59,7 +59,7 @@
 
 @foreach($promise as $feature)
 
-<section class="reveal">
+<section class="stagger-section reveal">
     <div class="row g-0 align-items-stretch flex-md-row{{ $loop->even ? '-reverse' : '' }}">
 
         <div class="col-md-5 icon-panel text-white d-flex align-items-center justify-content-center py-5"

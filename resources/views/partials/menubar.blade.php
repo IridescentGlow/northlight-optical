@@ -19,7 +19,7 @@
 
     {{-- account --}}
     <div class="dropdown d-inline-block">
-        <a class="nav-icon-link d-inline-flex align-items-center justify-content-center" href="#" role="button"
+        <a class="nav-icon-link" href="#" role="button"
             data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account menu">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="text-brown"
                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"

@@ -18,7 +18,7 @@
 @endphp
 
 <a href="{{ route('cart.index') }}"
-    class="nav-icon-link position-relative d-inline-flex align-items-center justify-content-center text-muted"
+    class="nav-icon-link position-relative text-muted"
     aria-label="{{ $cartCount > 0
         ? 'Shopping cart, ' . $cartCount . ' ' . Str::plural('item', $cartCount)
         : 'Shopping cart, empty' }}">

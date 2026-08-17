@@ -1,4 +1,4 @@
-<section class="py-4 mb-4" style="background: linear-gradient(42deg, rgba(0, 0, 0, 0.7), rgb(0 0 0 / 28%)), url('images/sale-banner.jpg') center / cover no-repeat">
+<section class="light-sweep py-4 mb-4" style="background: linear-gradient(42deg, rgba(0, 0, 0, 0.7), rgb(0 0 0 / 28%)), url('images/sale-banner.jpg') center / cover no-repeat">
     <div class="col-md-10 col-lg-8 mx-md-auto p-5 text-white text-center">
         {{-- h2.h1, not h1: the hero above already provides the page's h1
              (twice in the DOM, but one per breakpoint — the other is

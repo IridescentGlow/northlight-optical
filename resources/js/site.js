@@ -136,6 +136,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }, delay);
     });
 
+    // --- One-shot light sweep across the sale banner ---
+    //
+    // Fires once the section has fully entered the viewport — i.e. once its
+    // bottom edge has scrolled above the fold — not on first partial entry.
+    //
+    // Not `threshold: 1.0` alone: a threshold of 1 can never be reached by an
+    // element taller than the viewport, and the sweep would then silently
+    // never run. The sale banner measures 300–345px against a 844px+ viewport
+    // today, so this is insurance rather than a live case, but it is exactly
+    // the kind of thing that breaks later when copy grows. The ratio branch
+    // below covers it.
+    //
+    // Purely decorative: nothing is hidden pending the sweep, so with reduced
+    // motion set we simply never add the class.
+    if (!prefersReducedMotion) {
+        const sweepTargets = document.querySelectorAll('.light-sweep');
+
+        if (sweepTargets.length && 'IntersectionObserver' in window) {
+            const sweepObserver = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (!entry.isIntersecting) {
+                            return;
+                        }
+
+                        const rect = entry.boundingClientRect;
+                        const tallerThanViewport = rect.height > window.innerHeight;
+                        const fullyPast = rect.bottom <= window.innerHeight;
+
+                        if (fullyPast || (tallerThanViewport && entry.intersectionRatio >= 0.9)) {
+                            entry.target.classList.add('is-swept');
+                            sweepObserver.unobserve(entry.target);
+                        }
+                    });
+                },
+                { threshold: [0, 0.25, 0.5, 0.75, 0.9, 1] }
+            );
+
+            sweepTargets.forEach((el) => sweepObserver.observe(el));
+        }
+    }
+
     // --- Animated stat counters (About page) ---
     // Each .stat-counter already renders its correct final value (e.g.
     // "15+") as static text in the HTML. If this never runs, that value

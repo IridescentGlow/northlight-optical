@@ -74,9 +74,17 @@ $btn-hover-bg-tint-amount:        2%;
 .btn-outline-primary {
     color: $primary;
 
+    // :focus-visible, NOT :focus. Bootstrap 5.3 fills the button background
+    // on :hover, :focus-visible and :active — but plain :focus (what a mouse
+    // click leaves behind) gets no fill at all. Forcing white text on :focus
+    // therefore left the button white-on-transparent, i.e. invisible, from
+    // the moment it was clicked until focus moved elsewhere. Matching
+    // Bootstrap's own state list keeps the text white only when there is
+    // actually a filled background behind it, and lets the button return to
+    // its gold outline as soon as the pointer leaves.
     &:hover,
     &:active,
-    &:focus {
+    &:focus-visible {
         color: $white;
     }
 }
@@ -360,7 +368,17 @@ header.sticky-top {
 // of the icon means both are equally easy to hit without changing how the
 // nav looks at rest. min-width rather than width so the account control's
 // Bootstrap dropdown caret can extend the pill instead of overflowing it.
+// Centring lives here rather than on the markup as `d-inline-flex`.
+// Bootstrap's display utilities carry !important, so putting d-inline-flex
+// on .navbar-toggler beat `.navbar-expand-lg .navbar-toggler { display: none }`
+// and left the hamburger on screen at >=lg, where the nav is already
+// expanded and the button therefore did nothing at all. As a plain
+// single-class rule it loses to Bootstrap's two-class selector at >=lg
+// (hidden, as intended) and still applies below lg (where it works).
 .nav-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     min-width: 2.75rem;
     height: 2.75rem;
     padding-inline: 0.25rem;
@@ -423,7 +441,227 @@ header.sticky-top {
     text-transform: uppercase;
 }
 
+// Vertical rhythm for the alternating left/right "staggered" pattern —
+// the Promise page's full-bleed split panels and the About page's bio
+// rows, which are the only two places it appears. The Promise panels had
+// no gap at all: consecutive <section>s stacked edge to edge, so six
+// alternating colour blocks read as one continuous striped slab instead
+// of six separate statements. Defined once here rather than as utilities
+// on each page so the two stay in step.
+//
+// Applied with the adjacent-sibling combinator so the first item keeps
+// whatever spacing its section header already establishes.
+.stagger-section + .stagger-section {
+    margin-top: 3rem;
+}
+
+@media (min-width: 768px) {
+    .stagger-section + .stagger-section {
+        margin-top: 5rem;
+    }
+}
+
+// Card that reads as raised at rest rather than only on hover, with a
+// hover that does something other than deepen the same shadow: a brand
+// accent bar wipes across the top edge while the card lifts. The bar
+// uses ::after (Bootstrap claims ::before on nothing here, but .card and
+// friends do use ::after in places — this class is only applied to plain
+// divs, so it's unclaimed) and animates transform, not width, so it
+// composites on the GPU instead of triggering layout.
+.card-elevated {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.07);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, $brown, $brown-dark);
+        transform: scaleX(0);
+        transform-origin: left center;
+        transition: transform 0.35s ease;
+    }
+
+    &:hover,
+    &:focus-within {
+        transform: translateY(-4px);
+        box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.12);
+
+        &::after {
+            transform: scaleX(1);
+        }
+    }
+}
+
+/* ---------------------------------------------------------------------
+   Hero stage, transparent-over-hero nav, and the sale light sweep.
+   ------------------------------------------------------------------ */
+
+// Header height, used to make hero + header fill exactly one screen.
+// Verified at 60px at every breakpoint (the nav is a single row from
+// 360px up since the mobile-ergonomics fix).
+.hero-stage {
+    --header-h: 3.75rem;
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100svh - var(--header-h));
+    background-color: $white;
+    padding-block: 2rem;
+}
+
+// Bolder than before, as asked. Bootstrap's .display-* headings are
+// font-weight 300, which is why the old hero read as thin. clamp() spans
+// display-4 up to display-2 — still inside the existing type scale, just
+// fluid across it instead of two hard-coded copies.
+.hero-headline {
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    text-transform: uppercase;
+}
+
+.hero-sub {
+    font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+    font-weight: 500;
+    color: $gray-700;
+}
+
+.hero-model {
+    model-viewer {
+        display: block;
+        width: 100%;
+        height: clamp(17rem, 52svh, 34rem);
+        background-color: transparent;
+        --poster-color: transparent;
+    }
+
+    // If the CDN is unreachable the custom element never upgrades and would
+    // otherwise be an inline, zero-height unknown element.
+    model-viewer:not(:defined) {
+        display: block;
+        min-height: 16rem;
+    }
+
+    &__fallback {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        min-height: 16rem;
+        color: rgba($brown, 0.45);
+        background-color: transparent;
+    }
+}
+
+// Entrance: model drops in from above, copy fades up under it.
+//
+// The 0-opacity state exists only inside the keyframes, never as the
+// element's resting style — so when the reduced-motion block below sets
+// `animation: none`, everything falls back to fully visible rather than
+// disappearing. Same guarantee as the .reveal system.
+@keyframes northlight-hero-drop {
+    from {
+        opacity: 0;
+        transform: translateY(-14vh);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes northlight-hero-fade {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.hero-model {
+    animation: northlight-hero-drop 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-copy > * {
+    animation: northlight-hero-fade 0.9s ease-out both;
+}
+
+.hero-copy > :nth-child(1) { animation-delay: 0.25s; }
+.hero-copy > :nth-child(2) { animation-delay: 0.4s; }
+.hero-copy > :nth-child(3) { animation-delay: 0.55s; }
+
+// Transparent bar over the hero, until .nav-scrolled solidifies it.
+// !important matches the existing .nav-scrolled convention — it has to
+// beat the bg-white / shadow-sm utilities on the header markup.
+header.sticky-top.nav-over-hero:not(.nav-scrolled) {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+// One-shot diagonal light sweep across the sale banner. .is-swept is
+// added by site.js once the section has fully entered the viewport, and
+// never removed — `forwards` holds the finished state, so it cannot loop
+// or replay on scroll-back.
+@keyframes northlight-light-sweep {
+    from { transform: translateX(-120%) skewX(-12deg); }
+    to { transform: translateX(120%) skewX(-12deg); }
+}
+
+.light-sweep {
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: -25%;
+        bottom: -25%;
+        left: 0;
+        width: 55%;
+        pointer-events: none;
+        background: linear-gradient(
+            100deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.35) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: translateX(-120%) skewX(-12deg);
+    }
+
+    &.is-swept::after {
+        animation: northlight-light-sweep 1.15s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
+    .hero-model,
+    .hero-copy > * {
+        animation: none;
+    }
+
+    .light-sweep.is-swept::after {
+        animation: none;
+    }
+
+    .card-elevated:hover,
+    .card-elevated:focus-within {
+        transform: none;
+    }
+
+    .card-elevated,
+    .card-elevated::after {
+        transition: none;
+    }
+
     .nav-icon-link:hover,
     .nav-icon-link:focus-visible {
         transform: none;

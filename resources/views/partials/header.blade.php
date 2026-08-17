@@ -1,8 +1,13 @@
-<header class="sticky-top bg-white shadow-sm">
+{{-- .nav-over-hero only on Home, which is the only route with a hero.
+     It makes the bar transparent until .nav-scrolled fires (site.js, at
+     24px of scroll). Safe without a light/dark variant because the new
+     hero ground is white, so the dark wordmark and brown icons keep the
+     same contrast they have against the normal white bar. --}}
+<header class="sticky-top bg-white shadow-sm {{ request()->routeIs('home') ? 'nav-over-hero' : '' }}">
     <nav class="navbar navbar-expand-lg container">
         <div class="container-fluid px-3 px-md-2">
 
-            <button class="navbar-toggler nav-icon-link border-0 p-0 d-inline-flex align-items-center justify-content-center"
+            <button class="navbar-toggler nav-icon-link border-0 p-0"
                 type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbar-primary" aria-controls="navbar-primary" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -82,7 +87,7 @@
                     --}}
                     <li class="nav-item d-none d-lg-inline-block">
                         <a href="{{ route('products.index') }}"
-                            class="nav-icon-link d-inline-flex align-items-center justify-content-center"
+                            class="nav-icon-link"
                             aria-label="Browse all products">
                             <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"
                             class="text-brown"
@@ -96,7 +101,7 @@
 
 
                     <li class="nav-item dropdown d-none d-lg-inline-block">
-                        <a class="nav-icon-link dropdown-toggle d-inline-flex align-items-center justify-content-center"
+                        <a class="nav-icon-link dropdown-toggle"
                             href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false" aria-label="Account menu">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"

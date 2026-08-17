@@ -246,7 +246,7 @@
             </figure>
 
             <div class="text-center mt-4">
-                <a href="{{ route('testimonials') }}" class="text-muted small">Read more patient stories</a>
+                <a href="{{ route('testimonials') }}" class="btn btn-outline-primary px-3">Read more patient stories</a>
             </div>
         </div>
     </div>
@@ -283,7 +283,11 @@
                     </div>
 
                     <div class="col-md-5">
-                        <div class="bg-white rounded-3 p-4 hover-lift">
+                        {{-- .card-elevated, not .hover-lift: reads as raised
+                             at rest, and its hover wipes a brand accent bar
+                             across the top edge rather than just deepening
+                             the same shadow. --}}
+                        <div class="bg-white rounded-3 p-4 card-elevated">
                             <h6 class="section-eyebrow text-muted mb-3">Opening hours</h6>
 
                             <dl class="row mb-4 small">

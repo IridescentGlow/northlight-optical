@@ -56,7 +56,9 @@
 
     @foreach($team as $member)
 
-    <div class="row align-items-center mb-5 pb-5 {{ $loop->last ? '' : 'border-bottom' }} reveal">
+    {{-- .stagger-section supplies the gap between rows (see app.scss); the
+         pb-5 keeps the hairline divider clear of the bio text above it. --}}
+    <div class="row align-items-center pb-5 {{ $loop->last ? '' : 'border-bottom' }} stagger-section reveal">
 
         <div class="col-md-4 col-lg-3 text-center {{ $loop->even ? 'order-md-2' : '' }} mb-4 mb-md-0">
             <div class="bg-brown text-white rounded-circle d-flex align-items-center justify-content-center fw-bold mx-auto reveal reveal-blur"
