@@ -63,6 +63,15 @@ $btn-hover-bg-tint-amount:        2%;
 }
 
 
+/* ---------------------------------------------------------------------
+   Motion & interaction layer (Northlight Optical)
+
+   Additive only: no new colors, fonts, or spacing scale — everything
+   below reads $primary/$brown-dark from the tokens above. This exists
+   to give the site weight/polish (hover states, scroll reveals, a
+   sticky-nav scroll transition) without touching the brand system.
+   ------------------------------------------------------------------ */
+
 // The global .btn rule above hard-codes color:$white for every button
 // variant, which makes stock .btn-outline-primary unreadable (white text,
 // no fill, at rest). Restore its intended resting/hover colors here so it
@@ -74,5 +83,89 @@ $btn-hover-bg-tint-amount:        2%;
     &:active,
     &:focus {
         color: $white;
+    }
+}
+
+// Subtle "real weight" hover for card-like elements: a lift + deeper
+// shadow instead of a flat color swap. Opt-in via class so it only
+// touches elements that ask for it.
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+    }
+}
+
+// Button micro-interaction: a slight press/lift instead of only a color
+// change. Applies everywhere .btn already does.
+.btn {
+    transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    &:active {
+        transform: translateY(0) scale(0.98);
+    }
+}
+
+// Sticky header: stays visually identical at rest; gains depth and a
+// frosted-glass backdrop once the page is scrolled. .nav-scrolled is
+// toggled by JS (resources/js/site.js). !important matches the existing
+// .sale-badge convention above for overriding Bootstrap's !important
+// utility classes (bg-white, shadow-sm) already on the header markup.
+header.sticky-top {
+    transition: box-shadow 0.25s ease, background-color 0.25s ease;
+
+    &.nav-scrolled {
+        background-color: rgba(255, 255, 255, 0.92) !important;
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+        backdrop-filter: saturate(180%) blur(8px);
+        -webkit-backdrop-filter: saturate(180%) blur(8px);
+    }
+}
+
+// Scroll-reveal: fade/slide-up as sections enter the viewport.
+//
+// Elements only ever get the *hidden* pre-reveal state if JS adds
+// .reveal-pending — which only happens once app.js has confirmed
+// IntersectionObserver support AND that the visitor has not requested
+// reduced motion. Content inside .reveal with no .reveal-pending (no JS,
+// old browser, JS error) stays fully visible. This is the mechanism that
+// satisfies "no motion-only dependency for usability."
+.reveal {
+    opacity: 1;
+    transform: none;
+}
+
+.reveal.reveal-pending {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.reveal.reveal-pending.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal.reveal-pending {
+        opacity: 1;
+        transform: none;
+    }
+
+    .hover-lift:hover,
+    .btn:hover,
+    .btn:active,
+    .card img:hover {
+        transform: none;
+    }
+
+    header.sticky-top {
+        transition: none;
     }
 }
