@@ -155,3 +155,79 @@ tracks live status; no separate PROGRESS.md exists.)
 
 ### Blocked on
 - Nothing currently.
+
+---
+
+## Milestone 3: Signature "wow" details (last UI pass)
+
+**Status: complete and verified.**
+
+### Done
+
+Six of nine candidate details, picked for on-brand fit and risk/reward.
+Full reasoning (including the three skipped) in `docs/NORTHLIGHT.md` §3b.
+
+- Blur-to-focus reveal (`.reveal-blur` modifier) — product images,
+  product detail image, About avatar circles, Promise panel icons.
+- Before/after comparison slider on Promise ("See the Difference") —
+  draggable + keyboard-operable, blurred vs. sharp eye-chart-styled
+  brand wordmark (no photography exists in this repo, so this is a
+  content substitution, flagged explicitly).
+- Lens-style cursor zoom on product imagery (`.lens-zoom`), replacing
+  the original flat `.card img:hover { scale(1.04) }`.
+- Upgraded toast notifications (`partials/alerts.blade.php`): entrance
+  animation, 6-second auto-dismiss, and a fix for a latent bug where
+  two simultaneous flash messages would have rendered exactly on top of
+  each other.
+- Animated underline on nav link hover.
+- Animated stat counters on About (2 illustrative placeholders + 1 real
+  number computed from team data — see Known Constraints below).
+
+Skipped on purpose: magnetic buttons (redundant with existing button
+lift, tonally off for a healthcare-adjacent brand), transparent-over-hero
+nav (only Home has a hero; doing it properly means conditional per-route
+header behavior in a shared partial — bigger structural risk than the
+rest of this pass for a "solidify on scroll" effect already covered),
+staggered headline text reveal (six other new details already landing on
+these five pages; a seventh risked "too many reads busy").
+
+### Verification performed
+
+- Full Playwright sweep re-run after **each** fix, not once at the end —
+  10 routes × desktop (1440px)/mobile (390px) × normal/`reducedMotion:
+  'reduce'`, 40 combinations. Final run: zero overflow, zero page
+  errors, zero elements stuck in a hidden pre-reveal state.
+- **Three real bugs found and fixed by this process, not by inspection:**
+  1. Blur bleed past the viewport edge on Promise's full-bleed icon
+     panels (`overflow: true`, motion-enabled runs only) — moved the
+     blur-focus effect from the panel onto the icon itself.
+  2. A `transition` shorthand conflict where `.lens-zoom`'s hover
+     duration was silently overridden by `.reveal.reveal-blur`'s
+     higher-specificity rule after the first reveal — confirmed via
+     `getComputedStyle`, fixed with a scoped `!important`.
+  3. The nav underline's `::after` collided with Bootstrap's own
+     dropdown-toggle caret (also `::after`), visibly corrupting the
+     "Categories" and "About" carets — caught by a close-up screenshot,
+     fixed by switching to `::before`.
+- Targeted functional checks: compare-slider drag-to-20% and two
+  `ArrowRight` presses verified via `aria-valuenow` (20 → 30); lens-zoom
+  `transform-origin` verified to track a simulated cursor position; a
+  full register → toast-appears → 7s-wait → toast-gone run verified
+  auto-dismiss; `php artisan test` (2/2 pass) and `php -l` on every
+  touched file.
+
+### Known gaps / deliberate substitutions
+- The before/after slider's "photo" is a styled eye chart (brand
+  wordmark typography), not a real image — same root cause as the
+  Promise icon-panels (no photography in this repo).
+- Two of the three About stat counters ("15+ Years Serving Portland,"
+  "8,000+ Patients Cared For") are illustrative placeholders, explicitly
+  requested as such — not audited business metrics. The third
+  ("Languages Spoken by Our Team") is computed live from real team data
+  and is not a placeholder. **Before this site is treated as real, the
+  two placeholder numbers need replacing with actual figures.**
+- Same pre-existing gaps as Milestones 1–2 (product photography, no
+  outbound mail, SQLite-only local dev) — unchanged by this milestone.
+
+### Blocked on
+- Nothing currently.

@@ -27,6 +27,14 @@ Contact/Booking. No new SCSS, no new animation.
    micro-interactions — explicitly requested and explicitly scoped to
    structure/motion only, never color or type.
 
+**Third milestone** ("last UI pass," §3b) — six signature "wow" details
+picked from a list of nine candidates, chosen for on-brand fit and
+risk/reward over forcing every option in: a blur-to-focus variant of the
+reveal system, a draggable before/after comparison slider, a cursor-lens
+zoom on product imagery, upgraded toast notifications, an animated nav
+underline, and animated stat counters. Three candidates were deliberately
+skipped — reasoning in §3b.
+
 Everything else — the product catalog, cart, checkout, auth, account
 dashboard — is reused as-is. It already behaves like a real eyewear store's
 shop section, so there was no reason to touch it beyond the auth-prompt fix.
@@ -170,9 +178,9 @@ Added in `resources/scss/app.scss` (bottom of file) and
   button on the checkout callout needed; verified with a resting-state and
   hover-state screenshot, not just read from the SCSS.
 - **`.hover-lift`** — opt-in lift + shadow on hover, applied to product
-  cards (`partials/card.blade.php`) and testimonial cards, alongside the
-  existing `.card img:hover` zoom (they compose fine; the lift is on the
-  `.card`, the zoom is on the `img` inside it).
+  cards (`partials/card.blade.php`) and testimonial cards. (Originally
+  composed with a flat `.card img:hover` zoom on the same image; that zoom
+  was replaced by `.lens-zoom` in the third milestone — see §3b.)
 - **`.btn`** gained a small press/lift transform on hover/active. Applies
   everywhere `.btn` already does, existing pages included.
 - **Sticky header "solidify" on scroll.** `header.sticky-top` is visually
@@ -198,6 +206,172 @@ Added in `resources/scss/app.scss` (bottom of file) and
   Playwright in both `reducedMotion: 'reduce'` and default contexts,
   scrolled through every route: zero elements ever left in
   `.reveal-pending:not(.is-visible)`.
+
+### 3b. Signature "wow" details (third milestone — last UI pass)
+
+The brief was a list of nine candidate details, pick 4–6, prioritize
+on-brand fit, skip anything that doesn't earn its place. Six were built;
+three were skipped on purpose. All of it lives in `resources/scss/app.scss`
+(bottom of file, under "Signature detail layer") and
+`resources/js/site.js`.
+
+**Picked, in the order they appear in `app.scss`:**
+
+1. **Blur-to-focus reveal** (`.reveal-blur`, a modifier on the existing
+   `.reveal` system) — an element starts blurred and slightly enlarged,
+   then sharpens into focus, instead of just fading/sliding.
+   **Why this one first:** it's the most literally on-brand item on the
+   list for an optical store — "coming into focus" is what glasses
+   *do*. Applied to product card images, the product detail page image,
+   About's initials circles, and the icon inside each Promise split
+   panel.
+   A `--tilt` CSS custom property (defaulting to `0deg`) lets the About
+   page's rotated avatar circles keep their static rotation without
+   fighting this rule for the `transform` property, since inline
+   `style="transform: rotate(...)"` and an external stylesheet's
+   `transform` can't both apply — only one wins, and it isn't additive.
+   **Bug caught and fixed during verification:** the first version put
+   `.reveal-blur` directly on Promise's full-bleed `.icon-panel` divs
+   (edge-to-edge, no container gutter). `filter: blur(14px)` bleeds
+   visually past an element's box edges, and with the panel already
+   touching the viewport edge, that bleed pushed past `100vw` —
+   `/promise` measured `overflow: true` (scrollWidth 1452/1440 desktop,
+   398/390 mobile) in the Playwright sweep, but only with motion enabled
+   (reduced-motion never applies the blurred state, which is exactly why
+   it didn't show up there — a good example of why the sweep runs both
+   ways). Fixed by moving `.reveal-blur` off the full-width panel and
+   onto a small wrapper around just the icon SVG, which sits comfortably
+   inset from the panel's edges regardless of blur radius. This is also
+   a better effect: blurring a flat color panel is barely visible in the
+   first place, since there's no detail in it to blur.
+2. **Before/after comparison slider** (`.compare-slider`, on the Promise
+   page — "See the Difference"). A draggable divider between a blurred
+   layer and a sharp layer of the same content.
+   **Why this one:** the second-most on-brand item — a blurry/sharp
+   comparison is literally what corrective lenses do, which is a more
+   specific and more delightful fit than a generic image slider.
+   Since there's still no photography in this repo, both layers render
+   the same CSS/HTML "content" rather than a photo: the brand wordmark
+   set in decreasing sizes, deliberately styled like a Snellen eye
+   chart. That's a substitution in the same spirit as Promise's
+   icon-panels (§2a) — flagged here rather than left as an unremarked
+   simplification.
+   Interaction is Pointer Events (`pointerdown`/`pointermove`/`pointerup`
+   in `site.js`, unifying mouse and touch) plus `ArrowLeft`/`ArrowRight`
+   keyboard support (`role="slider"`, `aria-valuenow` kept in sync). The
+   position update is a direct, immediate response to input — not a
+   decorative animation — so there's nothing for `prefers-reduced-motion`
+   to disable in the interaction itself; the only thing gated by it is
+   the handle's own hover transition. With no JS at all, the slider
+   simply stays at its default 50/50 split — both labels ("Without
+   Correction" / "With Northlight") are still present and readable in
+   the static HTML either way.
+3. **Lens-style cursor zoom** (`.lens-zoom`) on product imagery —
+   supersedes the original repo's flat `.card img:hover { scale(1.04) }`.
+   `site.js` tracks the cursor position over the image and updates
+   `transform-origin` on `mousemove`, so the zoom (now `scale(1.18)`)
+   centers on whatever part of the image the cursor is over, reading
+   like a magnifying lens rather than a uniform center-zoom. Applied to
+   `partials/card.blade.php` and the product detail page image, each
+   now wrapped in an `overflow-hidden` container so the larger zoom
+   doesn't spill past the image's rounded corners.
+   **Bug caught and fixed during verification:** these same images also
+   carry `.reveal.reveal-blur`. Once an image's reveal fires,
+   `.reveal.reveal-blur.reveal-pending.is-visible` (4 classes) stays on
+   the element permanently and keeps setting its own `transition`
+   shorthand — which silently beat `.lens-zoom`'s 1-class `transition:
+   transform 0.3s ease` on specificity. Every hover *after* the initial
+   reveal was inheriting the reveal's 0.7s duration instead of the
+   intended 0.3s. Not a visible break, just wrong on inspection — caught
+   by checking `getComputedStyle(img).transitionDuration` after
+   scrolling the image into view, not by assumption. Fixed with a scoped
+   `!important` on `.lens-zoom`'s transition (documented inline next to
+   the rule, same convention as the pre-existing `.sale-badge`
+   override).
+4. **Toast notifications** — `partials/alerts.blade.php` rebuilt around
+   a `.toast-stack` wrapper and a `.toast-notification` entrance
+   animation (`@keyframes northlight-toast-in`, translateY+scale+fade).
+   **Why this one:** the existing flash messages were already
+   toast-*positioned* (fixed, bottom-end, dismissible) but had no
+   entrance motion and, on closer inspection, a latent bug — the cart
+   message and the success message each used the exact same fixed
+   position independently, so if both ever fired at once they'd have
+   rendered exactly on top of each other. The rebuild fixes that
+   (`d-flex flex-column-reverse` stacks them) as a natural consequence
+   of building this properly, not a separate fix. `site.js` also adds a
+   6-second auto-dismiss via Bootstrap's own `Alert.getOrCreateInstance(el).close()` API — every toast
+   remains fully readable and manually dismissible
+   (`data-bs-dismiss="alert"`) with or without that timer.
+5. **Animated underline on nav link hover** — a `::before` pseudo-element
+   that grows from 0 to 100% width under `.navbar-nav .nav-link` on
+   hover/focus.
+   **Bug caught and fixed during verification:** the first version used
+   `::after`, which collided with Bootstrap's own dropdown-toggle caret
+   — also implemented via `::after` on the same `.nav-link` element.
+   The two rules don't merge cleanly (the underline rule's higher
+   specificity won for `position`/`content`, keeping Bootstrap's
+   border-triangle shape but repositioning it), and the result was a
+   visibly broken caret on both "Categories" and "About." Caught by a
+   close-up screenshot of the nav, not by reading the CSS — switched to
+   `::before`, which nothing else on `.nav-link` uses, confirmed fixed
+   by a second screenshot.
+6. **Animated stat counters** — three tiles near the top of the About
+   page ("Years Serving Portland," "Patients Cared For," "Languages
+   Spoken by Our Team"), counting up via `requestAnimationFrame` when
+   scrolled into view.
+   **Placeholder numbers, flagged as such (per the request):** "15+
+   Years Serving Portland" and "8,000+ Patients Cared For" are
+   illustrative, not audited business metrics — flagged in a Blade
+   comment directly above the markup and here. "15" was deliberately
+   chosen to match Dr. Okafor's stated tenure in her bio for narrative
+   consistency, not because it's real practice history. "Languages
+   Spoken by Our Team" is **not** a placeholder — `AboutController`
+   computes it live (`collect($team)->pluck('languages')->flatten()->unique()->count()`),
+   currently `8`.
+   Each counter's HTML always contains its correct final value as
+   static text (e.g. `15+`) — the count-up only ever animates *on top
+   of* an already-correct number; if `site.js` never runs, that's
+   exactly what a visitor sees. This mirrors the reveal system's rule:
+   the animation is additive, never a withholding mechanism.
+
+**Skipped, and why:**
+
+- **Magnetic buttons** (cursor-following shift on primary CTAs). The
+  button layer already has a lift/press micro-interaction from the
+  second milestone (§3a); adding cursor-chasing motion on top read as
+  compounding rather than complementing, and felt tonally off for a
+  healthcare-adjacent local business — playful cursor-chase effects fit
+  a fashion or consumer-tech brand more than an eye-care practice
+  building trust.
+- **Transparent-over-hero nav.** The literal version of this pattern
+  only makes sense on a page with a hero image behind the header — that
+  is Home alone; every other route's header sits on plain page content
+  with no hero to be transparent over. Doing it properly would mean
+  conditional per-route header behavior (position, z-index, initial
+  text color) in a single shared partial used on every page, which is a
+  meaningfully bigger structural change than the rest of this pass, and
+  risks exactly the kind of "preserve existing layout" regression this
+  project has otherwise avoided. The second milestone's `.nav-scrolled`
+  "solidify" transition already gives the nav scroll-responsive weight
+  without that risk.
+- **Staggered word/character reveal on headlines.** Splitting headline
+  text into per-character/word spans is a generic premium technique,
+  not something that reads as specifically *this* brand's move the way
+  blur-to-focus or the before/after slider do — and with six other
+  details already landing on these same five pages, adding a seventh
+  risked exactly what the brief warned against: "too many reads busy."
+  Skipped in favor of restraint.
+
+**Verification for this milestone:** full Playwright sweep re-run after
+every fix (not just once at the end) — 10 routes × desktop/mobile ×
+normal/reduced motion, 40 combinations, zero overflow / zero page errors
+/ zero stuck-hidden reveals in the final run. Plus targeted checks:
+`.compare-slider` drag-to-20% and two `ArrowRight` presses verified via
+`aria-valuenow` (20 → 30, exactly as expected); `.lens-zoom`
+`transform-origin` verified to track a simulated mouse position; a full
+register→toast→7-second-wait run verified the toast appears and
+auto-dismisses; the nav caret fix and the underline itself were each
+confirmed by screenshot, not inferred from the CSS.
 
 ## 4. Implementation Roadmap
 
@@ -227,6 +401,21 @@ polish):**
 15. ~~Re-verify: overflow, console/page errors, stuck-hidden reveals —
     desktop + mobile × normal + reduced motion (40 combinations)~~
 16. ~~Update this document and `PROJECT_STATUS.md`~~
+
+**Third milestone (signature "wow" details — last UI pass):**
+
+17. ~~Pick 4–6 of 9 candidate details, prioritizing on-brand fit;
+    document what was skipped and why (§3b)~~
+18. ~~Implement all six: blur-to-focus reveal, before/after slider,
+    lens-zoom, toast notifications, animated nav underline, stat
+    counters~~
+19. ~~Re-run the full Playwright sweep after each fix, not just once at
+    the end — caught and fixed three real bugs this way (full-bleed
+    blur overflow, a transition-shorthand conflict, a colliding
+    `::after` pseudo-element) rather than assuming the CSS was correct~~
+20. ~~Targeted verification of each interactive mechanism: slider
+    drag + keyboard, lens cursor-tracking, toast auto-dismiss~~
+21. ~~Update this document and `PROJECT_STATUS.md`~~
 
 ## 5. Current Project Status
 
@@ -269,3 +458,17 @@ snapshot (updated as work lands).
   are visual/motion only.** None of them change what a screen reader
   announces, tab order, or focus behavior. `prefers-reduced-motion`
   removes the animation but never the content (§3a).
+- **The before/after slider's "photo" is a styled eye chart, not an
+  image.** Same root cause as the Promise icon-panels above — no
+  photography exists in this repo. Both slider layers render identical
+  brand-wordmark typography (styled like a Snellen eye chart), one
+  layer blurred, the other sharp. Flagged here and in §3b, not a silent
+  substitution.
+- **Two About-page stats are illustrative placeholders, one is real.**
+  "15+ Years Serving Portland" and "8,000+ Patients Cared For" are not
+  audited business metrics — they exist to demonstrate the count-up
+  interaction and were explicitly requested as placeholders. "Languages
+  Spoken by Our Team" is computed live from `config('northlight.team')`
+  in `AboutController` and is not a placeholder. Full detail in §3b.
+  Before this site is treated as real, the two illustrative numbers need
+  replacing with actual figures (or removing).
