@@ -30,8 +30,15 @@ RUN composer install --no-dev --no-scripts --no-interaction --optimize-autoloade
 COPY . .
 COPY --from=assets /app/public/build ./public/build
 
+# Not `mkdir -p storage/framework/{sessions,views,cache}` — Docker's
+# default RUN shell is dash (/bin/sh), which does not expand bash-style
+# braces. That form silently creates one literal directory named
+# "{sessions,views,cache}" instead of three real ones, and Laravel then
+# fails at request time with "file_put_contents(.../sessions/<id>): No
+# such file or directory" — caught by actually running the built image
+# against a real database before pushing, not by reading the Dockerfile.
 RUN composer run-script post-autoload-dump \
-    && mkdir -p storage/framework/{sessions,views,cache} storage/logs \
+    && mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs \
     && chmod -R 775 storage bootstrap/cache
 
 COPY docker/start.sh /usr/local/bin/start.sh
