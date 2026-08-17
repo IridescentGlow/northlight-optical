@@ -1,2 +1,20 @@
 *
 !.gitignore
+
+# The eight Northlight product-catalog photos. storage/app/public/ is
+# gitignored by stock Laravel because it's meant for runtime uploads, not
+# source-controlled assets — but these are static catalog images the app
+# requires to render correctly, with no upload flow that would ever
+# recreate them. Left ignored, they would be invisible to `git push` and
+# to any git-based deploy, and every product listing would show a broken
+# image on a fresh clone. Named individually rather than `!images/` so a
+# real future user upload landing in this directory stays ignored.
+!images/
+!images/sunglasses1.jpg
+!images/sunglasses2.jpg
+!images/sunglasses3.jpg
+!images/sunglasses4.jpg
+!images/eyeglasses1.jpg
+!images/eyeglasses3.jpg
+!images/eyeglasses4.jpg
+!images/eyeglasses5.jpg
