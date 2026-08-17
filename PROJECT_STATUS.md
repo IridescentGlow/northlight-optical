@@ -482,3 +482,114 @@ reasoning in `docs/NORTHLIGHT.md` §2c.
 ### Blocked on
 
 - Push/deploy decision, and the remote question above.
+
+---
+
+## Milestone 6: Pre-push cleanup
+
+**Status: complete and verified. Not pushed, not deployed.**
+
+### The "deleted products section" — not a deletion
+
+Working tree was clean at the start of this pass; nothing had been
+removed. `GET /products` returned 404 because a new `public/products/`
+staging folder shadowed the route at the web-server level (a real
+directory in the document root resolves before Laravel ever sees the
+request). Proven by moving it away (200) and back (404). Images relocated
+to `reference/product-images/` (untracked, safe).
+
+### Product photos
+
+Only 2 of the 9 images supplied were clean. The other 7: 5 have a fake
+"pay to unlock the real transparent file" checkerboard baked directly
+into their pixels (confirmed via alpha-channel extraction — 100% opaque
+on every one, so this is not a conversion bug), 2 carry a tiled "pngtree"
+watermark, and one of the checkerboard images is a real Ray-Ban stock
+photo with the wordmark legible on the lens and arm.
+
+This was surfaced to the user in full — which image has which defect,
+which slot it would fill — before any of them were wired in, with three
+options offered. **The user chose "ship all 8 as converted, watermarks
+and all."** All 8 are now live at the exact filenames the catalog
+requests, tracked past `storage/app/public/`'s default gitignore (was
+gitignoring everything; these are static catalog assets with no upload
+flow to recreate them).
+
+**Real trademark now live in the catalog, by the user's informed choice:**
+`sunglasses1.jpg` ("Classic Black Sunglasses") is Ray-Ban's own product
+photo. This should be resolved with a rights-cleared photo before the
+site is shown to anyone outside this project.
+
+### Hero: 11.7MB → 585KB, CDN dependency removed
+
+Both flagged as needed before push in the prior milestone; both done, and
+both took a second attempt after the first one silently didn't work —
+caught by testing, not assumed:
+
+- Compression via `gltf-transform optimize`. First run used the
+  pipeline's default (meshopt) and produced a GLB that failed to render
+  at all in model-viewer's bundled loader. Switched to
+  `--compress draco`, confirmed pixel-equivalent to the original via a
+  fixed-camera-angle screenshot comparison including a cropped closeup on
+  the model's fine bead/knot detail.
+- CDN removal via `@google/model-viewer` as an npm dependency — but as a
+  **dynamic** import gated on the page actually containing a
+  `<model-viewer>` element. A static import first tried in `app.js` put
+  ~300KB gzipped in the *shared* bundle every route loads; caught by
+  comparing build output sizes before/after, fixed by moving the import
+  into `site.js` behind a `document.querySelector` check.
+- That still weren't enough: Draco's WASM decoder is fetched from
+  `www.gstatic.com` by default, which would have quietly reintroduced an
+  external-host dependency of the same kind just removed. Caught by
+  inspecting the actual network requests, not by reading the library's
+  advertised API. Fixed by self-hosting the three decoder files at
+  `public/draco/` and setting `window.ModelViewerElement.dracoDecoderLocation`
+  as a **global, before** the dynamic import resolves — the library reads
+  that property synchronously as each element upgrades, during import
+  evaluation, before any `.then()` could run. Found by reading the
+  library's own bundled source after the "set it after import" version
+  silently did nothing.
+
+### Verification performed
+
+- Every image's checkerboard/watermark defect confirmed by direct visual
+  inspection at 2x-3x zoom, not inferred from thumbnails.
+- Alpha-channel extraction (`mean alpha: 1` on all 5 checkerboard sources)
+  confirming the pattern is baked into RGB, not a real-transparency
+  conversion bug on our end.
+- All 8 final image URLs return 200; 0 broken `/storage/` requests
+  site-wide (down from the pre-existing 9 broken image requests present
+  since Milestone 1).
+- GLB before/after compared at a **fixed** camera angle (no auto-rotate
+  drift to hide behind) plus a cropped closeup on the model's most
+  detailed feature — pixel-equivalent.
+- Bundle sizes compared before/after each hero JS change: shared bundle
+  confirmed back at ~26KB gzip (matching pre-hero baseline) with
+  `model-viewer` isolated into its own ~298KB chunk.
+- Per-route network logging: `model-viewer` chunk requested on `/`,
+  absent on `/products`, `/about`, `/cart`. Zero non-font external
+  requests on `/` (down from the CDN script plus its gstatic.com
+  sub-fetch). Model reports `loaded:true`. GLB served at 572KB. All three
+  self-hosted decoder files return 200.
+- Full 100-combination sweep re-run: **0 flagged, 0 console errors across
+  all 100 runs** (previously 90 — every one was a product-image 404, now
+  fixed). 21-combination signed-in sweep re-run: 0 flagged.
+- `php artisan test` 2/2, `php -l` clean, `npm run build` clean.
+- Confirmed `origin` unchanged throughout
+  (`git@github.com:bhupindersingh007/sunray.git`) and nothing pushed.
+
+### Known gaps
+
+- **The Ray-Ban trademark in `sunglasses1.jpg`** — see above. Needs a
+  rights-cleared replacement before this is shown outside this project.
+- **`origin` still points at the upstream repo.** Must be repointed
+  before any push — this was never in scope to change unilaterally.
+- **The upstream licence question is unresolved** (Milestone 5): no
+  LICENSE file, no attribution terms in the README; the footer credit
+  stays until the upstream author says otherwise.
+- Everything else from Milestones 1–5 not listed above is unchanged.
+
+### Blocked on
+
+- Push/deploy decision, the remote question, and the trademark image —
+  all the user's call, not made here.

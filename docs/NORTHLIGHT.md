@@ -305,6 +305,96 @@ milestone:
 | Opening-hours card had hover-only shadow | New `.card-elevated`: persistent resting shadow, and a hover that lifts *and* wipes a brand accent bar across the top edge rather than only deepening the same shadow. |
 | `/products` returned 404 | Not a code fault and nothing was deleted — a `public/products/` directory had been created for staging images, and the web server matches a real directory in the document root before Laravel's router ever sees the request. Proven by moving it away (200) and back (404). See Known Constraints. |
 
+### 2e. Pre-push cleanup (sixth milestone)
+
+**Product photos.** `config('northlight.*')` content was never in question,
+but the eight product photos referenced by the seeded catalog
+(`storage/app/public/images/*.jpg`) were missing since Milestone 1 — the
+site's oldest known gap. The user supplied 9 candidate images. Inspecting
+them (not just converting them) found that only 2 of the 9 were clean:
+
+| Source file | Defect | Used as |
+|---|---|---|
+| `image1.png` | none | `eyeglasses3.jpg` |
+| `image2.jpg` | none | `eyeglasses5.jpg` |
+| `image3.png` | fake checkerboard baked into pixels | `eyeglasses4.jpg` |
+| `image4.webp` | fake checkerboard baked into pixels | `eyeglasses1.jpg` |
+| `image5.png` | fake checkerboard baked into pixels | `sunglasses3.jpg` |
+| `image6.jpg` | "pngtree" watermark tiled across image | not used |
+| `image7.jpg` | "pngtree" watermark tiled across image | `sunglasses4.jpg` |
+| `image8.png` | fake checkerboard **+** real Ray-Ban wordmark visible on lens/arm | `sunglasses1.jpg` |
+| `image9.webp` | fake checkerboard baked into pixels | `sunglasses2.jpg` |
+
+The "checkerboard" is not a transparency bug from converting these to
+JPEG — verified by extracting each source's alpha channel and confirming
+it is 100% opaque (`mean alpha: 1` on every file). It is drawn directly
+into the RGB pixels, the way several stock/mockup marketplaces render a
+free preview: a fake "this file is normally transparent, pay to unlock
+the real one" watermark. Neither that pattern nor the "pngtree" text was
+edited out — doing so would mean defeating another site's rights-
+protection mechanism, which was out of bounds regardless of instruction.
+
+This was surfaced to the user directly (not silently shipped, not
+silently substituted) with three options — ship only the 2 clean images
+and leave the rest broken, ship all 8 with the defects visible, or pause
+for different source images. **The user chose to ship all 8 as
+converted**, an informed decision made after seeing the specific defects
+listed above. `sunglasses1.jpg` ("Classic Black Sunglasses") therefore
+carries a real third-party trademark in production; see Known
+Constraints.
+
+Converted to the eight exact filenames the app requests (confirmed live
+via 404s, not just read from the seeder) and normalized to `.jpg`
+regardless of source format. `storage/app/public/.gitignore` gained
+per-filename negations — these are static catalog assets with no upload
+flow that recreates them, and left ignored they would never have reached
+a deploy.
+
+**Hero GLB compression and CDN removal.** Two things flagged as needed
+before push, both now done:
+
+- The 11.7MB model is now 585KB, via `gltf-transform`'s optimize pipeline
+  (weld, meshoptimizer simplify at a 0.6 vertex-ratio target, Draco
+  geometry compression, 2048px textures resized to 1024px and re-encoded
+  as WebP). Verified visually, not just by file size — the pipeline's
+  *default* compression method is meshopt, which failed outright in
+  model-viewer's bundled loader (`setMeshoptDecoder must be called before
+  loading compressed files`); switched to `--compress draco`, which
+  model-viewer decodes natively. Confirmed pixel-equivalent at a fixed
+  camera angle against the original, including a cropped closeup on the
+  model's decorative bead/knot detail.
+- `@google/model-viewer` replaces the `ajax.googleapis.com` `<script>`
+  tag as an npm dependency — but only as a **dynamic** import
+  (`resources/js/site.js`, gated on `document.querySelector('model-viewer')`),
+  not a static one. A static import in `app.js` was tried first and put
+  the ~300KB-gzipped Three.js payload this component bundles into the
+  *shared* chunk every page loads, taking it from 26KB to 324KB gzipped
+  on About, Cart, Login — everywhere, not just Home. Caught by comparing
+  the built bundle sizes before and after, not assumed.
+- That import alone was not sufficient: Draco decoding fetches its WASM
+  module from `www.gstatic.com` by default, which would have silently
+  reintroduced an external-host dependency identical in kind to the one
+  just removed. The three required decoder files are now self-hosted
+  (`public/draco/`, copied from `three`'s own package — decoder only, the
+  encoder isn't needed at runtime) and wired up via
+  `window.ModelViewerElement.dracoDecoderLocation`, set as a plain global
+  **before** `import('@google/model-viewer')` resolves. This ordering is
+  load-bearing: the library reads `self.ModelViewerElement.dracoDecoderLocation`
+  itself, synchronously, from each `<model-viewer>` instance's constructor
+  as it upgrades during module evaluation — before any `.then()` on that
+  import could ever run. Found by reading the library's own bundled
+  source after the first attempt (setting the property on the imported
+  class binding, after the import resolved) silently didn't work.
+
+Verified: zero non-font external requests on the homepage (down from the
+CDN script plus its own `gstatic.com` sub-fetch); model reports
+`loaded: true`; GLB served at 572KB; all three decoder files 200 at their
+new same-origin path; the `model-viewer` JS chunk requested on `/` and
+confirmed absent from network logs on `/products`, `/about`, `/cart`.
+Full 100-combination sweep re-run clean, with total console errors across
+all 100 runs at **0** (previously 90 — all the product-image 404s the
+first fix above resolved). 21-combination signed-in sweep re-run clean.
+
 ## 3. Design / UX Rules
 
 1. **No new colors, fonts, or spacing scale.** Only `$brown` / `$brown-dark`
@@ -612,6 +702,27 @@ order, since the nav is the more load-bearing of the two):**
     via a contrast audit, white-on-gradient text failing AA at 2.41:1~~
 28. ~~Update this document and `PROJECT_STATUS.md`~~
 
+**Sixth milestone (pre-push cleanup):**
+
+29. ~~Diagnose the "products section deleted" report — found no deletion;
+    `public/products/` (a staging folder for new photos) was shadowing
+    the `/products` route at the web-server level~~
+30. ~~Inspect all 9 candidate product photos individually rather than
+    converting them blind — found 6 with a watermark or a fake
+    checkerboard baked into their pixels, one of those also a real
+    Ray-Ban trademark, and surfaced the full breakdown to the user
+    before proceeding~~
+31. ~~Convert and place all 8 (per the user's explicit choice), track
+    them past `storage/app/public/`'s default gitignore~~
+32. ~~Compress the hero GLB — first attempt (meshopt) silently failed to
+    render in model-viewer; caught by testing, switched to Draco~~
+33. ~~Remove the hero's CDN dependency on ajax.googleapis.com — first
+    attempt reintroduced an equivalent dependency on www.gstatic.com via
+    Draco's default decoder location; caught by network-request
+    inspection, not assumed fixed~~
+34. ~~Re-run the full sweep and the signed-in sweep after every change~~
+35. ~~Update this document and `PROJECT_STATUS.md`~~
+
 ## 5. Current Project Status
 
 See [`../PROJECT_STATUS.md`](../PROJECT_STATUS.md) for the live status
@@ -631,11 +742,17 @@ snapshot (updated as work lands).
   caps at PHP 8.3). `composer install --ignore-platform-reqs` was used to
   install; this affects only dev-only error-page tooling, not the app
   itself, and `composer.lock` was not regenerated.
-- **Product photography is still broken, pre-existing.** `partials/card.blade.php`
-  renders `asset('storage/' . $product->image_url)`, but no product images
-  ship in the repo (`storage/app/public` is empty aside from the symlink).
-  This was true before this project and is out of scope — it's a shop-catalog
-  concern, not something the new marketing pages touch.
+- **Product photography now exists, but with real defects the user chose
+  to accept.** `storage/app/public/images/*.jpg` (8 files, tracked) render
+  correctly across the catalog. Six of the eight visibly show a fake
+  "unlock to get the real transparent file" checkerboard or a tiled
+  "pngtree" watermark, and `sunglasses1.jpg` ("Classic Black Sunglasses")
+  is a real Ray-Ban stock photo with the Ray-Ban wordmark legible in the
+  image itself — a genuine third-party trademark now live in the catalog.
+  Full per-image breakdown in §2e. **This needs resolving with real,
+  rights-cleared photography before the site is shown to anyone outside
+  this project** — the trademark in particular is a different order of
+  problem than a cosmetic watermark.
 - **No outbound mail.** `.env(.example)` configures `MAIL_HOST=mailpit`,
   which isn't running anywhere in this setup. The Contact form does not
   attempt to send email; it validates, logs, and flashes a success message.
@@ -698,18 +815,17 @@ snapshot (updated as work lands).
   (`git@github.com:bhupindersingh007/sunray.git`). Nothing has been
   pushed. A `git push` from this clone targets the original author's
   repository, not a fork — the remote has to be repointed before any push.
-- **The hero depends on an external host at runtime.**
-  `<model-viewer>` is loaded from `ajax.googleapis.com`. If that host is
-  blocked or unreachable the 3D model silently does not appear; the
-  headline, copy and CTA are unaffected and a placeholder holds the space.
-  Installing `@google/model-viewer` from npm would bundle it through Vite
-  and remove the dependency, at the cost of ~300KB in the app bundle.
-- **`public/models/hero-glasses.glb` is 11.7MB.** That is a large
-  first-paint cost on the site's most important page, and it is big enough
-  to visibly delay other work on the main thread (it perturbed one
-  verification probe). Compressing it — Draco/meshopt geometry compression
-  plus KTX2 textures — would typically bring it under 2MB with no visible
-  quality loss. Worth doing before this is treated as production.
+  **Not resolved — still blocks push.**
+- ~~The hero depends on an external host at runtime.~~ **Resolved in the
+  sixth milestone.** `@google/model-viewer` is now an npm dependency,
+  dynamically imported only on the route that uses it, with its Draco
+  decoder self-hosted at `public/draco/` rather than fetched from
+  `www.gstatic.com`. Verified zero non-font external requests on `/`. See
+  §2e for why this took two attempts to get right.
+- ~~`public/models/hero-glasses.glb` is 11.7MB.~~ **Resolved in the sixth
+  milestone.** Now 585KB via Draco geometry compression + WebP textures,
+  confirmed pixel-equivalent to the original at a fixed camera angle. See
+  §2e.
 - **`g-5` overflows the viewport below `sm`.** A 3rem horizontal gutter
   gives a `.row` -24px side margins while `.container` only pads 12px.
   Above `sm` the container is centred with slack to absorb it; below,
