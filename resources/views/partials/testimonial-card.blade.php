@@ -1,4 +1,4 @@
-<article class="card border-0 h-100">
+<article class="card border-0 h-100 hover-lift reveal">
     <div class="card-body px-0">
 
         <p class="display-6 text-brown mb-0" style="line-height: 1;">&ldquo;</p>

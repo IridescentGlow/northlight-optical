@@ -1,4 +1,4 @@
-<article class="card border-0 position-relative">
+<article class="card border-0 position-relative hover-lift">
 
     @if($product->on_sale == true)
 

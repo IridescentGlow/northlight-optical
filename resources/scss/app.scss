@@ -112,6 +112,27 @@ $btn-hover-bg-tint-amount:        2%;
     }
 }
 
+// Icon-led list rows (Services page): a soft background tint on hover
+// instead of a border/shadow, since these rows are full-width and a
+// lift/shadow treatment would look out of place in a list.
+.service-row {
+    transition: background-color 0.2s ease, padding-left 0.2s ease;
+    border-radius: 0.5rem;
+
+    &:hover {
+        background-color: rgba($brown, 0.06);
+        padding-left: 0.5rem;
+    }
+}
+
+// Full-width gradient panel used by the Promise page's alternating
+// split-panel layout in place of a photo (no team/location photography
+// exists in this repo) — built from the same two tokens as everything
+// else, not a new color.
+.icon-panel {
+    background: linear-gradient(135deg, $brown, $brown-dark);
+}
+
 // Sticky header: stays visually identical at rest; gains depth and a
 // frosted-glass backdrop once the page is scrolled. .nav-scrolled is
 // toggled by JS (resources/js/site.js). !important matches the existing

@@ -13,6 +13,9 @@ class TestimonialController extends Controller
     {
         $testimonials = config('northlight.testimonials');
 
-        return view('testimonials.index', compact('testimonials'));
+        $featured = $testimonials[0];
+        $supporting = array_slice($testimonials, 1);
+
+        return view('testimonials.index', compact('featured', 'supporting'));
     }
 }

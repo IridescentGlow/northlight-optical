@@ -6,7 +6,7 @@
 
 <section class="container my-5">
 
-    <header class="row justify-content-center text-center mb-5">
+    <header class="row justify-content-center text-center mb-5 reveal">
         <div class="col-lg-8">
             <h2 class="mb-3">About {{ $business['name'] }}</h2>
             <p class="lead text-muted">
@@ -18,7 +18,7 @@
         </div>
     </header>
 
-    <header class="row align-items-center mb-4">
+    <header class="row align-items-center mb-4 reveal">
         <div class="col-8">
             <h4 class="mb-0">Meet the Team</h4>
         </div>
@@ -27,17 +27,37 @@
         </div>
     </header>
 
-    <div class="row">
+</section>
 
-        @foreach($team as $member)
+<section class="container mb-3">
 
-        <div class="col-md-6 col-lg-4 mb-4">
-            @include('partials.team-member', ['member' => $member])
+    @foreach($team as $member)
+
+    <div class="row align-items-center mb-5 pb-5 {{ $loop->last ? '' : 'border-bottom' }} reveal">
+
+        <div class="col-md-4 col-lg-3 text-center {{ $loop->even ? 'order-md-2' : '' }} mb-4 mb-md-0">
+            <div class="bg-brown text-white rounded-circle d-flex align-items-center justify-content-center fw-bold mx-auto"
+                style="width: 9rem; height: 9rem; font-size: 2.5rem; transform: rotate({{ $loop->even ? '3deg' : '-3deg' }});">
+                {{ $member['initials'] }}
+            </div>
         </div>
 
-        @endforeach
+        <div class="col-md-8 col-lg-9 {{ $loop->even ? 'order-md-1 text-md-end' : '' }}">
+
+            <h3 class="mb-1">{{ $member['name'] }}</h3>
+            <p class="text-brown fw-semibold mb-3">{{ $member['role'] }}</p>
+            <p class="fs-5 text-muted mb-3">{{ $member['bio'] }}</p>
+
+            <p class="small text-muted mb-0 d-flex align-items-center {{ $loop->even ? 'justify-content-md-end' : '' }}">
+                @include('partials.icon', ['icon' => 'globe', 'size' => 14])
+                <span class="ms-1">{{ implode(', ', $member['languages']) }}</span>
+            </p>
+
+        </div>
 
     </div>
+
+    @endforeach
 
 </section>
 

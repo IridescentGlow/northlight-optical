@@ -4,9 +4,8 @@
 
 @section('content')
 
-<section class="container my-5">
-
-    <header class="row justify-content-center text-center mb-5">
+<div class="container my-5">
+    <header class="row justify-content-center text-center mb-5 reveal">
         <div class="col-lg-8">
             <h2 class="mb-3">Our Promise</h2>
             <p class="lead text-muted">
@@ -15,31 +14,37 @@
             </p>
         </div>
     </header>
+</div>
 
-    <div class="row">
+@foreach($promise as $feature)
 
-        @foreach($promise as $feature)
+<section class="reveal">
+    <div class="row g-0 align-items-stretch flex-md-row{{ $loop->even ? '-reverse' : '' }}">
 
-        <div class="col-md-6 col-lg-4 mb-4">
-            <article class="card border-0 h-100">
-                <div class="card-body px-0">
-
-                    <div class="bg-brown text-white rounded-circle d-flex align-items-center justify-content-center mb-3"
-                        style="width: 3rem; height: 3rem;">
-                        @include('partials.icon', ['icon' => $feature['icon'], 'size' => 22])
-                    </div>
-
-                    <h5 class="card-title">{{ $feature['title'] }}</h5>
-                    <p class="card-text text-muted">{{ $feature['description'] }}</p>
-
-                </div>
-            </article>
+        <div class="col-md-5 icon-panel text-white d-flex align-items-center justify-content-center py-5"
+            style="min-height: 220px;">
+            @include('partials.icon', ['icon' => $feature['icon'], 'size' => 64])
         </div>
 
-        @endforeach
+        <div class="col-md-7 d-flex align-items-center">
+            <div class="p-4 p-lg-5">
+                <h4 class="mb-3">{{ $feature['title'] }}</h4>
+                <p class="text-muted fs-5 mb-0">{{ $feature['description'] }}</p>
+            </div>
+        </div>
 
     </div>
-
 </section>
+
+@endforeach
+
+<div class="container">
+    <div class="row justify-content-center text-center my-5 reveal">
+        <div class="col-lg-6">
+            <p class="text-muted mb-3">Questions about how we can accommodate your visit?</p>
+            <a href="{{ route('contact.create') }}" class="btn btn-primary py-2 px-3">Contact Us</a>
+        </div>
+    </div>
+</div>
 
 @endsection

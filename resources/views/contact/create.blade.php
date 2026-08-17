@@ -6,11 +6,13 @@
 
 <div class="container my-5 pb-5">
 
-    <h4 class="mb-2">Contact &amp; Booking</h4>
-    <p class="text-muted mb-4">Send us a message or request an appointment — we'll follow up within one business day.</p>
+    <div class="reveal">
+        <h4 class="mb-2">Contact &amp; Booking</h4>
+        <p class="text-muted mb-4">Send us a message or request an appointment — we'll follow up within one business day.</p>
+    </div>
 
     <div class="row">
-        <div class="col-lg-7">
+        <div class="col-lg-7 reveal">
 
             <form action="{{ route('contact.store') }}" method="POST">
 
@@ -78,9 +80,9 @@
 
         </div>
 
-        <div class="col-lg-5 mt-lg-3">
+        <div class="col-lg-5 mt-lg-3 reveal">
 
-            <div class="card border-0 bg-light-subtle p-4">
+            <div class="card border-0 bg-light-subtle p-4 hover-lift">
 
                 <h5 class="mb-3">{{ $business['name'] }}</h5>
 
