@@ -45,6 +45,13 @@ skipped — reasoning in §3b.
    overview built on a deliberate narrative arc, with every module linking
    forward to its full page.
 
+**Fifth milestone** (§2d) — a final adjustment pass before push: a
+full-viewport 3D hero with a transparent-over-hero nav, a one-shot light
+sweep on the sale banner, and six corrections (two of them regressions
+introduced by the fourth milestone). Also two report-only investigations
+— the upstream licence position and the product-image filenames — which
+resulted in no code change by design.
+
 Everything else — the product catalog, cart, checkout, auth, account
 dashboard — is reused as-is. It already behaves like a real eyewear store's
 shop section, so there was no reason to touch it beyond the auth-prompt fix.
@@ -242,6 +249,61 @@ the section reads as a single thought.
 by measurement rather than inspection — see §6 and `PROJECT_STATUS.md`:
 white text on the brand gradient (2.41:1, fails AA), and a `g-5` gutter
 overflowing the viewport below `sm`.
+
+### 2d. Final adjustment pass (fifth milestone)
+
+**Hero.** `partials/hero.blade.php` is now a full-viewport white stage with
+a 3D model instead of a photographic banner:
+
+- Height is `calc(100svh - 3.75rem)`, not `100svh`. The header is
+  `position: sticky` so it occupies flow rather than overlaying; hero plus
+  header therefore fill exactly one screen (verified: 840+60 = 900 at
+  1440x900, 784+60 = 844 at 390x844). `svh` rather than `vh` so mobile
+  browser chrome can't push the CTA below the fold.
+- The model is Google's `<model-viewer>`, loaded as an ES module from
+  `ajax.googleapis.com`. **This makes the hero depend on an external host
+  at runtime** — see Known Constraints. If that host is unreachable the
+  custom element never upgrades, the `slot="poster"` fallback stays on
+  screen, and the headline/copy/CTA are unaffected (verified by aborting
+  requests to the CDN, not assumed).
+- One `<h1>`, replacing the old breakpoint pair that shipped two and hid
+  one per breakpoint. A `clamp()` between two existing display sizes
+  covers the same range at `font-weight: 700` — Bootstrap's `.display-*`
+  are weight 300, which is why the previous hero read as thin.
+- Entrance: model drops from above, copy fades up beneath it. The
+  0-opacity state exists only inside the keyframes and never as a resting
+  style, so `animation: none` under reduced motion falls back to fully
+  visible — the same guarantee the `.reveal` system makes (§3a).
+
+**Transparent-over-hero nav.** Skipped in the third milestone as too risky
+(§3b) because only Home has a hero and doing it properly meant conditional
+per-route header behaviour. What resolves that now is that the new hero
+ground is *white*: the existing dark wordmark and brown icons keep exactly
+the contrast they have against the normal white bar, so no light/dark nav
+variant is needed. Scoped with `request()->routeIs('home')`, and the
+existing `.nav-scrolled` handles solidify-on-scroll unchanged.
+
+**Light sweep** (`.light-sweep` + `site.js`). A one-shot diagonal sweep
+across the sale banner, fired once the section's bottom edge has scrolled
+into view. Deliberately *not* `threshold: 1.0` alone: a threshold of 1 can
+never be reached by an element taller than the viewport, which would make
+the effect silently never run. The banner measures 300–345px against
+844px+ viewports today, so the ratio fallback is insurance against copy
+growth rather than a live case. `forwards` holds the finished state, so it
+cannot loop or replay on scroll-back (verified by scrolling away and
+returning).
+
+**Six corrections**, two of which were regressions from the fourth
+milestone:
+
+| Fix | Cause |
+|---|---|
+| Hamburger visible at >=lg, where clicking it did nothing | **My regression.** The fourth milestone put `d-inline-flex` on `.navbar-toggler`; Bootstrap's display utilities carry `!important` and so beat `.navbar-expand-lg .navbar-toggler { display: none }`. Centring now lives inside `.nav-icon-link` as a plain single-class rule, which correctly loses to Bootstrap's two-class selector at >=lg. **Not deleted** — the element is the only way to reach the nav below lg. |
+| `.btn-outline-primary` stuck white-on-transparent after a click | **My regression.** My override set `color: $white` on `:focus`. Bootstrap 5.3 fills the button background on `:hover`, `:focus-visible` and `:active`, but *not* on plain `:focus` — which is exactly what a mouse click leaves behind. Now `:focus-visible`, matching Bootstrap's own state list. |
+| Staggered sections cramped | The Promise page's alternating panels are consecutive `<section>`s with no margin, so six alternating colour blocks read as one striped slab. New `.stagger-section` supplies 3rem/5rem between siblings, applied to both places the pattern appears (Promise panels, About bio rows) rather than one. |
+| "Read more patient stories" was a bare text link | Now `.btn.btn-outline-primary`, consistent with every other forward link on the homepage. |
+| Opening-hours card had hover-only shadow | New `.card-elevated`: persistent resting shadow, and a hover that lifts *and* wipes a brand accent bar across the top edge rather than only deepening the same shadow. |
+| `/products` returned 404 | Not a code fault and nothing was deleted — a `public/products/` directory had been created for staging images, and the web server matches a real directory in the document root before Laravel's router ever sees the request. Proven by moving it away (200) and back (404). See Known Constraints. |
 
 ## 3. Design / UX Rules
 
@@ -618,6 +680,36 @@ snapshot (updated as work lands).
   white *text*, it inherits a real AA failure. Not changed here because
   it is outside this milestone's scope and would alter an established
   page's visual direction.
+- **Never create a directory under `public/` whose name collides with a
+  route.** `public/products/` made `GET /products` return 404 site-wide:
+  the web server resolves a real path in the document root before Laravel
+  routes the request. It looks exactly like a deleted controller or view.
+  Staging images live in `reference/product-images/` (untracked) instead.
+- **The upstream project ships no licence.** There is no `LICENSE` file,
+  and the README has no licence or attribution section.
+  `composer.json`'s `"license": "MIT"` sits beside `"name":
+  "laravel/laravel"` — it is the stock Laravel skeleton value describing
+  the framework, not the Sunray work built on top of it. Absent a licence,
+  default copyright applies, which grants *fewer* rights than MIT rather
+  than more. There is therefore no basis on which removing the footer
+  credit is clearly permitted, and it stays. This needs a decision from
+  the upstream author, not an inference from us.
+- **`origin` still points at the upstream repository**
+  (`git@github.com:bhupindersingh007/sunray.git`). Nothing has been
+  pushed. A `git push` from this clone targets the original author's
+  repository, not a fork — the remote has to be repointed before any push.
+- **The hero depends on an external host at runtime.**
+  `<model-viewer>` is loaded from `ajax.googleapis.com`. If that host is
+  blocked or unreachable the 3D model silently does not appear; the
+  headline, copy and CTA are unaffected and a placeholder holds the space.
+  Installing `@google/model-viewer` from npm would bundle it through Vite
+  and remove the dependency, at the cost of ~300KB in the app bundle.
+- **`public/models/hero-glasses.glb` is 11.7MB.** That is a large
+  first-paint cost on the site's most important page, and it is big enough
+  to visibly delay other work on the main thread (it perturbed one
+  verification probe). Compressing it — Draco/meshopt geometry compression
+  plus KTX2 textures — would typically bring it under 2MB with no visible
+  quality loss. Worth doing before this is treated as production.
 - **`g-5` overflows the viewport below `sm`.** A 3rem horizontal gutter
   gives a `.row` -24px side margins while `.container` only pads 12px.
   Above `sm` the container is centred with slack to absorb it; below,

@@ -384,3 +384,101 @@ reasoning in `docs/NORTHLIGHT.md` §2c.
 ### Blocked on
 
 - Nothing. **Not pushed, not deployed** — awaiting the go-ahead.
+
+---
+
+## Milestone 5: Final adjustment pass
+
+**Status: complete and verified. Not pushed, not deployed.**
+
+### Two report-only items (no code change, by design)
+
+- **Product image filenames.** `storage:link` is correctly set up
+  (`public/storage` -> `storage/app/public`). The app requests exactly
+  eight files, confirmed from live 404s rather than only from the seeder:
+  `sunglasses1.jpg`, `sunglasses2.jpg`, `sunglasses3.jpg`,
+  `sunglasses4.jpg`, `eyeglasses1.jpg`, `eyeglasses3.jpg`,
+  `eyeglasses4.jpg`, `eyeglasses5.jpg` — all `.jpg`, all in
+  `storage/app/public/images/` (note: there is no `eyeglasses2`). The
+  directory now exists and is empty, ready for them.
+  **Caveat for deploy:** `storage/app/public/` is gitignored by stock
+  Laravel, so files placed there are local-only and will not reach a
+  server via `git push`. They need to be uploaded, committed to a tracked
+  path, or handled by the deploy process.
+- **Licence.** No `LICENSE` file exists and the README has no licence or
+  attribution section. `composer.json`'s `"license": "MIT"` is the stock
+  `laravel/laravel` skeleton value describing the framework, not the
+  Sunray work. With no licence granted, default copyright applies —
+  *fewer* rights than MIT, not more. Removing the footer credit is
+  therefore not demonstrably permitted, so **it has not been touched**.
+
+### Done
+
+- **Full-viewport 3D hero** — white ground, `<model-viewer>` GLB, model
+  drops in from above while the copy fades up, bolder single `<h1>`
+  (weight 700, replacing the old two-h1 breakpoint pair).
+- **Transparent-over-hero nav on Home only**, solidifying via the existing
+  `.nav-scrolled`. This was skipped in Milestone 3 as too risky; a white
+  hero removes the need for a light/dark nav variant, which is what made
+  it safe now.
+- **One-shot light sweep** on the 25%-off banner, fired once the section
+  is fully in view.
+- **Six corrections**, including two regressions from Milestone 4 (the
+  always-visible hamburger and the stuck outline button). Full cause
+  analysis in `docs/NORTHLIGHT.md` §2d.
+- **`/products` 404 explained and fixed.** Nothing had been deleted; a
+  `public/products/` staging directory shadowed the route, since the web
+  server matches a real path in the document root before Laravel routes
+  the request. Proven by moving it away (200) and back (404). Images moved
+  to `reference/product-images/`. This required no tracked-file change.
+
+### Verification performed
+
+- **Full sweep, 100 combinations** (10 routes x 1440/992/991/768/390 x
+  normal and reduced motion): **0 flagged**. Assertions per combination:
+  no horizontal overflow, no page errors, no reveal stuck hidden, exactly
+  one visible cart, no unnamed or sub-44px header control, and — new this
+  pass — **nothing left invisible by an entrance animation**.
+- **Signed-in sweep, 21 combinations** (7 routes x 1440/991/390, cart
+  populated, account dropdown opened on each): 0 flagged.
+- **Hamburger**: hidden at 1440 and 992; at 991 and 390 it still opens the
+  menu (collapse 0 -> 214px). Nav links reachable at all four widths.
+- **Outline buttons**: all five on the homepage confirmed returning to
+  gold-on-transparent after click-then-unhover, with keyboard
+  `:focus-visible` still filling.
+- **Light sweep**: does not fire on partial entry, fires once the bottom
+  edge clears the fold, does **not** replay after scrolling away and back,
+  and never fires under reduced motion.
+- **Hero**: hero+header = exactly the viewport at 1440x900 and 390x844;
+  white ground; nav transparent at rest and opaque after scroll; nav stays
+  opaque on `/about` (not-Home); single `<h1>` at weight 700; all
+  entrance-animated elements settle at opacity 1 in **both** motion modes.
+- **Hero CDN failure path verified, not assumed** — with requests to
+  `ajax.googleapis.com` aborted, the component never upgrades, the poster
+  fallback holds the space, and headline/copy/CTA render normally with no
+  page errors and no overflow. Both the working and failing paths were
+  confirmed.
+- **Staggered spacing**: Promise gaps 0px -> 80px; About 80–100px.
+- **Hours card**: persistent resting shadow, hover adds a -4px lift plus
+  an accent bar scaling 0 -> 1.
+- All 90 console errors across the sweep are the pre-existing product
+  image 404s, enumerated by URL — nothing from `model-viewer` or the GLB.
+- `php artisan test` 2/2, `php -l` clean on all touched files,
+  `npm run build` clean.
+
+### Known gaps
+
+- **`origin` still points at `bhupindersingh007/sunray`.** A push from
+  this clone targets the upstream author's repository. Must be repointed
+  before any push.
+- **The GLB is 11.7MB** — a heavy first-paint cost on the most important
+  page. Draco/meshopt + KTX2 would typically get it under 2MB.
+- **The hero depends on an external CDN at runtime**; npm-installing
+  `@google/model-viewer` would remove that at ~300KB of bundle.
+- Product photography still absent until the eight files above are added.
+- Everything previously listed for Milestones 1–4 is unchanged, including
+  the Promise page's white-on-gradient icons.
+
+### Blocked on
+
+- Push/deploy decision, and the remote question above.
