@@ -12,6 +12,11 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UpdateAccountController;
 use App\Http\Controllers\UpdatePasswordController;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\PromiseController;
+use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\IsCartEmpty;
 
@@ -32,6 +37,14 @@ Route::get('/', HomeController::class)->name('home');
 Route::resource('products', ProductController::class)->only(['index', 'show']);
 
 Route::resource('cart', CartController::class);
+
+Route::get('about', AboutController::class)->name('about');
+Route::get('services', ServicesController::class)->name('services');
+Route::get('promise', PromiseController::class)->name('promise');
+Route::get('testimonials', TestimonialController::class)->name('testimonials');
+
+Route::get('contact', [ContactController::class, 'create'])->name('contact.create');
+Route::post('contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('register', [RegisterController::class, 'create'])->name('register.create');
 Route::post('register', [RegisterController::class, 'store'])->name('register.store');
