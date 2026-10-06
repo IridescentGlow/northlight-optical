@@ -7,6 +7,17 @@
 
     <title>{{ config('app.name') }} - @yield('title')</title>
 
+    {{-- Search and social share previews. This site is a concept project, and
+         the default description says so, because the link gets shared. --}}
+    <meta name="description" content="@yield('description', 'Northlight Optical is a concept eyewear store: marketing pages, scroll motion and a 3D hero built on the open-source Sunray Laravel shop.')">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ config('app.name') }}">
+    <meta property="og:title" content="{{ config('app.name') }} - @yield('title')">
+    <meta property="og:description" content="@yield('description', 'Northlight Optical is a concept eyewear store: marketing pages, scroll motion and a 3D hero built on the open-source Sunray Laravel shop.')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ asset('images/home-banner.jpg') }}">
+    <meta name="twitter:card" content="summary_large_image">
+
     {{-- Bootstrap --}}
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 
