@@ -15,6 +15,7 @@
     <meta property="og:title" content="{{ config('app.name') }} - @yield('title')">
     <meta property="og:description" content="@yield('description', 'Northlight Optical is a concept eyewear store: marketing pages, scroll motion and a 3D hero built on the open-source Sunray Laravel shop.')">
     <meta property="og:url" content="{{ url()->current() }}">
+    <link rel="canonical" href="{{ url()->current() }}">
     <meta property="og:image" content="{{ asset('images/home-banner.jpg') }}">
     <meta name="twitter:card" content="summary_large_image">
 
