@@ -1,0 +1,22 @@
+# Free-tier demo deploy on Render (Docker). SQLite, no external database.
+# Free web services sleep after ~15 minutes idle; the first visit afterwards
+# takes about a minute to wake the container.
+services:
+  - type: web
+    name: northlight-optical
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_DRIVER
+        value: file
+      - key: LOG_CHANNEL
+        value: stderr

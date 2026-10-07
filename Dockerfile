@@ -22,6 +22,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-install pdo pdo_mysql mbstring bcmath \
     && rm -rf /var/lib/apt/lists/*
 
+# The official php image compiles in pdo_sqlite; fail the build loudly if not,
+# since the free demo deploy depends on it.
+RUN php -m | grep -qi pdo_sqlite
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY composer.json composer.lock ./
