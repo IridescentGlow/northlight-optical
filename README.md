@@ -1,4 +1,20 @@
-## Introduction
+# Northlight Optical (concept project)
+
+Northlight Optical is a concept website for a **fictional** local eyewear store. It is a portfolio piece, not a client site.
+
+**Live demo:** https://northlight-optical.onrender.com/
+(Free hosting: the first visit after about 15 minutes idle takes up to a minute to wake. Data resets on restart.)
+
+### Who built what
+- **The shop** (catalog, search and filters, cart, checkout, accounts, orders) is the open-source **Sunray** project by [Bhupinder Singh](https://github.com/bhupindersingh007/sunray). It is reused as-is.
+- **The Northlight layer** is this repo's work: the brand, five marketing pages (About, Services, Promise, Testimonials, Contact), the homepage narrative, the scroll and hover motion layer, the 3D hero, and the Docker/Render deployment setup.
+
+### Run it free on Render
+`render.yaml` deploys a free Docker web service using SQLite, so no database is needed. In Render choose New, then Blueprint, pick this repo and branch, and apply. See `docker/start.sh` for the boot steps (migrate, seed, serve). To use MySQL instead, set `DB_CONNECTION=mysql` and the `DB_*` variables.
+
+---
+
+## Introduction (upstream Sunray README)
 **SUNRAY** - An eyewear ecommerce application built with PHP, Laravel, Vite, Bootstrap, and MySQL.
 
 **SUNRAY Link** - http://sunray.thsite.top
