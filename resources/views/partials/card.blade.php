@@ -13,7 +13,8 @@
 
     <a href="{{ route('products.show', ['product' => $product]) }}" class="d-block overflow-hidden rounded">
         <img src="{{ asset('storage/'. $product->image_url) }}"
-        class="card-img-top object-fit-contain lens-zoom reveal reveal-blur" alt="{{ $product->name  }}">
+        class="card-img-top object-fit-contain lens-zoom reveal reveal-blur" alt="{{ $product->name  }}"
+        loading="lazy" decoding="async">
     </a>
 
     <div class="card-body px-0">
