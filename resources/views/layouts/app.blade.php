@@ -18,6 +18,8 @@
     <link rel="canonical" href="{{ url()->current() }}">
     <meta property="og:image" content="{{ asset('images/home-banner.jpg') }}">
     <meta name="twitter:card" content="summary_large_image">
+    {{-- Brand gold ($brown in app.scss) for the mobile browser toolbar. --}}
+    <meta name="theme-color" content="#D39D4E">
 
     {{-- Bootstrap --}}
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
