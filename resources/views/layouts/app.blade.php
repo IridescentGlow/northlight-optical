@@ -34,12 +34,15 @@
 
 <body>
 
+    {{-- Lets keyboard and screen-reader users jump past the navigation. Bootstrap's
+         .visually-hidden-focusable keeps it invisible until it receives focus. --}}
+    <a class="visually-hidden-focusable" href="#main">Skip to main content</a>
 
     @include('partials.header')
     @include('partials.alerts')
 
 
-    <main style="min-height: 76vh;">
+    <main id="main" style="min-height: 76vh;">
         @yield('content')
     </main>
 
