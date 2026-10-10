@@ -1,0 +1,7 @@
+# Northlight Optical is a concept portfolio project and stores no real customer data.
+# If you notice a security problem, please report it privately if you can,
+# or open an issue at the address below.
+Contact: https://github.com/IridescentGlow/northlight-optical/issues
+Expires: 2027-10-10T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://northlight-optical.onrender.com/.well-known/security.txt
