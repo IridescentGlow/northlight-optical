@@ -46,11 +46,11 @@
                 <ul class="navbar-nav ms-lg-auto text-center">
 
                     <li class="nav-item me-lg-2">
-                        <a class="nav-link" href="{{ route('home') }}">Home</a>
+                        <a class="nav-link" href="{{ route('home') }}" @if(request()->routeIs('home')) aria-current="page" @endif>Home</a>
                     </li>
 
                     <li class="nav-item me-lg-2">
-                        <a class="nav-link" href="{{ route('products.index') }}">Products</a>
+                        <a class="nav-link" href="{{ route('products.index') }}" @if(request()->routeIs('products.*')) aria-current="page" @endif>Products</a>
                     </li>
 
                     <li class="nav-item dropdown me-lg-3">
