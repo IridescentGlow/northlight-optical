@@ -21,14 +21,14 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="name">Full Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
+                        <input type="text" class="form-control" id="name" name="name" autocomplete="name" value="{{ old('name') }}">
                         @error('name')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="email">Email Address <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}">
+                        <input type="email" class="form-control" id="email" name="email" autocomplete="email" value="{{ old('email') }}">
                         @error('email')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -38,7 +38,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="phone_number">Phone No.</label>
-                        <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number') }}">
+                        <input type="tel" class="form-control" id="phone_number" name="phone_number" autocomplete="tel" value="{{ old('phone_number') }}">
                         @error('phone_number')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
