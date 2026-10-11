@@ -2,6 +2,8 @@
 
 @section('title', 'Contact & Booking')
 
+@section('description', 'Book an eye exam or send a question to Northlight Optical, a concept eyewear store. This demo form does not send real messages.')
+
 @section('content')
 
 <div class="container my-5 pb-5">

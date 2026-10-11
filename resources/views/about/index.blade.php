@@ -2,6 +2,8 @@
 
 @section('title', 'About & Team')
 
+@section('description', 'Meet the team behind Northlight Optical, a concept eyewear store. The team and practice are fictional, part of a portfolio project.')
+
 @section('content')
 
 <section class="container my-5">

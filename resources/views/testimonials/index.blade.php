@@ -2,6 +2,8 @@
 
 @section('title', 'Testimonials')
 
+@section('description', 'Sample patient testimonials for Northlight Optical, a concept eyewear store. The patients and quotes are fictional, part of a portfolio project.')
+
 @section('content')
 
 <section class="container my-5">

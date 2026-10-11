@@ -2,6 +2,8 @@
 
 @section('title', 'Services')
 
+@section('description', 'The services page of Northlight Optical, a concept eyewear store: a portfolio project for a fictional local shop.')
+
 @section('content')
 
 <section class="container my-5">

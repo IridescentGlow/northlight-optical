@@ -2,6 +2,8 @@
 
 @section('title', 'Our Promise')
 
+@section('description', 'What Northlight Optical, a concept eyewear store, promises its patients: accessibility, insurance help and multilingual care. A portfolio project.')
+
 @section('content')
 
 <div class="container my-5">

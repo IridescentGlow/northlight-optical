@@ -2,6 +2,8 @@
 
 @section('title', 'Products')
 
+@section('description', 'Browse sunglasses and eyeglasses in the Northlight Optical demo shop, a concept store built on the open-source Sunray shop.')
+
 @section('content')
 
 <section class="container my-5">
