@@ -2,6 +2,11 @@
 
 @section('title', $product->name)
 
+{{-- Product-specific search description and share image. e() escapes quotes
+     because the layout prints @yield output raw inside an attribute. --}}
+@section('description', e($product->short_description))
+@section('og_image', asset('storage/' . $product->image_url))
+
 @section('content')
 
 <div class="container mt-5">
