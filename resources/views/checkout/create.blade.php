@@ -82,6 +82,14 @@
             
                 <h5 class="mt-4">Payment Information</h5>
                 <hr>
+
+                {{-- Northlight is a concept project and no payment is taken, so say
+                     so before anyone types a real card. The card fields also opt out
+                     of browser autofill for the same reason. --}}
+                <p class="alert alert-light border small" role="note">
+                    This is a concept store. No payment is processed and card details are not saved.
+                    Please don't enter a real card; any 16 digits, a MM/YY from this year or later and any 3-digit code will work.
+                </p>
             
                 <div class="mb-3">
                     <label for="card_number" class="form-label">Card Number</label>
