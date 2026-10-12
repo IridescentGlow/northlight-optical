@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="phone_number" class="text-black">Phone No.<span class="text-danger">*</span></label>
-                        <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number') }}">
+                        <input type="tel" class="form-control" id="phone_number" name="phone_number" autocomplete="tel" value="{{ old('phone_number') }}">
                         @error('phone_number')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -56,7 +56,7 @@
                 <div class="form-group row">
                     <div class="col-md-12 mb-3">
                         <label class="form-label" for="address" class="text-black">Address<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="address" name="address" placeholder="Street address" value="{{ old('address') }}">
+                        <input type="text" class="form-control" id="address" name="address" autocomplete="street-address" maxlength="150" placeholder="Street address" value="{{ old('address') }}">
                         @error('address')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -64,7 +64,7 @@
             
                     <div class="col-md-12 mb-3">
                         <label class="form-label" for="postal" class="text-black">Postal <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="postal" name="postal" value="{{ old('postal') }}">
+                        <input type="text" class="form-control" id="postal" name="postal" autocomplete="postal-code" value="{{ old('postal') }}">
                         @error('postal')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -73,7 +73,7 @@
             
                 <div class="form-group">
                     <label class="form-label" for="order_notes" class="text-black">Order Notes</label>
-                    <textarea name="order_notes" id="order_notes" cols="30" rows="3" class="form-control"
+                    <textarea name="order_notes" maxlength="150" id="order_notes" cols="30" rows="3" class="form-control"
                      placeholder="Write your notes here...">{{ old('order_notes') }}</textarea>
                     @error('order_notes')
                     <small class="text-danger">{{ $message }}</small>
@@ -85,7 +85,7 @@
             
                 <div class="mb-3">
                     <label for="card_number" class="form-label">Card Number</label>
-                    <input type="text" class="form-control" id="card_number" name="card_number" value="{{ old('card_number') }}">
+                    <input type="text" class="form-control" id="card_number" name="card_number" autocomplete="off" inputmode="numeric" value="{{ old('card_number') }}">
                     @error('card_number')
                     <small class="text-danger">{{ $message }}</small>
                     @enderror
@@ -94,7 +94,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="expiry_date" class="form-label">Expiry Date</label>
-                        <input type="text" class="form-control" id="expiry_date" name="expiry_date" placeholder="MM/YY" value="{{ old('expiry_date') }}">
+                        <input type="text" class="form-control" id="expiry_date" name="expiry_date" autocomplete="off" maxlength="5" placeholder="MM/YY" value="{{ old('expiry_date') }}">
                         @error('expiry_date')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -102,7 +102,7 @@
             
                     <div class="col-md-6 mb-3">
                         <label for="cvv" class="form-label">CVV</label>
-                        <input type="number" class="form-control" id="cvv" name="cvv" value="{{ old('cvv') }}">
+                        <input type="number" class="form-control" id="cvv" name="cvv" autocomplete="off" inputmode="numeric" value="{{ old('cvv') }}">
                         @error('cvv')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
