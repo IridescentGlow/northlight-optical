@@ -2,9 +2,9 @@
     <form class="d-flex mb-3" role="search" action="{{ route('products.index') }}">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
             name="search" value="{{ request('search') }}">
-        <button class="d-flex align-items-center btn btn-primary" type="submit">
+        <button class="d-flex align-items-center btn btn-primary" type="submit" aria-label="Search products">
             <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"
-                fill="none" stroke-linecap="round" stroke-linejoin="round">
+                fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
