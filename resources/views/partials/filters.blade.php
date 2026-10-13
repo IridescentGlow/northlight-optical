@@ -27,17 +27,17 @@
                         <div class="form-check mb-2">
 
 
-                            <input class="form-check-input" type="radio" value="eyeglasses" name="category"
+                            <input class="form-check-input" type="radio" value="eyeglasses" name="category" id="category-eyeglasses"
                             {{ request('category') == 'eyeglasses' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="category">
+                            <label class="form-check-label" for="category-eyeglasses">
                                 Eye Glasses
                             </label>
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" value="sunglasses" name="category"
+                            <input class="form-check-input" type="radio" value="sunglasses" name="category" id="category-sunglasses"
                             {{ request('category') == 'sunglasses' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="category">
+                            <label class="form-check-label" for="category-sunglasses">
                                 Sun Glasses
                             </label>
                         </div>
@@ -57,17 +57,17 @@
 
 
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="type" value="featured"
+                            <input class="form-check-input" type="radio" name="type" value="featured" id="type-featured"
                             {{ request('type') == 'featured' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="type">
+                            <label class="form-check-label" for="type-featured">
                                 Featured
                             </label>
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="type" value="sale"
+                            <input class="form-check-input" type="radio" name="type" value="sale" id="type-sale"
                             {{ request('type') == 'sale' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="type">
+                            <label class="form-check-label" for="type-sale">
                                 On Sale
                             </label>
                         </div>
