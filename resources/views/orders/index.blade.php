@@ -47,8 +47,9 @@
                             <td>{{ $order->address . ', ' . $order->postal  }}</td>
                             <td>${{ $order->total }}</td>
                             <td>
-                                <button class="btn btn-sm btn-primary" 
-                                type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#order-{{ $order->id }}">
+                                <button class="btn btn-sm btn-primary"
+                                type="button" data-bs-toggle="modal" data-bs-target="#order-{{ $order->id }}"
+                                aria-label="View details of order {{ $order->order_number }}">
                                 View More
                                </button>
 
