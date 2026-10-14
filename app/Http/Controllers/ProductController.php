@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function index(Request $request) : View
     {
 
-        $products = Product::filter($request->search, $request->category, $request->type)->simplePaginate(6);
+        $products = Product::filter($request->search, $request->category, $request->type)->simplePaginate(6)->withQueryString();
 
         return view('products.index', compact('products'));
 
