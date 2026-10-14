@@ -56,7 +56,7 @@
                         <form action="{{ route('cart.update', ['cart' => $cartItem->id]) }}" method="post">
                             @csrf
                             @method('PUT')
-                            <button type="submit" class="btn btn-primary">&times;</button>
+                            <button type="submit" class="btn btn-primary" aria-label="Remove {{ $cartItem->name }} from cart">&times;</button>
                         </form>
                     </td>
                 </tr>
