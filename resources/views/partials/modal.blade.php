@@ -12,11 +12,11 @@
                 <table class="table table-bordered">
                     <thead class="small">
                         <tr>
-                            <th></th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total</th>
+                            <th scope="col"><span class="visually-hidden">Image</span></th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Total</th>
                         </tr>
                     </thead>
                     <tbody>

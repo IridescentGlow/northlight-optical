@@ -28,12 +28,12 @@
         <table class="table table-bordered" style="min-width: 50rem;">
             <thead class="small">
                 <tr>
-                    <th></th>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price <sup>(Per Unit)</sup></th>
-                    <th>Total Price</th>
-                    <th>Actions</th>
+                    <th scope="col"><span class="visually-hidden">Image</span></th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price <sup>(Per Unit)</sup></th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>

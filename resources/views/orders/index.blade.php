@@ -26,12 +26,12 @@
                 <table class="table table-bordered" style="min-width: 50rem;">
                     <thead class="small">
                         <tr>
-                            <th>Order No.</th>
-                            <th>Order Date</th>
-                            <th>Status</th>
-                            <th>Address</th>
-                            <th>Total</th>
-                            <th></th>
+                            <th scope="col">Order No.</th>
+                            <th scope="col">Order Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Total</th>
+                            <th scope="col"><span class="visually-hidden">Details</span></th>
                         </tr>
                     </thead>
                     <tbody>
