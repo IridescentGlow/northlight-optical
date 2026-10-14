@@ -44,7 +44,17 @@
 
                 @else
                 
-                    <p class="text-muted">No Products Found.</p>
+                    {{-- role="status" so the result is announced after a search or filter. --}}
+                    <div class="col-12" role="status">
+                        <p class="text-muted mb-2">
+                            @if(is_string(request('search')) && request('search') !== '')
+                            No products match &ldquo;{{ request('search') }}&rdquo;.
+                            @else
+                            No products match these filters.
+                            @endif
+                        </p>
+                        <a href="{{ route('products.index') }}" class="small">Reset filters and see all products</a>
+                    </div>
                     
                 @endif
 
