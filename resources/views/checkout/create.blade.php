@@ -7,7 +7,7 @@
 <div class="container mt-5 pb-5">
 
 
-	<h4 class="mb-2">Checkout</h4>
+	<h1 class="h4 mb-2">Checkout</h1>
 
 	<div class="row">
 		<div class="col-lg-7">

@@ -17,7 +17,7 @@
 
         <div class="col-lg-9">
 
-            <h4 class="mb-3">My Account</h4>
+            <h1 class="h4 mb-3">My Account</h1>
 
             <div class="row">
                 <div class="col-md-6">

@@ -34,7 +34,7 @@
 
         <div class="col-md-6 ps-md-4">
 
-            <h3 class="mb-2">{{ $product->name }}</h3>
+            <h1 class="h3 mb-2">{{ $product->name }}</h1>
 
             <p class="text-muted mb-2">{{ $product->category }}</p>
 

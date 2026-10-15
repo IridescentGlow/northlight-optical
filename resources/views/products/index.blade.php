@@ -11,7 +11,7 @@
     <header class="row align-items-center mb-4">
         <div class="col-6">
 
-            <h4 class="mb-0">All Products</h4>
+            <h1 class="h4 mb-0">All Products</h1>
         </div>
         <div class="col-6 d-flex justify-content-end">
             <a href="{{ route('products.index') }}" class="text-muted small">&times; Reset Filters</a>

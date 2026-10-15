@@ -9,7 +9,7 @@
 <div class="container my-5 pb-5">
 
     <div class="reveal">
-        <h4 class="mb-2">Contact &amp; Booking</h4>
+        <h1 class="h4 mb-2">Contact &amp; Booking</h1>
         <p class="text-muted mb-4">Send us a message or request an appointment — we'll follow up within one business day.</p>
     </div>
 

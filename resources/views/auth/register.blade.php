@@ -9,7 +9,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
 
-            <h4>Register</h4>
+            <h1 class="h4">Register</h1>
             
             <hr>
 

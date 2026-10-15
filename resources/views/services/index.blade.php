@@ -10,7 +10,7 @@
 
     <header class="row justify-content-center text-center mb-5 reveal">
         <div class="col-lg-8">
-            <h2 class="mb-3">Services</h2>
+            <h1 class="h2 mb-3">Services</h1>
             <p class="lead text-muted">
                 From your first comprehensive exam to your hundredth frame adjustment, our team
                 handles it in-house.

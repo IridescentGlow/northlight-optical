@@ -9,7 +9,7 @@
 
     <header class="row align-items-center mb-4">
         <div class="col-6">
-            <h4 class="mb-0">Shopping Cart</h4>
+            <h1 class="h4 mb-0">Shopping Cart</h1>
         </div>
         <div class="col-6 d-flex justify-content-end">
             @if(isset($cartItems) && count($cartItems) > 0)

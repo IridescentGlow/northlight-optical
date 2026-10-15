@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
 
-            <h4>Login</h4>
+            <h1 class="h4">Login</h1>
             <hr>
 
             <form action="{{ route('login.store') }}" method="POST">

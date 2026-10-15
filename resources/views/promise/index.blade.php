@@ -9,7 +9,7 @@
 <div class="container my-5">
     <header class="row justify-content-center text-center mb-5 reveal">
         <div class="col-lg-8">
-            <h2 class="mb-3">Our Promise</h2>
+            <h1 class="h2 mb-3">Our Promise</h1>
             <p class="lead text-muted">
                 Good eye care shouldn't depend on how well you match the "default" patient. Here's
                 what we do about that.

@@ -10,7 +10,7 @@
 
     <header class="row justify-content-center text-center mb-5 reveal">
         <div class="col-lg-8">
-            <h2 class="mb-3">About {{ $business['name'] }}</h2>
+            <h1 class="h2 mb-3">About {{ $business['name'] }}</h1>
             <p class="lead text-muted">
                 We opened our doors in Portland with one goal: make good eye care feel like it was
                 built for you, not just tolerable for you. That means fitting stations at wheelchair

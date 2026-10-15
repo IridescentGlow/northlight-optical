@@ -10,7 +10,7 @@
 
     <header class="row justify-content-center text-center mb-5 reveal">
         <div class="col-lg-8">
-            <h2 class="mb-3">What Patients Say</h2>
+            <h1 class="h2 mb-3">What Patients Say</h1>
             <p class="lead text-muted">
                 We asked patients what actually made a difference for them. Here's what came back.
             </p>

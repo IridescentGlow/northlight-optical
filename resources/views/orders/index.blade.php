@@ -17,7 +17,7 @@
 
         <div class="col-lg-9">
 
-            <h4 class="mb-3">My Orders</h4>
+            <h1 class="h4 mb-3">My Orders</h1>
 
 
             @if($orders->count() > 0)
