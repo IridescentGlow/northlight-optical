@@ -53,7 +53,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="quantity" class="form-label">Quantity</label>
-                    <select class="form-select" name="quantity" required>
+                    <select class="form-select" id="quantity" name="quantity" required>
                        <option value="" disabled>Choose...</option>
                        @foreach (range(1, 5) as $item)
                            <option value="{{ $item }}">{{ $item }}</option>
