@@ -3,7 +3,13 @@ $brown-dark: hsl(35.64deg 60.18% 50.67%);
 
 $font-family-sans-serif: 'Jost', 'sans-serif';
 $primary: $brown;
-$input-focus-box-shadow: none;
+// Visible focus for text fields and selects. The previous `none` left only
+// Bootstrap's faint tinted border as the cue, which is easy to miss. The
+// border uses a darker shade of the brand brown so it keeps 3:1 contrast
+// against the white field (the lighter $brown-dark alone is about 2.8:1).
+$brown-focus: hsl(35.64deg 60.18% 36%);
+$input-focus-border-color: $brown-focus;
+$input-focus-box-shadow: 0 0 0 .2rem rgba($brown-focus, .25);
 $btn-hover-bg-shade-amount:       50%;
 $btn-hover-bg-tint-amount:        2%;
 
