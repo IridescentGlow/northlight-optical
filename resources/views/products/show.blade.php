@@ -9,6 +9,31 @@
 
 @section('content')
 
+{{-- Product structured data for search results. Built in PHP and encoded with
+     JSON_HEX_TAG so no value can close the script tag. Availability is InStock
+     because the concept store has no stock tracking. --}}
+@php
+    $productUrl = route('products.show', ['product' => $product]);
+    $structuredData = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $product->name,
+        'description' => $product->short_description,
+        'category' => $product->category,
+        'image' => asset('storage/' . $product->image_url),
+        'url' => $productUrl,
+        'brand' => ['@type' => 'Brand', 'name' => config('app.name')],
+        'offers' => [
+            '@type' => 'Offer',
+            'priceCurrency' => 'USD',
+            'price' => number_format((float) $product->price, 2, '.', ''),
+            'availability' => 'https://schema.org/InStock',
+            'url' => $productUrl,
+        ],
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+
 <div class="container mt-5">
     <div class="row">
 
