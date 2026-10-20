@@ -43,7 +43,7 @@
 
                 <div class="overflow-hidden rounded mb-4 mb-lg-5">
                     <img src="{{ asset('storage/'. $product->image_url) }}" class="img-fluid lens-zoom reveal reveal-blur"
-                        alt="{{ $product->name }}">
+                        alt="{{ $product->name }}" fetchpriority="high" decoding="async">
                 </div>
 
                 @if($product->on_sale == true)
