@@ -23,16 +23,16 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="name">Full Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" name="name" autocomplete="name" maxlength="80" value="{{ old('name') }}">
+                        <input type="text" class="form-control" id="name" name="name" autocomplete="name" maxlength="80" value="{{ old('name') }}" @error('name') aria-invalid="true" aria-describedby="name-error" @enderror>
                         @error('name')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="name-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="email">Email Address <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="email" name="email" autocomplete="email" maxlength="80" value="{{ old('email') }}">
+                        <input type="email" class="form-control" id="email" name="email" autocomplete="email" maxlength="80" value="{{ old('email') }}" @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
                         @error('email')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="email-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -40,39 +40,39 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="phone_number">Phone No.</label>
-                        <input type="tel" class="form-control" id="phone_number" name="phone_number" autocomplete="tel" maxlength="25" value="{{ old('phone_number') }}">
+                        <input type="tel" class="form-control" id="phone_number" name="phone_number" autocomplete="tel" maxlength="25" value="{{ old('phone_number') }}" @error('phone_number') aria-invalid="true" aria-describedby="phone_number-error" @enderror>
                         @error('phone_number')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="phone_number-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="reason">Reason for Contact <span class="text-danger">*</span></label>
-                        <select class="form-select" id="reason" name="reason">
+                        <select class="form-select" id="reason" name="reason" @error('reason') aria-invalid="true" aria-describedby="reason-error" @enderror>
                             <option value="" disabled {{ old('reason') ? '' : 'selected' }}>Choose...</option>
                             @foreach($reasons as $reason)
                             <option value="{{ $reason }}" {{ old('reason') == $reason ? 'selected' : '' }}>{{ $reason }}</option>
                             @endforeach
                         </select>
                         @error('reason')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="reason-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="preferred_date">Preferred Date</label>
-                    <input type="date" class="form-control" id="preferred_date" name="preferred_date" min="{{ now()->toDateString() }}" value="{{ old('preferred_date') }}">
+                    <input type="date" class="form-control" id="preferred_date" name="preferred_date" min="{{ now()->toDateString() }}" value="{{ old('preferred_date') }}" @error('preferred_date') aria-invalid="true" aria-describedby="preferred_date-error" @enderror>
                     @error('preferred_date')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="preferred_date-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="message">Message <span class="text-danger">*</span></label>
                     <textarea name="message" id="message" rows="4" maxlength="1000" class="form-control"
-                        placeholder="Tell us what you need — a specific time that works, accessibility needs, insurance questions, anything.">{{ old('message') }}</textarea>
+                        placeholder="Tell us what you need — a specific time that works, accessibility needs, insurance questions, anything." @error('message') aria-invalid="true" aria-describedby="message-error" @enderror>{{ old('message') }}</textarea>
                     @error('message')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="message-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 

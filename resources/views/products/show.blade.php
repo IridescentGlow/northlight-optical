@@ -53,7 +53,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="quantity" class="form-label">Quantity</label>
-                    <select class="form-select" id="quantity" name="quantity" required>
+                    <select class="form-select" id="quantity" name="quantity" required @error('quantity') aria-invalid="true" aria-describedby="quantity-error" @enderror>
                        <option value="" disabled>Choose...</option>
                        @foreach (range(1, 5) as $item)
                            <option value="{{ $item }}">{{ $item }}</option>
@@ -61,7 +61,7 @@
                     </select>
 
                     @error('quantity')
-                    <small class="text-danger d-block mt-1">{{ $message }}</small>
+                    <small id="quantity-error" class="text-danger d-block mt-1">{{ $message }}</small>
                     @enderror
 
                 </div>

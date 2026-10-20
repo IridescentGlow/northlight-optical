@@ -22,16 +22,16 @@
                 <div class="form-group row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="first_name" class="text-black">First Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control hover:not-allowed" id="first_name" name="first_name" value="{{ auth()->user()->first_name  }}" readonly>
+                        <input type="text" class="form-control hover:not-allowed" id="first_name" name="first_name" value="{{ auth()->user()->first_name  }}" readonly @error('first_name') aria-invalid="true" aria-describedby="first_name-error" @enderror>
                         @error('first_name')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="first_name-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="last_name" class="text-black">Last Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control hover:not-allowed" id="last_name" name="last_name" value="{{ auth()->user()->last_name }}" readonly>
+                        <input type="text" class="form-control hover:not-allowed" id="last_name" name="last_name" value="{{ auth()->user()->last_name }}" readonly @error('last_name') aria-invalid="true" aria-describedby="last_name-error" @enderror>
                         @error('last_name')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="last_name-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -39,16 +39,16 @@
                 <div class="form-group row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="email" class="text-black">Email Address <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control hover:not-allowed" id="email" name="email" value="{{ auth()->user()->email }}" readonly>
+                        <input type="text" class="form-control hover:not-allowed" id="email" name="email" value="{{ auth()->user()->email }}" readonly @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
                         @error('email')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="email-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="phone_number" class="text-black">Phone No.<span class="text-danger">*</span></label>
-                        <input type="tel" class="form-control" id="phone_number" name="phone_number" autocomplete="tel" value="{{ old('phone_number') }}">
+                        <input type="tel" class="form-control" id="phone_number" name="phone_number" autocomplete="tel" value="{{ old('phone_number') }}" @error('phone_number') aria-invalid="true" aria-describedby="phone_number-error" @enderror>
                         @error('phone_number')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="phone_number-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -56,17 +56,17 @@
                 <div class="form-group row">
                     <div class="col-md-12 mb-3">
                         <label class="form-label" for="address" class="text-black">Address<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="address" name="address" autocomplete="street-address" maxlength="150" placeholder="Street address" value="{{ old('address') }}">
+                        <input type="text" class="form-control" id="address" name="address" autocomplete="street-address" maxlength="150" placeholder="Street address" value="{{ old('address') }}" @error('address') aria-invalid="true" aria-describedby="address-error" @enderror>
                         @error('address')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="address-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
             
                     <div class="col-md-12 mb-3">
                         <label class="form-label" for="postal" class="text-black">Postal <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="postal" name="postal" autocomplete="postal-code" value="{{ old('postal') }}">
+                        <input type="text" class="form-control" id="postal" name="postal" autocomplete="postal-code" value="{{ old('postal') }}" @error('postal') aria-invalid="true" aria-describedby="postal-error" @enderror>
                         @error('postal')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="postal-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -74,9 +74,9 @@
                 <div class="form-group">
                     <label class="form-label" for="order_notes" class="text-black">Order Notes</label>
                     <textarea name="order_notes" maxlength="150" id="order_notes" cols="30" rows="3" class="form-control"
-                     placeholder="Write your notes here...">{{ old('order_notes') }}</textarea>
+                     placeholder="Write your notes here..." @error('order_notes') aria-invalid="true" aria-describedby="order_notes-error" @enderror>{{ old('order_notes') }}</textarea>
                     @error('order_notes')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="order_notes-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
             
@@ -93,26 +93,26 @@
             
                 <div class="mb-3">
                     <label for="card_number" class="form-label">Card Number</label>
-                    <input type="text" class="form-control" id="card_number" name="card_number" autocomplete="off" inputmode="numeric" value="{{ old('card_number') }}">
+                    <input type="text" class="form-control" id="card_number" name="card_number" autocomplete="off" inputmode="numeric" value="{{ old('card_number') }}" @error('card_number') aria-invalid="true" aria-describedby="card_number-error" @enderror>
                     @error('card_number')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="card_number-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
             
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="expiry_date" class="form-label">Expiry Date</label>
-                        <input type="text" class="form-control" id="expiry_date" name="expiry_date" autocomplete="off" maxlength="5" placeholder="MM/YY" value="{{ old('expiry_date') }}">
+                        <input type="text" class="form-control" id="expiry_date" name="expiry_date" autocomplete="off" maxlength="5" placeholder="MM/YY" value="{{ old('expiry_date') }}" @error('expiry_date') aria-invalid="true" aria-describedby="expiry_date-error" @enderror>
                         @error('expiry_date')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="expiry_date-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
             
                     <div class="col-md-6 mb-3">
                         <label for="cvv" class="form-label">CVV</label>
-                        <input type="number" class="form-control" id="cvv" name="cvv" autocomplete="off" inputmode="numeric" value="{{ old('cvv') }}">
+                        <input type="number" class="form-control" id="cvv" name="cvv" autocomplete="off" inputmode="numeric" value="{{ old('cvv') }}" @error('cvv') aria-invalid="true" aria-describedby="cvv-error" @enderror>
                         @error('cvv')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="cvv-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
