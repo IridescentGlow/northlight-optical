@@ -155,7 +155,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Toast auto-dismiss ---
     // Every toast is fully readable and dismissible by hand
     // (data-bs-dismiss="alert") regardless of this timer; this just
-    // clears them automatically after a delay.
+    // clears them automatically after a delay. The timer is paused while
+    // the pointer is over the toast or focus is inside it, so someone
+    // reaching for "View Cart" (or reading slowly) never loses the toast
+    // mid-click, and restarts with the full delay once they move away.
     document.querySelectorAll('.toast-notification[data-auto-dismiss]').forEach((toastEl) => {
         const delay = parseInt(toastEl.dataset.autoDismiss, 10);
 
@@ -163,9 +166,19 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        setTimeout(() => {
-            Alert.getOrCreateInstance(toastEl).close();
-        }, delay);
+        let timer;
+        const start = () => {
+            clearTimeout(timer);
+            timer = setTimeout(() => Alert.getOrCreateInstance(toastEl).close(), delay);
+        };
+        const pause = () => clearTimeout(timer);
+
+        toastEl.addEventListener('mouseenter', pause);
+        toastEl.addEventListener('mouseleave', start);
+        toastEl.addEventListener('focusin', pause);
+        toastEl.addEventListener('focusout', start);
+
+        start();
     });
 
     // --- One-shot light sweep across the sale banner ---
