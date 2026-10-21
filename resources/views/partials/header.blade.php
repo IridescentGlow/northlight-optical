@@ -59,8 +59,8 @@
                             Categories
                         </a>
                         <ul class="dropdown-menu border-0 text-center text-lg-start md:shadow-sm">
-                            <li><a class="dropdown-item" href="{{ route('products.index') }}?category=eyeglasses">Eye Glasses</a></li>
-                            <li><a class="dropdown-item" href="{{ route('products.index') }}?category=sunglasses">Sun Glasses</a></li>
+                            <li><a class="dropdown-item {{ (request('category') === 'eyeglasses') ? 'active' : '' }}" href="{{ route('products.index') }}?category=eyeglasses" @if(request('category') === 'eyeglasses') aria-current="page" @endif>Eye Glasses</a></li>
+                            <li><a class="dropdown-item {{ (request('category') === 'sunglasses') ? 'active' : '' }}" href="{{ route('products.index') }}?category=sunglasses" @if(request('category') === 'sunglasses') aria-current="page" @endif>Sun Glasses</a></li>
                         </ul>
                     </li>
 
@@ -70,11 +70,11 @@
                             About
                         </a>
                         <ul class="dropdown-menu border-0 text-center text-lg-start md:shadow-sm">
-                            <li><a class="dropdown-item" href="{{ route('about') }}">Our Team</a></li>
-                            <li><a class="dropdown-item" href="{{ route('services') }}">Services</a></li>
-                            <li><a class="dropdown-item" href="{{ route('promise') }}">Our Promise</a></li>
-                            <li><a class="dropdown-item" href="{{ route('testimonials') }}">Testimonials</a></li>
-                            <li><a class="dropdown-item" href="{{ route('contact.create') }}">Contact &amp; Booking</a></li>
+                            <li><a class="dropdown-item {{ (request()->routeIs('about')) ? 'active' : '' }}" href="{{ route('about') }}" @if(request()->routeIs('about')) aria-current="page" @endif>Our Team</a></li>
+                            <li><a class="dropdown-item {{ (request()->routeIs('services')) ? 'active' : '' }}" href="{{ route('services') }}" @if(request()->routeIs('services')) aria-current="page" @endif>Services</a></li>
+                            <li><a class="dropdown-item {{ (request()->routeIs('promise')) ? 'active' : '' }}" href="{{ route('promise') }}" @if(request()->routeIs('promise')) aria-current="page" @endif>Our Promise</a></li>
+                            <li><a class="dropdown-item {{ (request()->routeIs('testimonials')) ? 'active' : '' }}" href="{{ route('testimonials') }}" @if(request()->routeIs('testimonials')) aria-current="page" @endif>Testimonials</a></li>
+                            <li><a class="dropdown-item {{ (request()->routeIs('contact.*')) ? 'active' : '' }}" href="{{ route('contact.create') }}" @if(request()->routeIs('contact.*')) aria-current="page" @endif>Contact &amp; Booking</a></li>
                         </ul>
                     </li>
 

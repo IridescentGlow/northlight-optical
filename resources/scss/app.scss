@@ -10,6 +10,9 @@ $primary: $brown;
 $brown-focus: hsl(35.64deg 60.18% 36%);
 $input-focus-border-color: $brown-focus;
 $input-focus-box-shadow: 0 0 0 .2rem rgba($brown-focus, .25);
+// The current page in a dropdown is white text on this fill: the lighter brand
+// brown would be only ~2.4:1, so reuse the darker brown (5:1).
+$dropdown-link-active-bg: $brown-focus;
 $btn-hover-bg-shade-amount:       50%;
 $btn-hover-bg-tint-amount:        2%;
 
