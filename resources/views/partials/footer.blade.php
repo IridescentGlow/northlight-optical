@@ -3,16 +3,16 @@
         <p>
             &copy; {{ date('Y') }}
             Northlight Optical, a concept project. Shop built on
-            <a href="https://github.com/bhupindersingh007/sunray" target="_blank" rel="noopener">Sunray</a> by
+            <a href="https://github.com/bhupindersingh007/sunray" target="_blank" rel="noopener">Sunray<span class="visually-hidden"> (opens in a new tab)</span></a> by
             <a href="https://github.com/bhupindersingh007" target="_blank" rel="noopener">
                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" 
-                stroke-linejoin="round" class="">
+                stroke-linejoin="round" aria-hidden="true" focusable="false">
                 <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
                 </path></svg>
-                bhupindersingh007
+                bhupindersingh007<span class="visually-hidden"> (opens in a new tab)</span>
             </a>.
             Marketing pages, motion and 3D hero by
-            <a href="https://github.com/IridescentGlow" target="_blank" rel="noopener">IridescentGlow</a>.
+            <a href="https://github.com/IridescentGlow" target="_blank" rel="noopener">IridescentGlow<span class="visually-hidden"> (opens in a new tab)</span></a>.
         </p>
     </div>
 </footer>
