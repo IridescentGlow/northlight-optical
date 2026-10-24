@@ -134,7 +134,7 @@
 				<tbody class="fw-bold">
                     <tr>
                         <td>Sub Total</td>
-                        <td>${{ $subTotal }}</td>
+                        <td>${{ number_format($subTotal, 2) }}</td>
                     </tr>
                     <tr>
                         <td>Tax (5%)</td>

@@ -33,7 +33,7 @@
                             </td>
                             <td>{{ $orderItem->quantity }}</td>
                             <td>${{ $orderItem->price }}</td>
-                            <td>${{ $orderItem->price * $orderItem->quantity }}</td>
+                            <td>${{ number_format($orderItem->price * $orderItem->quantity, 2) }}</td>
                             
                         </tr>
 

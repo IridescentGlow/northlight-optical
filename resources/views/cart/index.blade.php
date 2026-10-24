@@ -51,7 +51,7 @@
                     <td>{{ $cartItem->name }}</td>
                     <td>{{ $cartItem->quantity }}</td>
                     <td>${{ $cartItem->price }}</td>
-                    <td>${{ $cartItem->price * $cartItem->quantity }}</td>
+                    <td>${{ number_format($cartItem->price * $cartItem->quantity, 2) }}</td>
                     <td>
                         <form action="{{ route('cart.update', ['cart' => $cartItem->id]) }}" method="post">
                             @csrf
@@ -81,7 +81,7 @@
                 <tbody class="fw-bold">
                     <tr>
                         <td>Sub Total</td>
-                        <td>${{ $subTotal }}</td>
+                        <td>${{ number_format($subTotal, 2) }}</td>
                     </tr>
                     <tr>
                         <td>Tax (5%)</td>
