@@ -10,6 +10,7 @@
           
             <div class="table-responsive">
                 <table class="table table-bordered">
+                    <caption class="visually-hidden">Items in order {{ $order->order_number }}</caption>
                     <thead class="small">
                         <tr>
                             <th scope="col"><span class="visually-hidden">Image</span></th>

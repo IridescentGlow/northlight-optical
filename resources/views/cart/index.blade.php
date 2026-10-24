@@ -26,6 +26,7 @@
 
     <div class="table-responsive">
         <table class="table table-bordered" style="min-width: 50rem;">
+            <caption class="visually-hidden">Items in your cart</caption>
             <thead class="small">
                 <tr>
                     <th scope="col"><span class="visually-hidden">Image</span></th>

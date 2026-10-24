@@ -24,6 +24,7 @@
 
             <div class="table-responsive">
                 <table class="table table-bordered" style="min-width: 50rem;">
+                    <caption class="visually-hidden">Your orders</caption>
                     <thead class="small">
                         <tr>
                             <th scope="col">Order No.</th>
