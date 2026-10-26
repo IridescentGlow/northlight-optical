@@ -34,7 +34,31 @@
 @endphp
 <script type="application/ld+json">{!! json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
 
+{{-- Breadcrumb trail: the visible list below and this structured data are the
+     same three steps, so the search-result path matches what a visitor sees. --}}
+@php
+    $breadcrumbData = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => route('home')],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Products', 'item' => route('products.index')],
+            ['@type' => 'ListItem', 'position' => 3, 'name' => $product->name, 'item' => $productUrl],
+        ],
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($breadcrumbData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+
 <div class="container mt-5">
+
+    <nav aria-label="Breadcrumb" class="mb-4">
+        <ol class="breadcrumb small mb-0">
+            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
+        </ol>
+    </nav>
+
     <div class="row">
 
         <div class="col-md-6">
