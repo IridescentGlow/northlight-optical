@@ -30,7 +30,8 @@
     <div class="row justify-content-center mb-5 reveal">
         <div class="col-lg-9">
             <div class="compare-slider" role="slider" tabindex="0" aria-label="Comparison: without correction versus with Northlight glasses"
-                aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+                aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"
+                aria-valuetext="With Northlight shown across 50% of the picture">
 
                 <div class="compare-slider__layer compare-slider__before bg-light">
                     <div>

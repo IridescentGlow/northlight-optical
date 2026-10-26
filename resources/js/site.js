@@ -114,6 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
             afterLayer.style.clipPath = `inset(0 ${100 - clamped}% 0 0)`;
             handle.style.left = `${clamped}%`;
             slider.setAttribute('aria-valuenow', Math.round(clamped));
+            slider.setAttribute(
+                'aria-valuetext',
+                `With Northlight shown across ${Math.round(clamped)}% of the picture`
+            );
         };
 
         const percentFromEvent = (event) => {
@@ -139,14 +143,26 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Follows the WAI-ARIA slider pattern: arrows (and PageUp/PageDown for
+        // a bigger step) move it, Home and End jump to either end.
         slider.addEventListener('keydown', (event) => {
-            const current = parseFloat(slider.getAttribute('aria-valuenow')) || 50;
+            // Not `|| 50`: at the far left the value is 0, which is falsy, so a
+            // keypress there used to jump to 45/55 instead of moving 5 from 0.
+            const parsed = parseFloat(slider.getAttribute('aria-valuenow'));
+            const current = Number.isNaN(parsed) ? 50 : parsed;
+            const keys = {
+                ArrowLeft: current - 5,
+                ArrowDown: current - 5,
+                PageDown: current - 20,
+                Home: 0,
+                ArrowRight: current + 5,
+                ArrowUp: current + 5,
+                PageUp: current + 20,
+                End: 100,
+            };
 
-            if (event.key === 'ArrowLeft') {
-                setPosition(current - 5);
-                event.preventDefault();
-            } else if (event.key === 'ArrowRight') {
-                setPosition(current + 5);
+            if (event.key in keys) {
+                setPosition(keys[event.key]);
                 event.preventDefault();
             }
         });
