@@ -26,10 +26,10 @@
         <p class="card-text">
 
             @if($product->on_sale == true)
-            <del class="text-danger">${{ number_format($product->price + $product->price * 0.25, 2); }}</del>
+            <del class="text-danger"><span class="visually-hidden">Original price: </span>${{ number_format($product->price + $product->price * 0.25, 2); }}</del>
             @endif
 
-            <span class="fw-bold lead">${{ $product->price }}</span>
+            <span class="fw-bold lead">@if($product->on_sale == true)<span class="visually-hidden">Sale price: </span>@endif${{ $product->price }}</span>
         </p>
 
         
