@@ -13,6 +13,9 @@ $input-focus-box-shadow: 0 0 0 .2rem rgba($brown-focus, .25);
 // The current page in a dropdown is white text on this fill: the lighter brand
 // brown would be only ~2.4:1, so reuse the darker brown (5:1).
 $dropdown-link-active-bg: $brown-focus;
+// Text links default to the brand brown (#d39d4e), which is only 2.4:1 on
+// white. The darker brown reads at 5:1 and Bootstrap derives the hover shade.
+$link-color: $brown-focus;
 $btn-hover-bg-shade-amount:       50%;
 $btn-hover-bg-tint-amount:        2%;
 
