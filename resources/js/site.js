@@ -197,6 +197,54 @@ document.addEventListener('DOMContentLoaded', () => {
         start();
     });
 
+    // --- Submit once ---
+    // A slow response (the free demo host can take seconds to wake) invites a
+    // second click on "Place Order", "Add to Cart" or "Send", and every click
+    // is another POST: two orders, two cart lines, two messages. This
+    // disables a form's submit buttons as soon as it is sent.
+    //
+    // The disabling waits one tick on purpose: a button disabled inside the
+    // submit event is left out of the form data. Constraint validation runs
+    // before the submit event, so a form that fails it is never locked. Only
+    // POST forms are touched; the GET filters reload the page anyway.
+    // `pageshow` undoes it if the browser restores the page from its
+    // back/forward cache, where the buttons would otherwise stay disabled.
+    document.addEventListener('submit', (event) => {
+        const form = event.target;
+
+        if (!(form instanceof HTMLFormElement) || form.method !== 'post' || event.defaultPrevented) {
+            return;
+        }
+
+        setTimeout(() => {
+            form.querySelectorAll('button[type="submit"], button:not([type])').forEach((button) => {
+                button.disabled = true;
+                button.setAttribute('aria-busy', 'true');
+
+                // Optional wording, e.g. data-submitting-label="Placing order…".
+                if (button.dataset.submittingLabel) {
+                    button.dataset.idleLabel = button.textContent;
+                    button.textContent = button.dataset.submittingLabel;
+                }
+            });
+        }, 0);
+    });
+
+    window.addEventListener('pageshow', (event) => {
+        if (!event.persisted) {
+            return;
+        }
+
+        document.querySelectorAll('button[aria-busy="true"]').forEach((button) => {
+            button.disabled = false;
+            button.removeAttribute('aria-busy');
+
+            if (button.dataset.idleLabel) {
+                button.textContent = button.dataset.idleLabel;
+            }
+        });
+    });
+
     // --- One-shot light sweep across the sale banner ---
     //
     // Fires once the section has fully entered the viewport — i.e. once its

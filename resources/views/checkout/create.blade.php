@@ -117,7 +117,7 @@
                     </div>
                 </div>
             
-                <button type="submit" class="btn btn-primary px-3 py-2 mb-4">Place Order</button>
+                <button type="submit" class="btn btn-primary px-3 py-2 mb-4" data-submitting-label="Placing order&hellip;">Place Order</button>
             </form>
             
 		</div>
