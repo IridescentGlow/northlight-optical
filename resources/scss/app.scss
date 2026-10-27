@@ -712,3 +712,51 @@ header.sticky-top.nav-over-hero:not(.nav-scrolled) {
         transition: none;
     }
 }
+
+// Print and "Save as PDF".
+//
+// The scroll-reveal layer hides content until it scrolls into view, and a
+// printout never scrolls: /about printed with 10 of its 15 revealed elements
+// at opacity 0, leaving blank gaps. Print shows everything, drops the site
+// chrome and controls that do nothing on paper, spells out where external
+// links point (a URL can't be clicked on paper), and keeps cards, table rows
+// and images from splitting across pages.
+@media print {
+    .reveal.reveal-pending {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    // Keeps the About page's static --tilt rotation, as the screen version does.
+    .reveal.reveal-blur.reveal-pending {
+        filter: none !important;
+        transform: rotate(var(--tilt, 0deg)) !important;
+    }
+
+    header.sticky-top,
+    footer,
+    .toast-stack,
+    .visually-hidden-focusable,
+    .btn,
+    .btn-close {
+        display: none !important;
+    }
+
+    // The layout gives <main> an inline min-height of 76vh for the screen.
+    main {
+        min-height: 0 !important;
+    }
+
+    main a[href^="http"]:not(.btn)::after {
+        content: " (" attr(href) ")";
+        font-size: 0.85em;
+        word-break: break-all;
+    }
+
+    .card,
+    tr,
+    img {
+        break-inside: avoid;
+    }
+}
