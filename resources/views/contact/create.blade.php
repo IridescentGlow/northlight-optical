@@ -86,7 +86,7 @@
 
             <div class="card border-0 bg-light-subtle p-4 hover-lift">
 
-                <h5 class="mb-3">{{ $business['name'] }}</h5>
+                <h2 class="h5 mb-3">{{ $business['name'] }}</h2>
 
                 <p class="d-flex mb-3">
                     @include('partials.icon', ['icon' => 'map-pin', 'size' => 20])

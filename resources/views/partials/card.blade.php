@@ -19,7 +19,7 @@
 
     <div class="card-body px-0">
 
-        <h5 class="card-title">{{ $product->name }}</h5>
+        <{{ $cardHeading ?? 'h4' }} class="h5 card-title">{{ $product->name }}</{{ $cardHeading ?? 'h4' }}>
 
         <p class="small text-muted mb-2">{{ $product->category }}</p>
 

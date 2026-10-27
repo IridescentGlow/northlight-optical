@@ -45,7 +45,7 @@
 
     <header class="row align-items-center mb-4 reveal">
         <div class="col-8">
-            <h4 class="mb-0">Meet the Team</h4>
+            <h2 class="h4 mb-0">Meet the Team</h2>
         </div>
         <div class="col-4 d-flex justify-content-end">
             <a href="{{ route('contact.create') }}" class="text-muted small">Book with us</a>

@@ -19,7 +19,7 @@
 
     <div class="row justify-content-center text-center mb-3 reveal">
         <div class="col-lg-7">
-            <h3 class="mb-2">See the Difference</h3>
+            <h2 class="h3 mb-2">See the Difference</h2>
             <p class="text-muted">
                 Drag the divider (or use your arrow keys) — this is what the right prescription
                 actually changes.
@@ -74,7 +74,7 @@
 
         <div class="col-md-7 d-flex align-items-center">
             <div class="p-4 p-lg-5">
-                <h4 class="mb-3">{{ $feature['title'] }}</h4>
+                <h2 class="h4 mb-3">{{ $feature['title'] }}</h2>
                 <p class="text-muted fs-5 mb-0">{{ $feature['description'] }}</p>
             </div>
         </div>

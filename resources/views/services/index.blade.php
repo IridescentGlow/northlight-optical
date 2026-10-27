@@ -30,10 +30,10 @@
             </div>
 
             <div>
-                <h5 class="mb-2">
+                <h2 class="h5 mb-2">
                     <span class="text-brown small fw-semibold me-2">{{ sprintf('%02d', $loop->iteration) }}</span>
                     {{ $service['title'] }}
-                </h5>
+                </h2>
                 <p class="text-muted mb-0">{{ $service['description'] }}</p>
             </div>
 

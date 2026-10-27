@@ -75,7 +75,7 @@
                 <thead>
                     <tr>
                         <td colspan="2">
-                            <h4 class="mb-0">Cart Totals</h4>
+                            <h2 class="h4 mb-0">Cart Totals</h2>
                         </td>
                     </tr>
                 </thead>
@@ -105,7 +105,7 @@
 
         @guest
         <div class="border border-primary-subtle bg-primary-subtle rounded-3 p-4 p-md-5 text-center w-100">
-            <h5 class="mb-2">Sign In to Complete Checkout</h5>
+            <h2 class="h5 mb-2">Sign In to Complete Checkout</h2>
             <p class="text-muted mb-4">
                 Log in or create a free account to check out — your cart will be waiting for you.
             </p>

@@ -88,7 +88,7 @@
                         @include('partials.icon', ['icon' => $service['icon'], 'size' => 30])
                     </div>
                     <div>
-                        <h5 class="mb-2">{{ $service['title'] }}</h5>
+                        <h4 class="h5 mb-2">{{ $service['title'] }}</h4>
                         <p class="text-muted mb-0">{{ $service['description'] }}</p>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
                 <div class="d-inline-flex mb-3">
                     @include('partials.icon', ['icon' => $feature['icon'], 'size' => 36])
                 </div>
-                <h5 class="mb-2">{{ $feature['title'] }}</h5>
+                <h4 class="h5 mb-2">{{ $feature['title'] }}</h4>
                 <p class="mb-0">{{ $feature['description'] }}</p>
             </div>
 
@@ -222,7 +222,7 @@
                 style="width: 7rem; height: 7rem; font-size: 2rem; --tilt: {{ $loop->even ? '3deg' : '-3deg' }};">
                 {{ $member['initials'] }}
             </div>
-            <h6 class="mb-1">{{ $member['name'] }}</h6>
+            <h4 class="h6 mb-1">{{ $member['name'] }}</h4>
             <p class="small text-muted mb-0">{{ $member['role'] }}</p>
         </div>
 
@@ -288,7 +288,7 @@
                              across the top edge rather than just deepening
                              the same shadow. --}}
                         <div class="bg-white rounded-3 p-4 card-elevated">
-                            <h6 class="section-eyebrow text-muted mb-3">Opening hours</h6>
+                            <h4 class="h6 section-eyebrow text-muted mb-3">Opening hours</h4>
 
                             <dl class="row mb-4 small">
                                 @foreach($hours as $entry)
@@ -297,7 +297,7 @@
                                 @endforeach
                             </dl>
 
-                            <h6 class="section-eyebrow text-muted mb-2">Find us</h6>
+                            <h4 class="h6 section-eyebrow text-muted mb-2">Find us</h4>
                             <address class="small text-muted mb-0">
                                 {{ $business['address_line1'] }}<br>
                                 {{ $business['address_line2'] }}<br>

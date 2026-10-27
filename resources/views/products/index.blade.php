@@ -32,7 +32,7 @@
                     @foreach($products as $product)
 
                     <div class="col-md-6 mb-4">
-                        @include('partials.card')
+                        @include('partials.card', ['cardHeading' => 'h2'])
                     </div>
 
                     @endforeach

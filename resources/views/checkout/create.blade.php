@@ -14,7 +14,7 @@
 
             <form action="{{ route('checkout.store') }}" method="POST">
 
-                <h5 class="mt-4">Customer Information</h5>
+                <h2 class="h5 mt-4">Customer Information</h2>
                 <hr>
                 
                 @csrf
@@ -80,7 +80,7 @@
                     @enderror
                 </div>
             
-                <h5 class="mt-4">Payment Information</h5>
+                <h2 class="h5 mt-4">Payment Information</h2>
                 <hr>
 
                 {{-- Northlight is a concept project and no payment is taken, so say
@@ -127,7 +127,7 @@
 				<thead>
 					<tr>
 						<td colspan="2">
-							<h4 class="mb-0">Cart Totals</h4>
+							<h2 class="h4 mb-0">Cart Totals</h2>
 						</td>
 					</tr>
 				</thead>

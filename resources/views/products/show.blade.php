@@ -136,7 +136,7 @@
         </div>
     </div>
 
-    <h5>Description</h5>
+    <h2 class="h5">Description</h2>
     <hr>
     <p>{{ $product->long_description }}</p>
 </div>
