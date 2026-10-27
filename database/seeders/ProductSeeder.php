@@ -28,7 +28,10 @@ class ProductSeeder extends Seeder
                 'category' => 'sunglasses',
                 'price' => 49.99,
                 'image_url' => 'images/sunglasses1.jpg',
-                'is_featured' => 1,
+                // Its photo is still the "coming soon" placeholder, so it stays
+                // off the homepage collection, which shows the first three
+                // featured products.
+                'is_featured' => 0,
                 'on_sale' => 0,
                 'created_at' => $now,
                 'updated_at' => $now,
@@ -70,7 +73,7 @@ class ProductSeeder extends Seeder
                 'category' => 'eyeglasses',
                 'price' => 59.99,
                 'image_url' => 'images/eyeglasses5.jpg',
-                'is_featured' => 0,
+                'is_featured' => 1,
                 'on_sale' => 1,
                 'created_at' => $now,
                 'updated_at' => $now,
