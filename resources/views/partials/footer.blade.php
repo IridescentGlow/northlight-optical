@@ -12,7 +12,16 @@
                 bhupindersingh007<span class="visually-hidden"> (opens in a new tab)</span>
             </a>.
             Marketing pages, motion and 3D hero by
-            <a href="https://github.com/IridescentGlow" target="_blank" rel="noopener">IridescentGlow<span class="visually-hidden"> (opens in a new tab)</span></a>.
+            <a href="https://dagim-kassa.vercel.app/" target="_blank" rel="noopener">Dagim Kassa<span class="visually-hidden"> (opens in a new tab)</span></a>
+            (<a href="https://github.com/IridescentGlow" target="_blank" rel="noopener">IridescentGlow<span class="visually-hidden"> (opens in a new tab)</span></a> on GitHub).
+        </p>
+        {{-- This page is a portfolio piece, so say where a visitor can hire the
+             person who built it. --}}
+        <p class="mb-0">
+            Want a site like this?
+            <a href="https://dagim-kassa.vercel.app/#contact" target="_blank" rel="noopener">Get in touch<span class="visually-hidden"> (opens in a new tab)</span></a>
+            or see
+            <a href="https://s0larisx.vercel.app/" target="_blank" rel="noopener">my portfolio<span class="visually-hidden"> (opens in a new tab)</span></a>.
         </p>
     </div>
 </footer>
