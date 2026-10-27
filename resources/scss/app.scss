@@ -36,13 +36,27 @@ $btn-hover-bg-tint-amount:        2%;
     color: $white;
 }
 
+// White text on the brand gold ($primary, #d39d4e) is 2.4:1, which fails WCAG AA
+// at any text size. Keep the gold fill and use the near-black body colour on
+// it (6.4:1). Hover and active fills are darker shades where Bootstrap's own
+// white text already passes, so only the resting state needs this.
+.btn-primary {
+    color: $body-color;
+}
 
+// The same brown used as text on white was 2.8:1 and, with white text on it
+// as a fill, 2.8:1 again. Both now use the darker focus brown (5:1). The logo
+// wordmark keeps the original gold: logotypes are exempt, and it is the brand.
 .text-brown{
+    color: $brown-focus;
+}
+
+.brand-wordmark .text-brown {
     color: $brown-dark;
 }
 
 .bg-brown{
-    background-color: $brown-dark;
+    background-color: $brown-focus;
 }
 
 
@@ -52,6 +66,7 @@ $btn-hover-bg-tint-amount:        2%;
     margin-top: -6px;
     margin-right: -6px;
     background-color: $primary !important;
+    color: $body-color;
     z-index: 99;
 }
 
@@ -94,10 +109,12 @@ $btn-hover-bg-tint-amount:        2%;
     // Bootstrap's own state list keeps the text white only when there is
     // actually a filled background behind it, and lets the button return to
     // its gold outline as soon as the pointer leaves.
+    // Filled with the gold at this point, so the text needs the dark colour
+    // (white on gold is 2.4:1).
     &:hover,
     &:active,
     &:focus-visible {
-        color: $white;
+        color: $body-color;
     }
 }
 

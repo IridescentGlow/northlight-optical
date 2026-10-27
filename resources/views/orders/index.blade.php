@@ -43,7 +43,7 @@
                             <td>{{ $order->order_number }}</td>
                             <td>{{ $order->created_at->format('d M, Y') }}</td>
                             <td>
-                                <span class="badge bg-primary fw-normal">{{ ucfirst($order->status) }}</span>
+                                <span class="badge text-bg-primary fw-normal">{{ ucfirst($order->status) }}</span>
                             </td>
                             <td>{{ $order->address . ', ' . $order->postal  }}</td>
                             <td>${{ $order->total }}</td>
