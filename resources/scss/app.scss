@@ -98,8 +98,11 @@ $btn-hover-bg-tint-amount:        2%;
 // variant, which makes stock .btn-outline-primary unreadable (white text,
 // no fill, at rest). Restore its intended resting/hover colors here so it
 // can be used as a real secondary action alongside .btn-primary.
+// The resting text uses the darker brown: the brand gold on white is only
+// 2.4:1 (2.3:1 on the light grey sections), the darker brown reads at 5:1.
+// The gold stays on the border and as the hover fill.
 .btn-outline-primary {
-    color: $primary;
+    color: $brown-focus;
 
     // :focus-visible, NOT :focus. Bootstrap 5.3 fills the button background
     // on :hover, :focus-visible and :active — but plain :focus (what a mouse
