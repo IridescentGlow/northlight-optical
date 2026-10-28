@@ -62,7 +62,7 @@ class CheckoutController extends Controller
     
             $cartItems = $this->cartService->getCartItems();
             $subTotal = $this->cartService->getCartSubTotal();
-            $tax = $subTotal * 0.05;
+            $tax = round($subTotal * 0.05, 2);
 
            $order = Order::createOrder($request, $subTotal, $tax, $cartItems);
 

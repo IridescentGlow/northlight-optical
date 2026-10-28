@@ -68,7 +68,7 @@ class Order extends Model
             'order_notes' => $data->order_notes,
             'subtotal' => $subTotal,
             'tax' => $tax,
-            'total' => $subTotal + $tax
+            'total' => round($subTotal + $tax, 2)
         ]);
 
         foreach ($cartItems as $cartItem) {

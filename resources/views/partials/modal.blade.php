@@ -33,7 +33,7 @@
                                 <a href="{{ route('products.show', ['product' => $orderItem->product]) }}" target="_blank" rel="noopener" class="text-body">{{ $orderItem->product->name }}<span class="visually-hidden"> (opens in a new tab)</span></a>
                             </td>
                             <td>{{ $orderItem->quantity }}</td>
-                            <td>${{ $orderItem->price }}</td>
+                            <td>${{ number_format($orderItem->price, 2) }}</td>
                             <td>${{ number_format($orderItem->price * $orderItem->quantity, 2) }}</td>
                             
                         </tr>
@@ -48,17 +48,17 @@
                        <tr>
                         <td colspan="3"></td>
                         <td>Sub Total</td>
-                        <td>${{ $order->subtotal }}</td>
+                        <td>${{ number_format($order->subtotal, 2) }}</td>
                        </tr>
                        <tr>
                         <td colspan="3"></td>
                         <td>Tax (5%)</td>
-                        <td>${{ $order->tax  }}</td>
+                        <td>${{ number_format($order->tax, 2) }}</td>
                        </tr>
                        <tr>
                         <td colspan="3"></td>
                         <td>Total</td>
-                        <td>${{ $order->total }}</td>
+                        <td>${{ number_format($order->total, 2) }}</td>
                        </tr>
                     </tfoot>
 

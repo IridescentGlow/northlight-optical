@@ -46,7 +46,7 @@
                                 <span class="badge text-bg-primary fw-normal">{{ ucfirst($order->status) }}</span>
                             </td>
                             <td>{{ $order->address . ', ' . $order->postal  }}</td>
-                            <td>${{ $order->total }}</td>
+                            <td>${{ number_format($order->total, 2) }}</td>
                             <td>
                                 <button class="btn btn-sm btn-primary"
                                 type="button" data-bs-toggle="modal" data-bs-target="#order-{{ $order->id }}"
