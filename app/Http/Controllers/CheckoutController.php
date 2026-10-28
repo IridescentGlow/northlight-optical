@@ -51,8 +51,10 @@ class CheckoutController extends Controller
             'cvv' => 'required|digits:3',
         ]);
 
-        if(explode('/', $request->expiry_date)[1] < date('y')){
-         
+        // A card is good through the last day of the month printed on it, so
+        // 01/26 is already expired in October 2026 even though the year matches.
+        [$expiryMonth, $expiryYear] = array_map('intval', explode('/', $request->expiry_date));
+        if ($expiryYear < (int) date('y') || ($expiryYear === (int) date('y') && $expiryMonth < (int) date('n'))) {
             return back()->withErrors(['expiry_date' => 'The expiry date field is invalid.'])->withInput();
         }
         
