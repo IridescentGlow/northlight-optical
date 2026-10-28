@@ -16,7 +16,15 @@
     <meta property="og:description" content="@yield('description', 'Northlight Optical is a concept eyewear store: marketing pages, scroll motion and a 3D hero built on the open-source Sunray Laravel shop.')">
     <meta property="og:url" content="{{ url()->current() }}">
     <link rel="canonical" href="{{ url()->current() }}">
-    <meta property="og:image" content="@yield('og_image', asset('images/home-banner.jpg'))">
+    {{-- The default share image is a 1200x630 crop (the size link previews use),
+         so its size and alt text are stated. A page that supplies its own
+         og_image (the product page) has different dimensions, so it gets neither. --}}
+    <meta property="og:image" content="@yield('og_image', asset('images/og-image.jpg'))">
+    @sectionMissing('og_image')
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A pair of round gold-framed sunglasses with green lenses on white marble">
+    @endif
     <meta name="twitter:card" content="summary_large_image">
     {{-- Brand gold ($brown in app.scss) for the mobile browser toolbar. --}}
     <meta name="theme-color" content="#D39D4E">
