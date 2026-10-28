@@ -336,6 +336,17 @@ header.sticky-top {
     }
 }
 
+// Product card photos come in different shapes (1000x405 up to 1000x1000)
+// and load lazily, so the image box used to start at zero height and push
+// the card text and every card below it down as each photo arrived (a
+// layout shift of 0.22 on /products). A fixed 4:3 box reserves the space up
+// front; object-fit: contain (the object-fit-contain class on the <img>)
+// keeps each photo uncropped on its white background.
+.card-img-top {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+}
+
 // 4. Toast notifications — entrance animation for
 // partials/alerts.blade.php. Bootstrap's own .fade/.show classes still
 // drive the *dismiss* transition (data-bs-dismiss="alert" depends on
