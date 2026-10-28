@@ -110,8 +110,8 @@
                 Log in or create a free account to check out — your cart will be waiting for you.
             </p>
             <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
-                <a href="{{ route('login.create') }}" class="btn btn-primary px-4 py-2">Log In</a>
-                <a href="{{ route('register.create') }}" class="btn btn-outline-primary px-4 py-2">Create Account</a>
+                <a href="{{ route('login.create', ['next' => 'checkout']) }}" class="btn btn-primary px-4 py-2">Log In</a>
+                <a href="{{ route('register.create', ['next' => 'checkout']) }}" class="btn btn-outline-primary px-4 py-2">Create Account</a>
             </div>
         </div>
         @endguest
