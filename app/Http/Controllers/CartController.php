@@ -85,10 +85,10 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, string $id)
     {
         
-        $this->cartService->removeCartItem($id);
+        $this->cartService->removeCartItem((int) $id);
         
         return redirect()->route('cart.index')->with('cart', 'Cart Updated.');
     

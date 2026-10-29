@@ -66,7 +66,8 @@ class CartService {
 
     public function removeCartItem(int $id) : void {
 
-        foreach (session('cart_items') as $key => $cartItem) {
+        // The cart can already be gone (emptied in another tab), so default to none
+        foreach (session('cart_items', []) as $key => $cartItem) {
 
             if (isset($cartItem['product_id']) && $cartItem['product_id'] == $id) {
                 
