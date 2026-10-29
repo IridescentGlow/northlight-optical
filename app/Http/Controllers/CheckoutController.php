@@ -55,7 +55,9 @@ class CheckoutController extends Controller
         // 01/26 is already expired in October 2026 even though the year matches.
         [$expiryMonth, $expiryYear] = array_map('intval', explode('/', $request->expiry_date));
         if ($expiryYear < (int) date('y') || ($expiryYear === (int) date('y') && $expiryMonth < (int) date('n'))) {
-            return back()->withErrors(['expiry_date' => 'The expiry date field is invalid.'])->withInput();
+            // withInput() skips the handler's $dontFlash list, so leave the card out by hand
+            return back()->withErrors(['expiry_date' => 'The expiry date field is invalid.'])
+                ->withInput($request->except(['card_number', 'cvv']));
         }
         
         DB::transaction(function() use($request){
