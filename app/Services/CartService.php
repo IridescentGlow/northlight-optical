@@ -4,6 +4,8 @@ namespace App\Services;
 
 class CartService {
 
+    public const MAX_PER_PRODUCT = 5;
+
 
     public function getCartItems() : ?array {
 
@@ -18,9 +20,10 @@ class CartService {
 
     }
 
-    public function addCartItem($product, $quantity) : void {
+    public function addCartItem($product, $quantity) : bool {
 
         $productFound = false;
+        $capped = false;
 
 
         if(session()->has('cart_items')) {
@@ -29,9 +32,14 @@ class CartService {
 
                 if (isset($cartItem['product_id']) && $cartItem['product_id'] == $product->id) {
 
-                    // product found in the array, so update quantity
+                    // product found in the array, so update quantity, keeping
+                    // the line at the same five-per-frame limit the product
+                    // page offers
 
-                    $cartItem['quantity'] = $cartItem['quantity'] + $quantity;
+                    $newQuantity = $cartItem['quantity'] + $quantity;
+                    $capped = $newQuantity > self::MAX_PER_PRODUCT;
+
+                    $cartItem['quantity'] = min($newQuantity, self::MAX_PER_PRODUCT);
                     $productFound = true;
 
                     break;
@@ -50,6 +58,7 @@ class CartService {
 
         }
 
+        return $capped;
 
     }
 

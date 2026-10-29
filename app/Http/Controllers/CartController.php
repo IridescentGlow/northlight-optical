@@ -51,16 +51,18 @@ class CartController extends Controller
 
         $request->validate([
             'product_slug' => 'required|exists:products,slug',
-            'quantity' => 'nullable|numeric|min:1|max:5',
+            'quantity' => 'nullable|integer|min:1|max:' . CartService::MAX_PER_PRODUCT,
         ]);
 
-        $quantity = $request->quantity ?? 1;
+        $quantity = (int) ($request->quantity ?? 1);
 
         $product = Product::where('slug', $request->product_slug)->FirstOrFail();
 
-        $this->cartService->addCartItem($product, $quantity);
+        $capped = $this->cartService->addCartItem($product, $quantity);
 
-        return redirect()->back()->with('cart', 'Cart Updated.');
+        return redirect()->back()->with('cart', $capped
+            ? 'Cart Updated. You can order up to ' . CartService::MAX_PER_PRODUCT . ' of one frame.'
+            : 'Cart Updated.');
 
     }
 
