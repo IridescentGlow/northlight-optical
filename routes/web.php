@@ -51,7 +51,8 @@ Route::post('register', [RegisterController::class, 'store'])->name('register.st
 
 
 Route::get('login', [LoginController::class, 'create'])->name('login.create');
-Route::post('login', [LoginController::class, 'store'])->name('login.store');
+// Ten tries a minute: enough for a typo or two, too few for password guessing.
+Route::post('login', [LoginController::class, 'store'])->middleware('throttle:10,1')->name('login.store');
 
 
 Route::middleware('auth')->group(function() {
@@ -67,7 +68,7 @@ Route::middleware('auth')->group(function() {
     Route::delete('update-account', [UpdateAccountController::class, 'destroy'])->name('update.account.destroy');
 
     Route::get('update-password', [UpdatePasswordController::class, 'create'])->name('update.password.create');
-    Route::post('update-password', [UpdatePasswordController::class, 'store'])->name('update.password.store');
+    Route::post('update-password', [UpdatePasswordController::class, 'store'])->middleware('throttle:10,1')->name('update.password.store');
 
 
 });
