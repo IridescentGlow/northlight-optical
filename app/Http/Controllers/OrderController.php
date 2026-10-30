@@ -16,6 +16,7 @@ class OrderController extends Controller
      
         $orders = Order::with('orderItems.product')
                 ->where('user_id', auth()->id())
+                ->latest('id')
                 ->simplePaginate();
 
         return view('orders.index', compact('orders'));
