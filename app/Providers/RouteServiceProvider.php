@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,18 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        // Sign-in attempts are counted per email address as well as per IP.
+        // Behind the host's proxies the IP the app sees can differ from one
+        // request to the next, or be set by the caller through
+        // X-Forwarded-For, so on its own it let attempts at one account
+        // spread across several counters.
+        RateLimiter::for('login', function (Request $request) {
+            return [
+                Limit::perMinute(10)->by('login|'.Str::lower((string) $request->input('email'))),
+                Limit::perMinute(30)->by('login-ip|'.$request->ip()),
+            ];
         });
 
         $this->routes(function () {

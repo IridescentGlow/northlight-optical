@@ -51,8 +51,9 @@ Route::post('register', [RegisterController::class, 'store'])->name('register.st
 
 
 Route::get('login', [LoginController::class, 'create'])->name('login.create');
-// Ten tries a minute: enough for a typo or two, too few for password guessing.
-Route::post('login', [LoginController::class, 'store'])->middleware('throttle:10,1')->name('login.store');
+// Ten tries a minute per email address (see RouteServiceProvider): enough for a
+// typo or two, too few for password guessing.
+Route::post('login', [LoginController::class, 'store'])->middleware('throttle:login')->name('login.store');
 
 
 Route::middleware('auth')->group(function() {
