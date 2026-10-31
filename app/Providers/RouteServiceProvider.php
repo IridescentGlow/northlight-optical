@@ -35,8 +35,10 @@ class RouteServiceProvider extends ServiceProvider
         // X-Forwarded-For, so on its own it let attempts at one account
         // spread across several counters.
         RateLimiter::for('login', function (Request $request) {
+            $email = $request->input('email');
+
             return [
-                Limit::perMinute(10)->by('login|'.Str::lower((string) $request->input('email'))),
+                Limit::perMinute(10)->by('login|'.(is_string($email) ? Str::lower($email) : '')),
                 Limit::perMinute(30)->by('login-ip|'.$request->ip()),
             ];
         });

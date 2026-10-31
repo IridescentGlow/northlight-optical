@@ -14,7 +14,10 @@ class ProductController extends Controller
     public function index(Request $request) : View
     {
 
-        $products = Product::filter($request->search, $request->category, $request->type)->simplePaginate(6)->withQueryString();
+        // ?search[]=x and the like arrive as arrays; only text can be searched for
+        $text = fn (string $key) => is_string($request->query($key)) ? $request->query($key) : null;
+
+        $products = Product::filter($text('search'), $text('category'), $text('type'))->simplePaginate(6)->withQueryString();
 
         return view('products.index', compact('products'));
 

@@ -31,8 +31,8 @@ class LoginController extends Controller
     public function store(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'email|required',
-            'password' => 'required'
+            'email' => 'required|string|email',
+            'password' => 'required|string'
         ]);
 
         if (auth()->attempt($credentials)) {

@@ -27,12 +27,12 @@ class ContactController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'required|max:80',
-            'email' => 'required|email|max:80',
-            'phone_number' => 'nullable|max:25',
-            'reason' => 'required|in:' . implode(',', config('northlight.contact_reasons')),
+            'name' => 'required|string|max:80',
+            'email' => 'required|string|email|max:80',
+            'phone_number' => 'nullable|string|max:25',
+            'reason' => 'required|string|in:' . implode(',', config('northlight.contact_reasons')),
             'preferred_date' => 'nullable|date|after_or_equal:today',
-            'message' => 'required|max:1000',
+            'message' => 'required|string|max:1000',
         ]);
 
         Log::info('Northlight contact/booking request received', $validated);

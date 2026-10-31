@@ -33,10 +33,10 @@ class RegisterController extends Controller
     {
 
         $request->validate([
-            'first_name' => 'required|max:50',
-            'last_name' => 'required|max:50',
-            'email' => 'required|email|unique:users,email|max:50|',
-            'password' => 'required|min:5|max:25|confirmed',
+            'first_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50',
+            'email' => 'required|string|email|unique:users,email|max:50',
+            'password' => 'required|string|min:5|max:25|confirmed',
         ]);
 
         $user = User::create([

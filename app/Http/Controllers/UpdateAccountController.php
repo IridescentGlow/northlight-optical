@@ -25,9 +25,9 @@ class UpdateAccountController extends Controller
     {
         
         $request->validate([
-            'first_name' => 'required|max:50',
-            'last_name' => 'required|max:50',
-            'email' => 'required|email|max:50|' . Rule::unique('users', 'email')->ignore(auth()->user()),
+            'first_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50',
+            'email' => 'required|string|email|max:50|' . Rule::unique('users', 'email')->ignore(auth()->user()),
         ]);
 
         auth()->user()->update([

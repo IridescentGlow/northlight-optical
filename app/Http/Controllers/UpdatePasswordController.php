@@ -24,8 +24,8 @@ class UpdatePasswordController extends Controller
     {
      
         $request->validate([
-            'current_password' => 'required|min:5|max:25|current_password',
-            'new_password' => 'required|min:5|max:25|confirmed',
+            'current_password' => 'required|string|min:5|max:25|current_password',
+            'new_password' => 'required|string|min:5|max:25|confirmed',
         ]);
 
 

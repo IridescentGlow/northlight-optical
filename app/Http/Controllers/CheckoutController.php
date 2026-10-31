@@ -44,11 +44,11 @@ class CheckoutController extends Controller
             'email' => 'required|email|max:100',
             'phone_number' => 'required|string|digits:10',
             'address' => 'required|string|max:150',
-            'postal' => 'required|size:6',
+            'postal' => 'required|string|size:6',
             'order_notes' => 'nullable|string|max:150',
-            'card_number' => 'required|digits:16',
-            'expiry_date' => [' required', 'size:5', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
-            'cvv' => 'required|digits:3',
+            'card_number' => 'required|string|digits:16',
+            'expiry_date' => ['required', 'string', 'size:5', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
+            'cvv' => 'required|string|digits:3',
         ]);
 
         // A card is good through the last day of the month printed on it, so

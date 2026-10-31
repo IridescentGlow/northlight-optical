@@ -50,7 +50,7 @@ class CartController extends Controller
     {
 
         $request->validate([
-            'product_slug' => 'required|exists:products,slug',
+            'product_slug' => 'required|string|exists:products,slug',
             'quantity' => 'nullable|integer|min:1|max:' . CartService::MAX_PER_PRODUCT,
         ]);
 

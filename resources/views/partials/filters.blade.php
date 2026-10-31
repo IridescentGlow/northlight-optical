@@ -1,7 +1,7 @@
 <aside>
     <form class="d-flex mb-3" role="search" action="{{ route('products.index') }}">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
-            name="search" value="{{ request('search') }}">
+            name="search" value="{{ is_string(request('search')) ? request('search') : '' }}">
         <button class="d-flex align-items-center btn btn-primary" type="submit" aria-label="Search products">
             <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"
                 fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
