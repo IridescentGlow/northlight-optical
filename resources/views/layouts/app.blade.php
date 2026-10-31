@@ -14,8 +14,8 @@
     <meta property="og:site_name" content="{{ config('app.name') }}">
     <meta property="og:title" content="{{ config('app.name') }} - @yield('title')">
     <meta property="og:description" content="@yield('description', 'Northlight Optical is a concept eyewear store: marketing pages, scroll motion and a 3D hero built on the open-source Sunray Laravel shop.')">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:url" content="@yield('canonical', e(url()->current()))">
+    <link rel="canonical" href="@yield('canonical', e(url()->current()))">
     {{-- The default share image is a 1200x630 crop (the size link previews use),
          so its size and alt text are stated. A page that supplies its own
          og_image (the product page) has different dimensions, so it gets neither. --}}

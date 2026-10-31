@@ -4,6 +4,13 @@
 
 @section('description', 'Browse sunglasses and eyeglasses in the Northlight Optical demo shop, a concept store built on the open-source Sunray shop.')
 
+{{-- Page 2 onwards lists products that are not on page 1, so it is its own page for
+     search engines; a canonical pointing at page 1 would hide them. Filtered and
+     searched lists keep pointing at the plain address. --}}
+@if($products->currentPage() > 1 && $products->count() > 0 && ! request()->hasAny(['search', 'category', 'type']))
+    @section('canonical', route('products.index', ['page' => $products->currentPage()]))
+@endif
+
 @section('content')
 
 <section class="container my-5">
