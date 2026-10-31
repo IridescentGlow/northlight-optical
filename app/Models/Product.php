@@ -27,7 +27,11 @@ class Product extends Model
 
         $query->when($search, function($query, $search){
 
-            $query->where('name', 'like', "%$search%");
+            // % and _ are wildcards in LIKE, so a search for "%" or "_" matched every
+            // product. Escape them with ! (written the same way on SQLite and MySQL).
+            $escaped = str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $search);
+
+            $query->whereRaw("name LIKE ? ESCAPE '!'", ["%{$escaped}%"]);
 
         })
         ->when($category, function($query, $category){
