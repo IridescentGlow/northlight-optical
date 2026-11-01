@@ -36,7 +36,9 @@ Route::get('/', HomeController::class)->name('home');
 
 Route::resource('products', ProductController::class)->only(['index', 'show']);
 
-Route::resource('cart', CartController::class);
+// The cart is only listed, added to, changed and emptied. The unused create, show
+// and edit routes used to answer with a blank page.
+Route::resource('cart', CartController::class)->only(['index', 'store', 'update', 'destroy']);
 
 Route::get('about', AboutController::class)->name('about');
 Route::get('services', ServicesController::class)->name('services');
