@@ -36,8 +36,13 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
+        // People type these the way they read them: (503) 555-0142, +1 503 555 0142,
+        // 4242 4242 4242 4242. Keep the digits so the length rules below judge the
+        // number, not the spacing. Anything that is not a string is left for
+        // the rules to reject.
+        $this->keepDigits($request, 'phone_number', 'phone');
+        $this->keepDigits($request, 'card_number', 'card');
 
-        
         $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
@@ -81,5 +86,24 @@ class CheckoutController extends Controller
 
     }
 
-    
+    /**
+     * Drop spaces, dashes, dots and brackets from a field that should be only digits.
+     * A phone number may also start with the +1 country code.
+     */
+    private function keepDigits(Request $request, string $key, string $kind): void
+    {
+        $value = $request->input($key);
+
+        if (! is_string($value)) {
+            return;
+        }
+
+        $digits = preg_replace('/[\s().-]/', '', $value);
+
+        if ($kind === 'phone') {
+            $digits = preg_replace('/^\+?1(?=\d{10}$)/', '', $digits);
+        }
+
+        $request->merge([$key => $digits]);
+    }
 }
