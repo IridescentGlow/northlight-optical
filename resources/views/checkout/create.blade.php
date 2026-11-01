@@ -64,7 +64,7 @@
             
                     <div class="col-md-12 mb-3">
                         <label class="form-label" for="postal" class="text-black">Postal <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="postal" name="postal" autocomplete="postal-code" value="{{ old('postal') }}" @error('postal') aria-invalid="true" aria-describedby="postal-error" @enderror>
+                        <input type="text" class="form-control" id="postal" name="postal" autocomplete="postal-code" placeholder="ZIP code, e.g. 97209" value="{{ old('postal') }}" @error('postal') aria-invalid="true" aria-describedby="postal-error" @enderror>
                         @error('postal')
                         <small id="postal-error" class="text-danger">{{ $message }}</small>
                         @enderror
