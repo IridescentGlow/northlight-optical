@@ -66,6 +66,10 @@ Route::middleware('auth')->group(function() {
 
     Route::get('orders', OrderController::class)->name('orders.index');
 
+    // Not behind IsCartEmpty: checkout's own redirect lands here, and a refresh after the
+    // cart is cleared should reach the order list, not the home page.
+    Route::get('confirmation', ConfirmationController::class)->name('confirmation');
+
     Route::get('update-account', [UpdateAccountController::class, 'create'])->name('update.account.create');
     Route::post('update-account', [UpdateAccountController::class, 'store'])->name('update.account.store');
     Route::delete('update-account', [UpdateAccountController::class, 'destroy'])->name('update.account.destroy');
@@ -81,8 +85,6 @@ Route::middleware('auth', IsCartEmpty::class)->group(function() {
     
     Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout.create');
     Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-
-    Route::get('confirmation', ConfirmationController::class)->name('confirmation');
 
 });
 
