@@ -24,7 +24,8 @@ class UpdatePasswordController extends Controller
     {
      
         $request->validate([
-            'current_password' => 'required|string|min:5|max:25|current_password',
+            // bail: the current_password rule throws on a list (current_password[]=x), so stop at the string rule first
+            'current_password' => 'bail|required|string|min:5|max:25|current_password',
             'new_password' => 'required|string|min:5|max:25|confirmed',
         ]);
 

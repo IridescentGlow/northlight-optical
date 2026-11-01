@@ -43,19 +43,20 @@ class CheckoutController extends Controller
         $this->keepDigits($request, 'phone_number', 'phone');
         $this->keepDigits($request, 'card_number', 'card');
 
+        // bail: digits: throws on a list (phone_number[]=1), so stop at the string rule first
         $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
             'email' => 'required|email|max:100',
-            'phone_number' => 'required|string|digits:10',
+            'phone_number' => 'bail|required|string|digits:10',
             'address' => 'required|string|max:150',
             // A US ZIP (the shop is in Portland, OR), ZIP+4, or a six-character
             // code such as M5V 3L9 or 560001, which is all the old size:6 rule took.
             'postal' => ['required', 'string', 'regex:/^(\d{5}(-\d{4})?|[A-Za-z0-9]{3} ?[A-Za-z0-9]{3})$/'],
             'order_notes' => 'nullable|string|max:150',
-            'card_number' => 'required|string|digits:16',
+            'card_number' => 'bail|required|string|digits:16',
             'expiry_date' => ['required', 'string', 'size:5', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
-            'cvv' => 'required|string|digits:3',
+            'cvv' => 'bail|required|string|digits:3',
         ], [
             'postal.regex' => 'Enter a 5-digit ZIP code, such as 97209, or a six-character postal code.',
         ]);
