@@ -49,6 +49,11 @@
                             @include('partials.icon', ['icon' => 'aperture', 'size' => 64])
                         </div>
                     </model-viewer>
+
+                    {{-- Hidden until site.js finds the browser cannot run WebGL
+                         (see .hero-model--still in app.scss). --}}
+                    <img class="hero-model__still" src="{{ asset('images/og-image.jpg') }}" width="1200" height="630"
+                         alt="A pair of round gold-framed sunglasses with green lenses on white marble">
                 </div>
             </div>
 

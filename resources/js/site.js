@@ -23,7 +23,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // all of it — for a component only the homepage hero uses. Vite splits
     // a dynamic import() into its own chunk automatically, so this fetch
     // only happens when document.querySelector below finds an element.
-    if (document.querySelector('model-viewer')) {
+    const heroViewer = document.querySelector('model-viewer');
+
+    if (heroViewer) {
+        // Without WebGL (hardware acceleration off, an old phone) the viewer
+        // cannot draw: it logs errors and leaves an empty box. Show the still
+        // photo that sits beside it instead, and skip the 3D code download.
+        const showStill = () => heroViewer.closest('.hero-model')?.classList.add('hero-model--still');
+        let hasWebGL = false;
+
+        try {
+            const probe = document.createElement('canvas');
+            const gl = probe.getContext('webgl2') || probe.getContext('webgl');
+            hasWebGL = Boolean(gl);
+            gl?.getExtension('WEBGL_lose_context')?.loseContext();
+        } catch (error) {
+            hasWebGL = false;
+        }
+
+        heroViewer.addEventListener('error', showStill);
         // The hero's GLB is Draco-compressed (11.7MB -> 585KB with no
         // visible quality loss). model-viewer decodes Draco via a WASM
         // module that, left at its default, is fetched from
@@ -41,8 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // during import() as custom elements upgrade — before any .then()
         // on that import could ever fire. So this line has to run first,
         // not after.
-        window.ModelViewerElement = { dracoDecoderLocation: `${window.location.origin}/draco/` };
-        import('@google/model-viewer');
+        if (hasWebGL) {
+            window.ModelViewerElement = { dracoDecoderLocation: `${window.location.origin}/draco/` };
+            import('@google/model-viewer');
+        } else {
+            showStill();
+        }
     }
 
     // --- Scroll reveal (incl. .reveal-blur variant — same elements, CSS

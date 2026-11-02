@@ -589,6 +589,27 @@ header.sticky-top {
         min-height: 16rem;
     }
 
+    // Shown by site.js, in place of the model, when the browser has no WebGL.
+    &__still {
+        display: none;
+        width: 100%;
+        height: auto;
+        border-radius: 0.75rem;
+    }
+
+    &--still {
+        // :not(:defined) too, because the element is never upgraded here and
+        // the rule above would otherwise keep it on screen.
+        model-viewer,
+        model-viewer:not(:defined) {
+            display: none;
+        }
+
+        .hero-model__still {
+            display: block;
+        }
+    }
+
     &__fallback {
         display: flex;
         align-items: center;
