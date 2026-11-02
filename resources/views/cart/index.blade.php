@@ -50,7 +50,19 @@
                         </div>
                     </td>
                     <td>{{ $cartItem->name }}</td>
-                    <td>{{ $cartItem->quantity }}</td>
+                    <td>
+                        <form action="{{ route('cart.update', ['cart' => $cartItem->id]) }}" method="post" class="d-flex align-items-center gap-2">
+                            @csrf
+                            @method('PATCH')
+                            <label class="visually-hidden" for="quantity-{{ $cartItem->id }}">Quantity of {{ $cartItem->name }}</label>
+                            <select class="form-select form-select-sm" style="width: 4.5rem;" id="quantity-{{ $cartItem->id }}" name="quantity">
+                                @foreach (range(1, \App\Services\CartService::MAX_PER_PRODUCT) as $option)
+                                    <option value="{{ $option }}" @selected($option == $cartItem->quantity)>{{ $option }}</option>
+                                @endforeach
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-outline-primary">Update</button>
+                        </form>
+                    </td>
                     <td>${{ $cartItem->price }}</td>
                     <td>${{ number_format($cartItem->price * $cartItem->quantity, 2) }}</td>
                     <td>

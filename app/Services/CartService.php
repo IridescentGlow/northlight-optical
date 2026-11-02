@@ -64,6 +64,21 @@ class CartService {
 
 
 
+    /**
+     * Set one line of the cart to an exact quantity (the cart page's quantity
+     * menu), within the same limit the product page offers.
+     */
+    public function setCartItemQuantity(int $id, int $quantity) : void {
+
+        foreach (session('cart_items', []) as $cartItem) {
+            if (isset($cartItem['product_id']) && $cartItem['product_id'] == $id) {
+                // the items are model objects, so this changes the one in the session
+                $cartItem['quantity'] = max(1, min($quantity, self::MAX_PER_PRODUCT));
+                break;
+            }
+        }
+    }
+
     public function removeCartItem(int $id) : void {
 
         // The cart can already be gone (emptied in another tab), so default to none

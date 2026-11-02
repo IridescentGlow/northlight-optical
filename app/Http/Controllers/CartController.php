@@ -63,6 +63,17 @@ class CartController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // The quantity menu on the cart page sends PATCH; the remove button sends PUT.
+        if ($request->isMethod('PATCH')) {
+            $request->validate([
+                'quantity' => 'bail|required|integer|min:1|max:' . CartService::MAX_PER_PRODUCT,
+            ]);
+
+            $this->cartService->setCartItemQuantity((int) $id, (int) $request->quantity);
+
+            return redirect()->route('cart.index')->with('cart', 'Cart Updated.');
+        }
+
         
         $this->cartService->removeCartItem((int) $id);
         
