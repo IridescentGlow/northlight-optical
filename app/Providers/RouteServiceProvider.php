@@ -43,6 +43,21 @@ class RouteServiceProvider extends ServiceProvider
             ];
         });
 
+        // The contact and sign-up forms. A per-IP count alone does not hold here: behind the
+        // host's proxies the address the app sees changes between requests, and a caller can
+        // set it through X-Forwarded-For (a test with one fixed header value was still let
+        // through on most requests). The site-wide ceiling does not depend on the address,
+        // so a script cannot get round it; it is set well above what real visitors do.
+        RateLimiter::for('contact', fn (Request $request) => [
+            Limit::perMinute(5)->by('contact-ip|'.$request->ip()),
+            Limit::perMinute(30)->by('contact-all'),
+        ]);
+
+        RateLimiter::for('register', fn (Request $request) => [
+            Limit::perMinute(10)->by('register-ip|'.$request->ip()),
+            Limit::perMinute(30)->by('register-all'),
+        ]);
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')

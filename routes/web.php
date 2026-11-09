@@ -47,12 +47,13 @@ Route::get('testimonials', TestimonialController::class)->name('testimonials');
 
 Route::get('contact', [ContactController::class, 'create'])->name('contact.create');
 // Every accepted request is written to the log, so an unlimited form can fill it. Five a
-// minute is plenty for a person, including a corrected resubmission after an error.
-Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
+// minute per address (and 30 for the whole site) is plenty for people; see RouteServiceProvider.
+Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:contact')->name('contact.store');
 
 Route::get('register', [RegisterController::class, 'create'])->name('register.create');
-// Ten tries a minute per address stops a script from creating accounts in bulk.
-Route::post('register', [RegisterController::class, 'store'])->middleware('throttle:10,1')->name('register.store');
+// Ten tries a minute per address and 30 for the whole site stop a script from creating
+// accounts in bulk; see RouteServiceProvider.
+Route::post('register', [RegisterController::class, 'store'])->middleware('throttle:register')->name('register.store');
 
 
 Route::get('login', [LoginController::class, 'create'])->name('login.create');
