@@ -45,7 +45,8 @@
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" value="{{ old('password') }}">
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" minlength="8" maxlength="25" aria-describedby="password-hint" value="{{ old('password') }}">
+                    <small id="password-hint" class="text-muted d-block">8 to 25 characters.</small>
                     @error('password')
                     <small class="text-danger">{{ $message }}</small>
                     @enderror
