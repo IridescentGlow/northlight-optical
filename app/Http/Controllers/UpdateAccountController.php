@@ -46,6 +46,12 @@ class UpdateAccountController extends Controller
      */
     public function destroy(Request $request)
     {
+        // Deleting the account also deletes its order history, and nothing could be undone
+        // from a stolen or left-open session, so the password is asked for first. bail: the
+        // current_password rule throws on a list (current_password[]=x).
+        $request->validate([
+            'current_password' => 'bail|required|string|max:25|current_password',
+        ]);
 
         auth()->user()->orders()->delete();
         

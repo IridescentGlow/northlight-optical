@@ -55,10 +55,17 @@
             </form>
 
             <div class="col-lg-7 border-top mt-4 pt-3">
-                <p class="text-muted">Delete all of my account information?</p>
+                <p class="text-muted">Delete all of my account information? This also removes your order history. Enter your password to confirm.</p>
                 <form action="{{ route('update.account.destroy') }}" method="POST" onsubmit="return confirm('Confirm account deletion? This action cannot be reverted.');">
                     @csrf
                     @method('DELETE')
+                    <div class="mb-3">
+                        <label for="delete_current_password" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="delete_current_password" name="current_password" autocomplete="current-password" required @error('current_password') aria-invalid="true" aria-describedby="delete_current_password-error" @enderror>
+                        @error('current_password')
+                        <small id="delete_current_password-error" class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
                     <button class="btn btn-danger" type="submit">Delete Account</button>
                 </form>
             </div>
