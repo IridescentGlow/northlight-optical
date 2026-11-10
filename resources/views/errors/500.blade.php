@@ -15,7 +15,7 @@
 
 <body>
     <main class="container text-center py-5" style="min-height: 76vh;">
-        <p class="display-1 fw-bold text-primary mb-0">500</p>
+        <p class="display-1 fw-bold text-brown mb-0">500</p>
         <h1 class="h3 mb-3">Something went wrong on our side</h1>
         <p class="text-muted mb-4">
             The page could not be loaded. Wait a few seconds and try again; this free demo can take a moment to wake up after a quiet spell.

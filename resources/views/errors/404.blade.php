@@ -15,7 +15,7 @@
 
 <body>
     <main class="container text-center py-5" style="min-height: 76vh;">
-        <p class="display-1 fw-bold text-primary mb-0">404</p>
+        <p class="display-1 fw-bold text-brown mb-0">404</p>
         <h1 class="h3 mb-3">We could not find that page</h1>
         <p class="text-muted mb-4">
             The link may be old or mistyped. Here are a few places to go next.

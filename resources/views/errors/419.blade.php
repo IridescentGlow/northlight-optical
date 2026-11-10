@@ -15,7 +15,7 @@
 
 <body>
     <main class="container text-center py-5" style="min-height: 76vh;">
-        <p class="display-1 fw-bold text-primary mb-0">419</p>
+        <p class="display-1 fw-bold text-brown mb-0">419</p>
         <h1 class="h3 mb-3">This page has expired</h1>
         <p class="text-muted mb-4">
             For your security a form can only be sent for a limited time, and this one waited too long.

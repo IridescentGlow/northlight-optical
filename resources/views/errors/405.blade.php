@@ -15,7 +15,7 @@
 
 <body>
     <main class="container text-center py-5" style="min-height: 76vh;">
-        <p class="display-1 fw-bold text-primary mb-0">405</p>
+        <p class="display-1 fw-bold text-brown mb-0">405</p>
         <h1 class="h3 mb-3">That address does not work this way</h1>
         <p class="text-muted mb-4">
             This link is for a button or a form, not for opening in the address bar.
