@@ -20,16 +20,16 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="first_name" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="first_name" name="first_name" autocomplete="given-name" value="{{ old('first_name') }}">
+                        <input type="text" class="form-control" id="first_name" name="first_name" autocomplete="given-name" value="{{ old('first_name') }}" @error('first_name') aria-invalid="true" aria-describedby="first_name-error" @enderror>
                         @error('first_name')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="first_name-error" class="text-danger">{{ $message }}</small>
                         @enderror    
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="last_name" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="last_name" name="last_name" autocomplete="family-name" value="{{ old('last_name') }}">
+                        <input type="text" class="form-control" id="last_name" name="last_name" autocomplete="family-name" value="{{ old('last_name') }}" @error('last_name') aria-invalid="true" aria-describedby="last_name-error" @enderror>
                         @error('last_name')
-                        <small class="text-danger">{{ $message }}</small>
+                        <small id="last_name-error" class="text-danger">{{ $message }}</small>
                         @enderror    
                     </div>
                 </div>
@@ -37,26 +37,26 @@
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" autocomplete="email" value="{{ old('email') }}">
+                    <input type="email" class="form-control" id="email" name="email" autocomplete="email" value="{{ old('email') }}" @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
                     @error('email')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="email-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" minlength="8" maxlength="25" aria-describedby="password-hint" value="{{ old('password') }}">
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" minlength="8" maxlength="25" aria-describedby="password-hint{{ $errors->has('password') ? ' password-error' : '' }}" value="{{ old('password') }}" @error('password') aria-invalid="true" @enderror>
                     <small id="password-hint" class="text-muted d-block">8 to 25 characters.</small>
                     @error('password')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="password-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="password_confirmation" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password">
+                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password" @error('password_confirmation') aria-invalid="true" aria-describedby="password_confirmation-error" @enderror>
                     @error('password_confirmation')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="password_confirmation-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 

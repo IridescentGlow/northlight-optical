@@ -17,17 +17,17 @@
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" autocomplete="username" value="{{ old('email') }}">
+                    <input type="email" class="form-control" id="email" name="email" autocomplete="username" value="{{ old('email') }}" @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
                     @error('email')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="email-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" autocomplete="current-password" value="{{ old('password') }}">
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="current-password" value="{{ old('password') }}" @error('password') aria-invalid="true" aria-describedby="password-error" @enderror>
                     @error('password')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="password-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 
