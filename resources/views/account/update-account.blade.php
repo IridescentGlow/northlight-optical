@@ -26,17 +26,17 @@
                 <div class="mb-3">
                     <label for="first_name" class="form-label">First Name</label>
                     <input type="text" class="form-control" id="first_name" name="first_name" autocomplete="given-name"
-                        value="{{ old('first_name', auth()->user()->first_name) }}">
+                        value="{{ old('first_name', auth()->user()->first_name) }}" @error('first_name') aria-invalid="true" aria-describedby="first_name-error" @enderror>
                     @error('first_name')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="first_name-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
                 <div class="mb-3">
                     <label for="last_name" class="form-label">Last Name</label>
                     <input type="text" class="form-control" id="last_name" name="last_name" autocomplete="family-name"
-                        value="{{ old('last_name', auth()->user()->last_name) }}">
+                        value="{{ old('last_name', auth()->user()->last_name) }}" @error('last_name') aria-invalid="true" aria-describedby="last_name-error" @enderror>
                     @error('last_name')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="last_name-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 
@@ -44,9 +44,9 @@
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
                     <input type="email" class="form-control" id="email" name="email" autocomplete="email"
-                        value="{{ old('email', auth()->user()->email) }}">
+                        value="{{ old('email', auth()->user()->email) }}" @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
                     @error('email')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="email-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 

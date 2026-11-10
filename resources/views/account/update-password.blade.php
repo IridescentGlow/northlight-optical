@@ -23,18 +23,18 @@
 
                 <div class="mb-3">
                     <label for="current_password" class="form-label">Current Password</label>
-                    <input type="password" class="form-control" id="current_password" name="current_password" autocomplete="current-password" value="{{ old('current_password') }}">
+                    <input type="password" class="form-control" id="current_password" name="current_password" autocomplete="current-password" value="{{ old('current_password') }}" @error('current_password') aria-invalid="true" aria-describedby="current_password-error" @enderror>
                     @error('current_password')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="current_password-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="new_password" class="form-label">New Password</label>
-                    <input type="password" class="form-control" id="new_password" name="new_password" autocomplete="new-password" minlength="8" maxlength="25" aria-describedby="new_password-hint" value="{{ old('new_password') }}">
+                    <input type="password" class="form-control" id="new_password" name="new_password" autocomplete="new-password" minlength="8" maxlength="25" aria-describedby="new_password-hint{{ $errors->has('new_password') ? ' new_password-error' : '' }}" value="{{ old('new_password') }}" @error('new_password') aria-invalid="true" @enderror>
                     <small id="new_password-hint" class="text-muted d-block">8 to 25 characters.</small>
                     @error('new_password')
-                    <small class="text-danger">{{ $message }}</small>
+                    <small id="new_password-error" class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 
