@@ -24,8 +24,8 @@
 
                     <article class="d-flex align-items-center border p-3 rounded text-muted mb-3 mb-md-0">
                         
-                        <a href="{{ route('update.account.create') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"
+                        <a href="{{ route('update.account.create') }}" aria-label="Update account">
+                            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"
                                 class="text-brown mb-2" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -42,7 +42,7 @@
 
                     <article class="d-flex align-items-center border p-3 rounded text-muted">
 
-                        <a href="{{ route('orders.index') }}" class="d-inline-block text-muted position-relative">
+                        <a href="{{ route('orders.index') }}" class="d-inline-block text-muted position-relative" aria-label="My orders ({{ $orders_count }})">
 
                             <span
                                 class="position-absolute start-100 translate-middle badge rounded-pill bg-brown text-white fw-semibold"
@@ -50,7 +50,7 @@
                                 {{ $orders_count }}
                             </span>
 
-                            <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="2"
+                            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="2"
                                 class="text-brown mb-2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                                 <line x1="3" y1="6" x2="21" y2="6">
