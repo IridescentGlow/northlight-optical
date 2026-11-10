@@ -28,6 +28,9 @@
     <meta name="twitter:card" content="summary_large_image">
     {{-- Brand gold ($brown in app.scss) for the mobile browser toolbar. --}}
     <meta name="theme-color" content="#D39D4E">
+    {{-- Home-screen icon for iOS (180x180, the logo glasses on the brand gold). Without it iOS
+         takes a page screenshot, and every visit also asked for /apple-touch-icon.png and got a 404. --}}
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
 
     {{-- Bootstrap --}}
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
