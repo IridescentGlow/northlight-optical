@@ -42,7 +42,7 @@
 
                     <article class="d-flex align-items-center border p-3 rounded text-muted">
 
-                        <a href="{{ route('orders.index') }}" class="d-inline-block text-muted position-relative" aria-label="My orders ({{ $orders_count }})">
+                        <a href="{{ route('orders.index') }}" class="d-inline-block text-muted position-relative" aria-label="{{ $orders_count }} {{ Str::plural('order', $orders_count) }}, view my orders">
 
                             <span
                                 class="position-absolute start-100 translate-middle badge rounded-pill bg-brown text-white fw-semibold"
