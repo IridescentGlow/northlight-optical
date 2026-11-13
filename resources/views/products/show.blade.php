@@ -4,10 +4,11 @@
 
 {{-- Product-specific search description and share image. The short description
      alone is one sentence (47 characters for the black sunglasses), too thin for
-     a search snippet, so the long description is used, cut at 24 words, with the
+     a search snippet, so the long description is used, cut at 20 words (122 to 149
+     characters for the eight seeded products; 24 words ran to 189), with the
      short one as the fallback. e() escapes quotes because the layout prints
      @yield output raw inside an attribute. --}}
-@section('description', e(Str::words(strip_tags($product->long_description ?: $product->short_description), 24)))
+@section('description', e(Str::words(strip_tags($product->long_description ?: $product->short_description), 20)))
 @section('og_image', asset('storage/' . $product->image_url))
 
 @section('content')
