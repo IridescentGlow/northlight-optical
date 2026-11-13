@@ -2,9 +2,12 @@
 
 @section('title', $product->name)
 
-{{-- Product-specific search description and share image. e() escapes quotes
-     because the layout prints @yield output raw inside an attribute. --}}
-@section('description', e($product->short_description))
+{{-- Product-specific search description and share image. The short description
+     alone is one sentence (47 characters for the black sunglasses), too thin for
+     a search snippet, so the long description is used, cut at 24 words, with the
+     short one as the fallback. e() escapes quotes because the layout prints
+     @yield output raw inside an attribute. --}}
+@section('description', e(Str::words(strip_tags($product->long_description ?: $product->short_description), 24)))
 @section('og_image', asset('storage/' . $product->image_url))
 
 @section('content')
