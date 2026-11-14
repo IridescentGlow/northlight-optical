@@ -34,6 +34,15 @@ class SecurityHeaders
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
         $response->headers->set('Content-Security-Policy', "base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'");
 
+        // A page built for a signed-in visitor (the account, order list and checkout
+        // pages, and the header's account link on every page) must not be kept by
+        // the browser's back-forward cache or a shared cache. Laravel's default
+        // "no-cache, private" lets a browser keep and re-show the page, so after
+        // signing out the Back button could show the previous person's pages.
+        if ($request->user() !== null) {
+            $response->headers->set('Cache-Control', 'no-store, private');
+        }
+
         // isSecure() follows X-Forwarded-Proto through the trusted proxies, so this
         // is sent on Render and not on a plain-http local run, where browsers
         // would ignore it anyway.
