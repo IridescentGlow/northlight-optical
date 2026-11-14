@@ -50,7 +50,7 @@ class UpdateAccountController extends Controller
         // from a stolen or left-open session, so the password is asked for first. bail: the
         // current_password rule throws on a list (current_password[]=x).
         $request->validate([
-            'current_password' => 'bail|required|string|max:25|current_password',
+            'current_password' => 'bail|required|string|max:64|current_password',
         ]);
 
         auth()->user()->orders()->delete();

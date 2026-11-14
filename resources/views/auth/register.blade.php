@@ -45,8 +45,8 @@
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" minlength="8" maxlength="25" aria-describedby="password-hint{{ $errors->has('password') ? ' password-error' : '' }}" value="{{ old('password') }}" @error('password') aria-invalid="true" @enderror>
-                    <small id="password-hint" class="text-muted d-block">8 to 25 characters.</small>
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" minlength="8" maxlength="64" aria-describedby="password-hint{{ $errors->has('password') ? ' password-error' : '' }}" value="{{ old('password') }}" @error('password') aria-invalid="true" @enderror>
+                    <small id="password-hint" class="text-muted d-block">8 to 64 characters.</small>
                     @error('password')
                     <small id="password-error" class="text-danger">{{ $message }}</small>
                     @enderror
