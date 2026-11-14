@@ -35,7 +35,14 @@ class ContactController extends Controller
             'message' => 'required|string|max:1000',
         ]);
 
-        Log::info('Northlight contact/booking request received', $validated);
+        // Log that a request arrived, not who sent it: the log stream (stderr on Render)
+        // is kept by the host, and a visitor's name, email, phone number and message
+        // do not belong in it. The form says this demo sends nothing anywhere.
+        Log::info('Northlight contact/booking request received', [
+            'reason' => $validated['reason'],
+            'has_preferred_date' => ! empty($validated['preferred_date']),
+            'message_length' => mb_strlen($validated['message']),
+        ]);
 
         return redirect()
             ->route('contact.create')
