@@ -26,6 +26,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # since the free demo deploy depends on it.
 RUN php -m | grep -qi pdo_sqlite
 
+# Without this every response carries "X-Powered-By: PHP/8.2.x", telling anyone
+# probing the site the exact PHP release to look up known flaws for.
+RUN echo "expose_php = Off" > "$PHP_INI_DIR/conf.d/zz-northlight.ini"
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY composer.json composer.lock ./
