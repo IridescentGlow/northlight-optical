@@ -24,11 +24,19 @@ class UpdateAccountController extends Controller
     public function store(Request $request)
     {
         
+        // Changing the sign-in email needs the current password, so someone at an
+        // unattended signed-in browser cannot move the account to their own address.
+        // A name-only change does not. The field has its own name because the delete
+        // form on the same page already shows errors for "current_password".
         $request->validate([
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'email' => 'required|string|email|max:50|' . Rule::unique('users', 'email')->ignore(auth()->user()),
-        ]);
+            'email_current_password' => [
+                'bail', Rule::requiredIf($request->input('email') !== auth()->user()->email),
+                'nullable', 'string', 'max:64', 'current_password',
+            ],
+        ], [], ['email_current_password' => 'current password']);
 
         auth()->user()->update([
            'first_name' => $request->first_name,

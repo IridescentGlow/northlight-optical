@@ -50,6 +50,15 @@
                     @enderror
                 </div>
 
+                <div class="mb-3">
+                    <label for="email_current_password" class="form-label">Current Password</label>
+                    <input type="password" class="form-control" id="email_current_password" name="email_current_password" autocomplete="current-password" maxlength="64" aria-describedby="email_current_password-hint{{ $errors->has('email_current_password') ? ' email_current_password-error' : '' }}" @error('email_current_password') aria-invalid="true" @enderror>
+                    <small id="email_current_password-hint" class="text-muted d-block">Needed only to change your email address.</small>
+                    @error('email_current_password')
+                    <small id="email_current_password-error" class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
                 <button type="submit" class="btn btn-primary mb-2">Update</button>
 
             </form>
