@@ -76,7 +76,9 @@ Route::middleware('auth')->group(function() {
 
     Route::get('update-account', [UpdateAccountController::class, 'create'])->name('update.account.create');
     Route::post('update-account', [UpdateAccountController::class, 'store'])->name('update.account.store');
-    Route::delete('update-account', [UpdateAccountController::class, 'destroy'])->name('update.account.destroy');
+    // Deleting the account checks the current password, so it gets the same limit as
+    // the change-password form; for a signed-in user both count against one budget.
+    Route::delete('update-account', [UpdateAccountController::class, 'destroy'])->middleware('throttle:10,1')->name('update.account.destroy');
 
     Route::get('update-password', [UpdatePasswordController::class, 'create'])->name('update.password.create');
     Route::post('update-password', [UpdatePasswordController::class, 'store'])->middleware('throttle:10,1')->name('update.password.store');
