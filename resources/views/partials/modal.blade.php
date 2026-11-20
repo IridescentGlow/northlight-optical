@@ -1,9 +1,9 @@
 
-  <div class="modal fade" id="order-{{ $order->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="order-{{ $order->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="order-{{ $order->id }}-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title fs-6" id="order-{{ $order->id }}">Order No. {{ $order->order_number }}</h4>
+          <h2 class="modal-title fs-6" id="order-{{ $order->id }}-title">Order No. {{ $order->order_number }}</h2>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
