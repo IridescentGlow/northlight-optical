@@ -1,5 +1,5 @@
 
-  <div class="modal fade" id="order-{{ $order->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="order-{{ $order->id }}-title" aria-hidden="true">
+  <div class="modal fade" id="order-{{ $order->id }}" tabindex="-1" aria-labelledby="order-{{ $order->id }}-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
