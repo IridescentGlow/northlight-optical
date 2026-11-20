@@ -8,7 +8,7 @@
         </div>
         <div class="modal-body">
           
-            <div class="table-responsive">
+            <div class="table-responsive position-relative">
                 <table class="table table-bordered">
                     <caption class="visually-hidden">Items in order {{ $order->order_number }}</caption>
                     <thead class="small">

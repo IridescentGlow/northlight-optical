@@ -22,7 +22,7 @@
 
             @if($orders->count() > 0)
 
-            <div class="table-responsive">
+            <div class="table-responsive position-relative">
                 <table class="table table-bordered" style="min-width: 50rem;">
                     <caption class="visually-hidden">Your orders</caption>
                     <thead class="small">

@@ -24,7 +24,7 @@
 
     @if(isset($cartItems) && count($cartItems) > 0)
 
-    <div class="table-responsive">
+    <div class="table-responsive position-relative">
         <table class="table table-bordered" style="min-width: 50rem;">
             <caption class="visually-hidden">Items in your cart</caption>
             <thead class="small">
