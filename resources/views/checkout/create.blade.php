@@ -19,17 +19,24 @@
                 
                 @csrf
 
+                {{-- Name and email are read from the account, so they can't be typed in
+                     here. Shade them and say where they can be changed, or the
+                     fields look like any other and simply ignore the keyboard. --}}
+                <p id="account-details-hint" class="small text-muted mb-2">
+                    Your name and email come from your account. To change them, go to <a href="{{ route('update.account.create') }}">Update Account</a>.
+                </p>
+
                 <div class="form-group row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" for="first_name" class="text-black">First Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control hover:not-allowed" id="first_name" name="first_name" value="{{ auth()->user()->first_name  }}" readonly @error('first_name') aria-invalid="true" aria-describedby="first_name-error" @enderror>
+                        <label class="form-label" for="first_name">First Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control bg-body-tertiary" id="first_name" name="first_name" value="{{ auth()->user()->first_name  }}" readonly aria-describedby="account-details-hint{{ $errors->has('first_name') ? ' first_name-error' : '' }}" @error('first_name') aria-invalid="true" @enderror>
                         @error('first_name')
                         <small id="first_name-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" for="last_name" class="text-black">Last Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control hover:not-allowed" id="last_name" name="last_name" value="{{ auth()->user()->last_name }}" readonly @error('last_name') aria-invalid="true" aria-describedby="last_name-error" @enderror>
+                        <label class="form-label" for="last_name">Last Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control bg-body-tertiary" id="last_name" name="last_name" value="{{ auth()->user()->last_name }}" readonly aria-describedby="account-details-hint{{ $errors->has('last_name') ? ' last_name-error' : '' }}" @error('last_name') aria-invalid="true" @enderror>
                         @error('last_name')
                         <small id="last_name-error" class="text-danger">{{ $message }}</small>
                         @enderror
@@ -38,14 +45,14 @@
             
                 <div class="form-group row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" for="email" class="text-black">Email Address <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control hover:not-allowed" id="email" name="email" value="{{ auth()->user()->email }}" readonly @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
+                        <label class="form-label" for="email">Email Address <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control bg-body-tertiary" id="email" name="email" value="{{ auth()->user()->email }}" readonly aria-describedby="account-details-hint{{ $errors->has('email') ? ' email-error' : '' }}" @error('email') aria-invalid="true" @enderror>
                         @error('email')
                         <small id="email-error" class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" for="phone_number" class="text-black">Phone No.<span class="text-danger">*</span></label>
+                        <label class="form-label" for="phone_number">Phone No.<span class="text-danger">*</span></label>
                         <input type="tel" class="form-control" id="phone_number" name="phone_number" autocomplete="tel" value="{{ old('phone_number') }}" @error('phone_number') aria-invalid="true" aria-describedby="phone_number-error" @enderror>
                         @error('phone_number')
                         <small id="phone_number-error" class="text-danger">{{ $message }}</small>
@@ -55,7 +62,7 @@
             
                 <div class="form-group row">
                     <div class="col-md-12 mb-3">
-                        <label class="form-label" for="address" class="text-black">Address<span class="text-danger">*</span></label>
+                        <label class="form-label" for="address">Address<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="address" name="address" autocomplete="street-address" maxlength="150" placeholder="Street address" value="{{ old('address') }}" @error('address') aria-invalid="true" aria-describedby="address-error" @enderror>
                         @error('address')
                         <small id="address-error" class="text-danger">{{ $message }}</small>
@@ -63,7 +70,7 @@
                     </div>
             
                     <div class="col-md-12 mb-3">
-                        <label class="form-label" for="postal" class="text-black">Postal <span class="text-danger">*</span></label>
+                        <label class="form-label" for="postal">Postal <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="postal" name="postal" autocomplete="postal-code" placeholder="ZIP code, e.g. 97209" value="{{ old('postal') }}" @error('postal') aria-invalid="true" aria-describedby="postal-error" @enderror>
                         @error('postal')
                         <small id="postal-error" class="text-danger">{{ $message }}</small>
@@ -72,7 +79,7 @@
                 </div>
             
                 <div class="form-group">
-                    <label class="form-label" for="order_notes" class="text-black">Order Notes</label>
+                    <label class="form-label" for="order_notes">Order Notes</label>
                     <textarea name="order_notes" maxlength="150" id="order_notes" cols="30" rows="3" class="form-control"
                      placeholder="Write your notes here..." @error('order_notes') aria-invalid="true" aria-describedby="order_notes-error" @enderror>{{ old('order_notes') }}</textarea>
                     @error('order_notes')
