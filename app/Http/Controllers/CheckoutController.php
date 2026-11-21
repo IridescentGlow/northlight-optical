@@ -42,6 +42,7 @@ class CheckoutController extends Controller
         // the rules to reject.
         $this->keepDigits($request, 'phone_number', 'phone');
         $this->keepDigits($request, 'card_number', 'card');
+        $this->tidyExpiry($request);
 
         // bail: digits: throws on a list (phone_number[]=1), so stop at the string rule first
         $request->validate([
@@ -55,10 +56,11 @@ class CheckoutController extends Controller
             'postal' => ['required', 'string', 'regex:/^(\d{5}(-\d{4})?|[A-Za-z0-9]{3} ?[A-Za-z0-9]{3})$/'],
             'order_notes' => 'nullable|string|max:150',
             'card_number' => 'bail|required|string|digits:16',
-            'expiry_date' => ['required', 'string', 'size:5', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
+            'expiry_date' => ['required', 'string', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
             'cvv' => 'bail|required|string|digits:3',
         ], [
             'postal.regex' => 'Enter a 5-digit ZIP code, such as 97209, or a six-character postal code.',
+            'expiry_date.regex' => 'Enter the expiry date as MM/YY, such as 08/28.',
         ]);
 
         // A card is good through the last day of the month printed on it, so
@@ -85,6 +87,26 @@ class CheckoutController extends Controller
 
         return redirect()->route('confirmation');
 
+    }
+
+    /**
+     * Read the expiry date the ways it gets typed: 08/28, 8/28, 08 / 28, 08-28,
+     * 0828 or 08/2028 all become 08/28. Anything else is left for the rules.
+     */
+    private function tidyExpiry(Request $request): void
+    {
+        $value = $request->input('expiry_date');
+
+        if (! is_string($value)) {
+            return;
+        }
+
+        $value = trim($value);
+
+        if (preg_match('/^(0?[1-9]|1[0-2]) ?[\/.-] ?(?:20)?(\d{2})$/', $value, $m)
+            || preg_match('/^(0[1-9]|1[0-2])(\d{2})$/', $value, $m)) {
+            $request->merge(['expiry_date' => sprintf('%02d/%s', $m[1], $m[2])]);
+        }
     }
 
     /**

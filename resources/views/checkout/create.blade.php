@@ -109,7 +109,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="expiry_date" class="form-label">Expiry Date</label>
-                        <input type="text" class="form-control" id="expiry_date" name="expiry_date" autocomplete="off" maxlength="5" placeholder="MM/YY" value="{{ old('expiry_date') }}" @error('expiry_date') aria-invalid="true" aria-describedby="expiry_date-error" @enderror>
+                        <input type="text" class="form-control" id="expiry_date" name="expiry_date" autocomplete="off" maxlength="9" placeholder="MM/YY" value="{{ old('expiry_date') }}" @error('expiry_date') aria-invalid="true" aria-describedby="expiry_date-error" @enderror>
                         @error('expiry_date')
                         <small id="expiry_date-error" class="text-danger">{{ $message }}</small>
                         @enderror
