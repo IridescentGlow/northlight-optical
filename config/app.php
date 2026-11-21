@@ -68,9 +68,14 @@ return [
     | will be used by the PHP date and date-time functions. We have gone
     | ahead and set this to a sensible default for you out of the box.
     |
+    | Northlight is a Portland, Oregon shop, so its days are Portland days:
+    | the earliest preferred date on the contact form, the date on each
+    | order and the month a card expires in. On UTC all three moved to the
+    | next day from 4 pm Pacific (5 pm in summer).
+    |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Los_Angeles',
 
     /*
     |--------------------------------------------------------------------------
