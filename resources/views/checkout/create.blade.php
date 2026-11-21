@@ -117,7 +117,7 @@
             
                     <div class="col-md-6 mb-3">
                         <label for="cvv" class="form-label">CVV</label>
-                        <input type="number" class="form-control" id="cvv" name="cvv" autocomplete="off" inputmode="numeric" value="{{ old('cvv') }}" @error('cvv') aria-invalid="true" aria-describedby="cvv-error" @enderror>
+                        <input type="text" class="form-control" id="cvv" name="cvv" autocomplete="off" inputmode="numeric" maxlength="3" value="{{ old('cvv') }}" @error('cvv') aria-invalid="true" aria-describedby="cvv-error" @enderror>
                         @error('cvv')
                         <small id="cvv-error" class="text-danger">{{ $message }}</small>
                         @enderror
