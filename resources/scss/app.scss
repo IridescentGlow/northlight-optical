@@ -1,7 +1,8 @@
 $brown: hsl(35.64deg 60.18% 56.67%);
 $brown-dark: hsl(35.64deg 60.18% 50.67%);
 
-$font-family-sans-serif: 'Jost', 'sans-serif';
+// sans-serif unquoted: in quotes it names a font called "sans-serif", not the fallback
+$font-family-sans-serif: 'Jost Variable', 'Jost', sans-serif;
 $primary: $brown;
 // Visible focus for text fields and selects. The previous `none` left only
 // Bootstrap's faint tinted border as the cue, which is easy to miss. The
