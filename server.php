@@ -5,7 +5,7 @@
 // - the built-in server is handed real files only (is_file, not file_exists), so a folder
 //   such as /storage/ or /build/ reaches Laravel and gets the site's 404 page and its
 //   security headers instead of the built-in server's bare "Not Found" page;
-// - Vite's build files are sent from here with a one-year cache (below).
+// - other static files are sent from here too, so they can carry cache headers (below).
 
 $publicPath = getcwd();
 
@@ -21,6 +21,27 @@ if ($uri !== '/' && is_file($publicPath.$uri)) {
     // the CSS, the app script and the 300 KB model-viewer script again.
     if (str_starts_with($uri, '/build/assets/') && ! str_contains($uri, '..')) {
         northlightSendFile($publicPath.$uri, 'public, max-age=31536000, immutable');
+
+        return true;
+    }
+
+    // The rest keep their names when they change (the 572 KB hero model, the 750 KB
+    // Draco decoder, product photos), so they get an hour and then a cheap check:
+    // Last-Modified goes out and a matching If-Modified-Since gets a 304 instead of the
+    // whole file. PHP files are still left to the built-in server.
+    if (! str_ends_with(strtolower($uri), '.php') && ! str_contains($uri, '..')) {
+        $modified = filemtime($publicPath.$uri);
+        $since = strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? '');
+
+        if ($since !== false && $since >= $modified) {
+            http_response_code(304);
+            header('Cache-Control: public, max-age=3600');
+
+            return true;
+        }
+
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s', $modified).' GMT');
+        northlightSendFile($publicPath.$uri, 'public, max-age=3600');
 
         return true;
     }
