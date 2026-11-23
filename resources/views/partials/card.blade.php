@@ -12,7 +12,11 @@
 
 
     <a href="{{ route('products.show', ['product' => $product]) }}" class="d-block overflow-hidden rounded">
+        {{-- $cardSizes: how wide the card is drawn, so srcset can pick the 320, 600 or
+             1000 px photo. The default is the products page's two-up grid. --}}
         <img src="{{ asset('storage/'. $product->image_url) }}"
+        srcset="{{ \App\Support\ProductImage::srcset($product->image_url) }}"
+        sizes="{{ $cardSizes ?? '(min-width: 1400px) 420px, (min-width: 992px) 34vw, (min-width: 768px) 48vw, 100vw' }}"
         class="card-img-top object-fit-contain lens-zoom reveal reveal-blur" alt="{{ $product->name  }}"
         loading="lazy" decoding="async">
     </a>

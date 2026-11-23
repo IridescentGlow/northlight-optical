@@ -127,7 +127,7 @@
         @foreach($featuredProducts as $product)
 
         <div class="col-md-6 col-lg-4 mb-4">
-            @include('partials.card')
+            @include('partials.card', ['cardSizes' => '(min-width: 1400px) 410px, (min-width: 992px) 31vw, (min-width: 768px) 48vw, 100vw'])
         </div>
 
         @endforeach
