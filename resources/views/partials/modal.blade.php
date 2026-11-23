@@ -26,7 +26,7 @@
                          
                         <tr>
                             <td style="width: 7rem;">
-                                <img src="{{ asset('storage/'. $orderItem->product->image_url) }}" alt="{{ $orderItem->name }}"
+                                <img src="{{ asset('storage/'. $orderItem->product->image_url) }}" srcset="{{ \App\Support\ProductImage::srcset($orderItem->product->image_url) }}" sizes="7rem" alt="{{ $orderItem->name }}"
                                 class="rounded w-100" style="min-width: 5rem;">
                             </td>
                             <td>

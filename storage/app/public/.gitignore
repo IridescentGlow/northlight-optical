@@ -18,3 +18,9 @@
 !images/eyeglasses3.jpg
 !images/eyeglasses4.jpg
 !images/eyeglasses5.jpg
+
+# Smaller copies of the same photos (vips thumbnail, quality 82), used by
+# App\Support\ProductImage for srcset. Only names ending -320w.jpg or
+# -600w.jpg are let through.
+!images/*-320w.jpg
+!images/*-600w.jpg

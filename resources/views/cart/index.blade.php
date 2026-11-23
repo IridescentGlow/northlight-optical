@@ -45,7 +45,7 @@
                 <tr>
                     <td style="width: 7rem;">
                         <div class="d-flex align-items-center">
-                            <img src="{{ asset('storage/'. $cartItem->image_url) }}" alt="{{ $cartItem->name }}"
+                            <img src="{{ asset('storage/'. $cartItem->image_url) }}" srcset="{{ \App\Support\ProductImage::srcset($cartItem->image_url) }}" sizes="7rem" alt="{{ $cartItem->name }}"
                                 class="rounded w-100" style="min-width: 5rem;">
                         </div>
                     </td>
