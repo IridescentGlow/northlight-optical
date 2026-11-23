@@ -51,8 +51,10 @@
                     </model-viewer>
 
                     {{-- Hidden until site.js finds the browser cannot run WebGL
-                         (see .hero-model--still in app.scss). --}}
-                    <img class="hero-model__still" src="{{ asset('images/og-image.jpg') }}" width="1200" height="630"
+                         (see .hero-model--still in app.scss). loading="lazy": a
+                         display:none image is still downloaded otherwise, so every
+                         visit paid 30 KB for a picture almost nobody is shown. --}}
+                    <img class="hero-model__still" src="{{ asset('images/og-image.jpg') }}" loading="lazy" width="1200" height="630"
                          alt="A pair of round gold-framed sunglasses with green lenses on white marble">
                 </div>
             </div>
